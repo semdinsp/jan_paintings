@@ -5,6 +5,19 @@ defmodule JanPaintingsWeb.PrintHTML do
 
   embed_templates "print_html/*"
 
+  @doc "One labelled row in a print's description."
+  attr :label, :string, required: true
+  slot :inner_block, required: true
+
+  def detail(assigns) do
+    ~H"""
+    <div class="sm:grid sm:grid-cols-[7rem_1fr] sm:gap-4">
+      <dt class="text-xs uppercase tracking-widest text-base-content/60 sm:pt-0.5">{@label}</dt>
+      <dd class="mt-1 text-base-content/80 sm:mt-0">{render_slot(@inner_block)}</dd>
+    </div>
+    """
+  end
+
   @doc "Filter tabs for switching between all prints and each category."
   attr :current, :map, default: nil
 

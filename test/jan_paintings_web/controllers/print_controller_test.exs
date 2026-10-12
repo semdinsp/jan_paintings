@@ -35,6 +35,16 @@ defmodule JanPaintingsWeb.PrintControllerTest do
     assert html =~ Phoenix.HTML.html_escape(print.title) |> Phoenix.HTML.safe_to_string()
   end
 
+  test "shows the print description", %{conn: conn} do
+    print = Catalog.get_print("dusart-fiddler-in-an-inn")
+    html = conn |> get(~p"/prints/old-masters/#{print.slug}") |> html_response(200)
+
+    assert html =~ "Hollstein 15"
+    assert html =~ "282 × 253mm"
+    assert html =~ "Provenance"
+    assert html =~ "Arms of Amsterdam"
+  end
+
   test "404s for unknown category or mismatched print", %{conn: conn} do
     print = hd(Catalog.list_prints("old-masters"))
 
