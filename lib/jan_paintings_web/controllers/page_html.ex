@@ -24,6 +24,8 @@ defmodule JanPaintingsWeb.PageHTML do
       </dd>
       <dt class="text-xs uppercase tracking-widest text-base-content/60 sm:pt-1">Phone</dt>
       <dd><a href="tel:+14506582752" class="hover:text-accent">450.658.2752</a></dd>
+      <dt class="text-xs uppercase tracking-widest text-base-content/60 sm:pt-1">Cell</dt>
+      <dd><a href="tel:+15146086959" class="hover:text-accent">514.608.6959</a></dd>
       <dt class="text-xs uppercase tracking-widest text-base-content/60 sm:pt-1">Address</dt>
       <dd>189 rue Saint-Pierre<br />Chambly, QC, Canada J3L 1L8</dd>
       <dt class="text-xs uppercase tracking-widest text-base-content/60 sm:pt-1">Visits</dt>

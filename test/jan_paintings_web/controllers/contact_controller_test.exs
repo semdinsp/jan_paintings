@@ -18,6 +18,7 @@ defmodule JanPaintingsWeb.ContactControllerTest do
     html = conn |> get(~p"/about") |> html_response(200)
     assert html =~ "189 rue Saint-Pierre"
     assert html =~ "450.658.2752"
+    assert html =~ ~s(href="tel:+15146086959")
     refute html =~ ~r/fax/i
     assert html =~ ~s(href="/contact")
   end
