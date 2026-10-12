@@ -36,6 +36,11 @@ config :phoenix_live_view,
 # at the `config/runtime.exs`.
 config :jan_paintings, JanPaintings.Mailer, adapter: Swoosh.Adapters.Local
 
+# Where contact form notifications are sent, and who they come from.
+config :jan_paintings, JanPaintings.Inquiries.Notifier,
+  to: {"Jan Johnson", "jan@janjohnsonprints.com"},
+  from: {"Jan Johnson Prints website", "website@janjohnsonprints.com"}
+
 # Configure esbuild (the version is required)
 config :esbuild,
   version: "0.25.4",
