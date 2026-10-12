@@ -13,7 +13,9 @@
       </p>
       <div class="mt-8 flex flex-wrap gap-3">
         <.link navigate={~p"/prints"} class="btn btn-primary">Browse the stock</.link>
-        <.link navigate={~p"/contact"} class="btn btn-ghost border-base-300">Get in touch</.link>
+        <.link href={~p"/about" <> "#contact"} class="btn btn-ghost border-base-300">
+          Get in touch
+        </.link>
       </div>
     </div>
     <.link

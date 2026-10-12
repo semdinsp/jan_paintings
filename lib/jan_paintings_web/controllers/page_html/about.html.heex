@@ -24,11 +24,53 @@
     </p>
   </article>
 
-  <section class="mt-12 max-w-3xl border-t border-base-300 pt-10">
-    <h2 class="font-serif text-2xl sm:text-3xl">Contact</h2>
-    <.contact_details class="mt-6 text-base sm:text-lg" />
-    <.link navigate={~p"/contact"} class="btn btn-primary mt-8 w-full sm:w-auto">
-      Send us a message
-    </.link>
-  </section>
+  <div
+    id="contact"
+    class="mt-12 grid scroll-mt-6 gap-12 border-t border-base-300 pt-10 lg:grid-cols-[2fr_3fr] lg:gap-16"
+  >
+    <section>
+      <h2 class="font-serif text-2xl sm:text-3xl">Contact</h2>
+      <p class="mt-4 text-base text-base-content/80 sm:text-lg">
+        To ask about a print, request a stock list or book a viewing, send a message or get in
+        touch directly. Prices are quoted in US dollars.
+      </p>
+      <.contact_details class="mt-8" />
+    </section>
+
+    <section class="print-mount p-5 sm:p-8">
+      <h2 class="font-serif text-2xl">Send a message</h2>
+      <p class="mt-1 text-sm text-base-content/60">
+        We'll reply by email, usually within a few days.
+      </p>
+
+      <.form for={@form} action={~p"/about" <> "#contact"} id="contact-form" class="mt-6">
+        <div class="grid gap-x-4 sm:grid-cols-2">
+          <.input field={@form[:name]} label="Name" autocomplete="name" required />
+          <.input field={@form[:email]} type="email" label="Email" autocomplete="email" required />
+        </div>
+        <div class="grid gap-x-4 sm:grid-cols-2">
+          <.input field={@form[:phone]} type="tel" label="Phone (optional)" autocomplete="tel" />
+          <.input field={@form[:subject]} label="Subject (optional)" />
+        </div>
+        <.input field={@form[:message]} type="textarea" label="Message" rows="6" required />
+        <.input field={@form[:print_slug]} type="hidden" />
+
+        <%!-- Spam trap: hidden from people, often filled in by bots. --%>
+        <div class="hidden" aria-hidden="true">
+          <label>
+            Leave this empty
+            <input
+              type="text"
+              name="contact_message[website]"
+              value=""
+              tabindex="-1"
+              autocomplete="off"
+            />
+          </label>
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-2 w-full sm:w-auto">Send message</button>
+      </.form>
+    </section>
+  </div>
 </Layouts.app>

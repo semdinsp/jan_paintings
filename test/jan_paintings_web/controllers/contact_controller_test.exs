@@ -14,33 +14,36 @@ defmodule JanPaintingsWeb.ContactControllerTest do
     "website" => ""
   }
 
-  test "about page shows contact details and links to the form", %{conn: conn} do
+  test "about page shows contact details and the form", %{conn: conn} do
     html = conn |> get(~p"/about") |> html_response(200)
+    assert html =~ ~s(id="contact")
     assert html =~ "189 rue Saint-Pierre"
     assert html =~ "450.658.2752"
     assert html =~ ~s(href="tel:+15146086959")
     refute html =~ ~r/fax/i
-    assert html =~ ~s(href="/contact")
-  end
-
-  test "contact page renders the form", %{conn: conn} do
-    html = conn |> get(~p"/contact") |> html_response(200)
     assert html =~ ~s(id="contact-form")
     assert html =~ "Send message"
   end
 
+  test "the old contact page redirects to the about page", %{conn: conn} do
+    assert conn |> get(~p"/contact") |> redirected_to() == "/about#contact"
+
+    assert conn |> get(~p"/contact?print=some-print") |> redirected_to() ==
+             "/about?print=some-print#contact"
+  end
+
   test "enquiring about a print prefills the subject", %{conn: conn} do
     print = hd(Catalog.list_prints("modern"))
-    html = conn |> get(~p"/contact?#{[print: print.slug]}") |> html_response(200)
+    html = conn |> get(~p"/about?#{[print: print.slug]}") |> html_response(200)
 
     assert html =~ Phoenix.HTML.html_escape(print.title) |> Phoenix.HTML.safe_to_string()
     assert html =~ ~s(value="#{print.slug}")
   end
 
   test "a valid message is stored and the gallery is emailed", %{conn: conn} do
-    conn = post(conn, ~p"/contact", contact_message: @valid)
+    conn = post(conn, ~p"/about", contact_message: @valid)
 
-    assert redirected_to(conn) == ~p"/contact"
+    assert redirected_to(conn) == "/about#contact"
     assert Phoenix.Flash.get(conn.assigns.flash, :info) =~ "your message has been sent"
 
     assert [message] = Inquiries.list_contact_messages()
@@ -55,7 +58,7 @@ defmodule JanPaintingsWeb.ContactControllerTest do
 
   test "an invalid message re-renders with errors", %{conn: conn} do
     conn =
-      post(conn, ~p"/contact", contact_message: %{@valid | "email" => "nope", "message" => ""})
+      post(conn, ~p"/about", contact_message: %{@valid | "email" => "nope", "message" => ""})
 
     html = html_response(conn, 422)
     assert html =~ "must be a valid email"
@@ -65,9 +68,9 @@ defmodule JanPaintingsWeb.ContactControllerTest do
   end
 
   test "the spam trap silently drops the message", %{conn: conn} do
-    conn = post(conn, ~p"/contact", contact_message: %{@valid | "website" => "http://spam"})
+    conn = post(conn, ~p"/about", contact_message: %{@valid | "website" => "http://spam"})
 
-    assert redirected_to(conn) == ~p"/contact"
+    assert redirected_to(conn) == "/about#contact"
     assert Inquiries.list_contact_messages() == []
     assert_no_email_sent()
   end

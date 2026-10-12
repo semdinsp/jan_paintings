@@ -23,7 +23,7 @@
       <p :if={@print.medium != ""} class="mt-4 text-lg text-base-content/80">{@print.medium}</p>
 
       <.link
-        navigate={~p"/contact?#{[print: @print.slug]}"}
+        href={~p"/about?#{[print: @print.slug]}" <> "#contact"}
         class="btn btn-primary mt-8 w-full sm:w-auto"
       >
         Enquire about this print

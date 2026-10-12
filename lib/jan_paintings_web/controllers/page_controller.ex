@@ -16,9 +16,7 @@ defmodule JanPaintingsWeb.PageController do
     )
   end
 
-  def about(conn, _params), do: render(conn, :about, page_title: "About")
-
-  def contact(conn, params) do
+  def about(conn, params) do
     print = params["print"] && Catalog.get_print(params["print"])
 
     attrs =
@@ -27,7 +25,13 @@ defmodule JanPaintingsWeb.PageController do
         else: %{}
 
     form = %ContactMessage{} |> Inquiries.change_contact_message(attrs) |> to_form()
-    render(conn, :contact, page_title: "Contact", form: form)
+    render(conn, :about, page_title: "About", form: form)
+  end
+
+  # The old contact page now lives on the about page; keep links working.
+  def contact_redirect(conn, params) do
+    query = Map.take(params, ["print"])
+    redirect(conn, to: ~p"/about?#{query}" <> "#contact")
   end
 
   # Bots tend to fill every field, so a filled-in hidden "website" field
@@ -45,13 +49,13 @@ defmodule JanPaintingsWeb.PageController do
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)
-        |> render(:contact, page_title: "Contact", form: to_form(changeset))
+        |> render(:about, page_title: "About", form: to_form(changeset))
     end
   end
 
   defp message_sent(conn) do
     conn
     |> put_flash(:info, "Thank you, your message has been sent. We'll be in touch soon.")
-    |> redirect(to: ~p"/contact")
+    |> redirect(to: ~p"/about" <> "#contact")
   end
 end

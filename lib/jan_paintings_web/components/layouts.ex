@@ -80,7 +80,7 @@ defmodule JanPaintingsWeb.Layouts do
                   {c.name}
                 </.link>
                 <.link navigate={~p"/about"} class="rounded px-3 py-2 hover:bg-base-200">About</.link>
-                <.link navigate={~p"/contact"} class="rounded px-3 py-2 hover:bg-base-200">
+                <.link href={~p"/about" <> "#contact"} class="rounded px-3 py-2 hover:bg-base-200">
                   Contact
                 </.link>
                 <div class="mt-2 border-t border-base-300 px-3 pt-3"><.theme_toggle /></div>
@@ -96,7 +96,7 @@ defmodule JanPaintingsWeb.Layouts do
               {c.short}
             </.link>
             <.link navigate={~p"/about"} class="nav-link">About</.link>
-            <.link navigate={~p"/contact"} class="nav-link">Contact</.link>
+            <.link href={~p"/about" <> "#contact"} class="nav-link">Contact</.link>
             <div class="ml-auto"><.theme_toggle /></div>
           </nav>
         </div>
