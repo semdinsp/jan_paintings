@@ -116,6 +116,36 @@ defmodule JanPaintingsWeb.PrintControllerTest do
     refute html =~ "More by this artist"
   end
 
+  test "shows a gallery of extra views when a print has them", %{conn: conn} do
+    html =
+      conn
+      |> get(
+        ~p"/prints/modern/tissot-the-return-from-the-parable-of-the-prodigal-son-a-set-of-four-plus-title"
+      )
+      |> html_response(200)
+
+    assert html =~ ~s(id="print-gallery")
+    assert html =~ "3 views"
+    assert html =~ "Tissot%20Working%20proof%202%20495.jpg"
+  end
+
+  test "links to a larger image when one exists", %{conn: conn} do
+    html =
+      conn
+      |> get(~p"/prints/old-masters/tiepolo-venice-receiving-neptunes-homage-after-g-b-tiepolo")
+      |> html_response(200)
+
+    assert html =~ "View larger"
+    assert html =~ "Tribute%201000.jpg"
+    refute html =~ ~s(id="print-gallery")
+  end
+
+  test "prints without extra views have no gallery", %{conn: conn} do
+    html = conn |> get(~p"/prints/old-masters/dusart-fiddler-in-an-inn") |> html_response(200)
+    refute html =~ "View larger"
+    refute html =~ ~s(id="print-gallery")
+  end
+
   test "404s for unknown category or mismatched print", %{conn: conn} do
     print = hd(Catalog.list_prints("old-masters"))
 

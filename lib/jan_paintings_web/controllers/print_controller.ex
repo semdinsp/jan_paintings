@@ -13,6 +13,7 @@ defmodule JanPaintingsWeb.PrintController do
       page_title: print.title,
       category: category,
       print: print,
+      views: Catalog.views(print),
       more_by_artist: Catalog.more_by_artist(print)
     )
   end

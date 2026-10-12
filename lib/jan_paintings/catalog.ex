@@ -58,6 +58,23 @@ defmodule JanPaintings.Catalog do
   def get_print(slug), do: Enum.find(@prints, &(&1.slug == slug))
 
   @doc """
+  Every image of a print for its detail page gallery: the main image first,
+  then any additional sheets or states. Each view has a display `src` and a
+  `large` URL for the "View larger" link.
+  """
+  def views(print) do
+    main = %{
+      src: image_url(print.image),
+      large: image_url(large_or(print.large_image, print.image))
+    }
+
+    [main | Enum.map(print.gallery, &%{src: image_url(&1), large: image_url(&1)})]
+  end
+
+  defp large_or("", image), do: image
+  defp large_or(large, _image), do: large
+
+  @doc """
   Other prints by the same artist as `print`, in catalogue order.
 
   Artists are matched on surname plus first given name, so "ARMINGTON,
