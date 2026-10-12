@@ -8,6 +8,8 @@ defmodule JanPaintingsWeb.Router do
     plug :put_root_layout, html: {JanPaintingsWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    # Site-wide password while the site is private; delete this line to remove it.
+    plug JanPaintingsWeb.Plugs.BasicAuth
   end
 
   pipeline :api do

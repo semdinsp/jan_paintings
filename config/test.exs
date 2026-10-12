@@ -39,3 +39,6 @@ config :phoenix_live_view,
 # Sort query params output of verified routes for robust url comparisons
 config :phoenix,
   sort_verified_routes_query_params: true
+
+# No site password in tests (the BasicAuth tests set their own).
+config :jan_paintings, :basic_auth, []

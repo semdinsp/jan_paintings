@@ -41,6 +41,12 @@ if config_env() == :dev do
 end
 
 if config_env() == :prod do
+  # Optional site-wide password. Leave BASIC_AUTH_PASSWORD unset to make the
+  # site public.
+  config :jan_paintings, :basic_auth,
+    username: System.get_env("BASIC_AUTH_USERNAME", "jan"),
+    password: System.get_env("BASIC_AUTH_PASSWORD")
+
   database_url =
     System.get_env("DATABASE_URL") ||
       raise """

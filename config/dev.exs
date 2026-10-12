@@ -10,6 +10,12 @@ config :jan_paintings, JanPaintings.Repo,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
+# Site-wide password for the private preview (see JanPaintingsWeb.Plugs.BasicAuth).
+# Delete this block to browse locally without a password.
+config :jan_paintings, :basic_auth,
+  username: System.get_env("BASIC_AUTH_USERNAME", "jan"),
+  password: System.get_env("BASIC_AUTH_PASSWORD", "remote")
+
 # For development, we disable any cache and enable
 # debugging and code reloading.
 #
