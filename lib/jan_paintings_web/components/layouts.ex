@@ -116,7 +116,7 @@ defmodule JanPaintingsWeb.Layouts do
           </p>
           <p class="sm:text-right">
             <a href="mailto:jan@janjohnsonprints.com" class="nav-link">jan@janjohnsonprints.com</a>
-            <br /> Phone 450.658.2752 · Fax 450.658.7654
+            <br /> Phone <a href="tel:+14506582752" class="nav-link">450.658.2752</a>
           </p>
         </div>
       </footer>
