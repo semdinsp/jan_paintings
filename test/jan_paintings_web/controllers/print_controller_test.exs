@@ -136,7 +136,7 @@ defmodule JanPaintingsWeb.PrintControllerTest do
       |> html_response(200)
 
     assert html =~ "View larger"
-    assert html =~ "Tribute%201000.jpg"
+    assert html =~ "/images/prints/tiepolo-venice-receiving-neptunes-homage-large.jpg"
     refute html =~ ~s(id="print-gallery")
   end
 

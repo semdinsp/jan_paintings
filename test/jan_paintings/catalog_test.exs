@@ -85,4 +85,9 @@ defmodule JanPaintings.CatalogTest do
     tiepolo = Catalog.list_prints() |> Enum.filter(&(&1.artist =~ "TIEPOLO"))
     assert length(tiepolo) == 3
   end
+
+  test "local image paths are served by this site; others come from the original site" do
+    assert Catalog.image_url("/images/prints/example.jpg") == "/images/prints/example.jpg"
+    assert Catalog.image_url("images/A B.jpg") == "https://janjohnsonprints.com/images/A%20B.jpg"
+  end
 end

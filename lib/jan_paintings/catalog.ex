@@ -145,6 +145,13 @@ defmodule JanPaintings.Catalog do
     Enum.find(@prints, &(&1.category == category_slug && &1.medium != ""))
   end
 
-  @doc "Absolute URL for an image path stored in the catalogue."
+  @doc """
+  URL for an image path stored in the catalogue.
+
+  Paths starting with "/" are images served by this site (for example
+  colour-corrected photos in priv/static/images/prints); anything else is
+  still loaded from the original site.
+  """
+  def image_url("/" <> _ = local_path), do: local_path
   def image_url(path), do: @image_host <> URI.encode(path)
 end
