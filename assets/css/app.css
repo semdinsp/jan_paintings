@@ -108,6 +108,14 @@
 @theme {
   --font-serif: "Tinos", "Times New Roman", Times, serif;
   --font-sans: "Tinos", "Times New Roman", Times, serif;
+  --font-display: "Libre Baskerville", "Baskerville", "Tinos", "Times New Roman", serif;
+}
+
+/* Large headings (page, print and section titles) use Libre Baskerville;
+   everything else stays in Tinos. */
+h1, h2 {
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
 }
 
 /* Page background: sage paper texture, echoing the original site. */
