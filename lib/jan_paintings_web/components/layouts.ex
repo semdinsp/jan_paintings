@@ -49,12 +49,15 @@ defmodule JanPaintingsWeb.Layouts do
             style={"background-image: url('#{JanPaintings.Catalog.banner_url(@banner)}')"}
             aria-hidden="true"
           />
-          <div class="relative mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-5 sm:px-6 sm:py-7 lg:px-8">
-            <.link navigate={~p"/"} class="block min-w-0">
-              <span class="block font-serif text-2xl tracking-tight sm:text-4xl">Jan Johnson</span>
-              <span class="block truncate text-[0.65rem] uppercase tracking-[0.25em] opacity-80 sm:text-xs">
-                Old Master &amp; Modern Prints
-              </span>
+          <div class="relative mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6 sm:py-5 lg:px-8">
+            <.link navigate={~p"/"} class="block min-w-0 shrink">
+              <img
+                src={~p"/images/jan-johnson-logo.png"}
+                alt="Jan Johnson, Old Master & Modern Prints Inc."
+                width="315"
+                height="115"
+                class="h-14 w-auto drop-shadow-[0_1px_2px_rgb(0_0_0_/_0.35)] sm:h-20 lg:h-24"
+              />
             </.link>
 
             <details class="group relative lg:hidden">
