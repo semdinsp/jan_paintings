@@ -32,7 +32,33 @@
     </.link>
   </section>
 
-  <section class="mt-16 grid gap-6 sm:grid-cols-3">
+  <section class="mt-16 grid items-center gap-8 border-y border-base-300 py-10 sm:grid-cols-[10rem_1fr] sm:py-12 lg:gap-12">
+    <img
+      src={JanPaintings.Catalog.image_url("images/Jan green jacket.jpg")}
+      alt="Jan Johnson"
+      loading="lazy"
+      class="print-mount mx-auto aspect-[4/5] w-36 object-cover p-2 sm:w-40"
+    />
+    <div class="max-w-2xl">
+      <p class="text-xs uppercase tracking-[0.25em] text-base-content/60">About the gallery</p>
+      <h2 class="mt-2 font-serif text-2xl sm:text-3xl">Jan Johnson</h2>
+      <p class="mt-4 text-base leading-relaxed text-base-content/80 sm:text-lg">
+        Jan Johnson trained in the print department of P &amp; D Colnaghi in London and opened
+        the gallery there in 1979, before moving it to Montreal in 1982. Over four decades the
+        gallery has supplied collectors and many of the world's major museums, and helped found
+        the International Fine Print Dealers Association. Visitors are welcome to view the stock
+        by appointment in Chambly, just outside Montreal.
+      </p>
+      <.link
+        navigate={~p"/about"}
+        class="mt-4 inline-block text-xs uppercase tracking-widest text-accent hover:opacity-70"
+      >
+        More about the gallery <span aria-hidden="true">&rarr;</span>
+      </.link>
+    </div>
+  </section>
+
+  <section class="mt-12 grid gap-6 sm:grid-cols-3">
     <.link
       :for={{category, cover} <- @categories}
       navigate={~p"/prints/#{category.slug}"}
