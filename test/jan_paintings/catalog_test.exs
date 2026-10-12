@@ -21,4 +21,16 @@ defmodule JanPaintings.CatalogTest do
       assert print.image != "", "#{print.slug} has no image"
     end
   end
+
+  test "available prints have a price; sold and reserved ones match the original site" do
+    by_status = Enum.group_by(Catalog.list_prints(), & &1.status)
+
+    assert length(by_status["sold"]) == 4
+    assert length(by_status["reserved"]) == 2
+    assert Enum.all?(by_status["available"], &(&1.price != ""))
+
+    for %{category: "canadian", status: "available", price: price} <- Catalog.list_prints() do
+      assert price =~ "CAD"
+    end
+  end
 end

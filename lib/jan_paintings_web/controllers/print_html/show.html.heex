@@ -20,6 +20,7 @@
         {@print.artist}<span :if={@print.dates != ""}> ({@print.dates})</span>
       </p>
       <h1 class="mt-2 font-serif text-2xl leading-snug sm:text-3xl">{@print.title}</h1>
+      <.status_badge status={@print.status} class="mt-3" />
       <p :if={@print.details != ""} class="mt-4 leading-relaxed text-base-content/80">
         {@print.details}
       </p>
@@ -29,14 +30,22 @@
         <.detail :if={@print.condition != ""} label="Condition">{@print.condition}</.detail>
         <.detail :if={@print.provenance != ""} label="Provenance">{@print.provenance}</.detail>
         <.detail :if={@print.watermark != ""} label="Watermark">{@print.watermark}</.detail>
-        <.detail label="Price">On request, in US dollars</.detail>
+        <.detail label="Price">
+          <span :if={@print.status == "sold"}>Sold</span>
+          <span :if={@print.status == "reserved"}>Reserved</span>
+          <span :if={@print.status == "available"} class="font-medium text-base-content">
+            {if @print.price == "", do: "On request", else: @print.price}
+          </span>
+        </.detail>
       </dl>
 
       <.link
         href={~p"/about?#{[print: @print.slug]}" <> "#contact"}
         class="btn btn-primary mt-8 w-full sm:w-auto"
       >
-        Enquire about this print
+        {if @print.status == "available",
+          do: "Enquire about this print",
+          else: "Ask about similar prints"}
       </.link>
     </div>
   </div>

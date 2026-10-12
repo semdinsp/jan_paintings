@@ -34,6 +34,28 @@ defmodule JanPaintingsWeb.PageHTML do
     """
   end
 
+  @doc "A Sold or Reserved badge; renders nothing for available prints."
+  attr :status, :string, required: true
+  attr :class, :any, default: nil
+
+  def status_badge(assigns) do
+    ~H"""
+    <span
+      :if={@status in ["sold", "reserved"]}
+      class={[
+        "inline-block rounded-sm px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-widest shadow-sm",
+        if(@status == "sold",
+          do: "bg-primary text-primary-content",
+          else: "bg-secondary text-secondary-content"
+        ),
+        @class
+      ]}
+    >
+      {@status}
+    </span>
+    """
+  end
+
   @doc "A mounted print card linking to a print's detail page."
   attr :print, :map, required: true
 
@@ -43,7 +65,8 @@ defmodule JanPaintingsWeb.PageHTML do
       navigate={~p"/prints/#{@print.category}/#{@print.slug}"}
       class="group flex min-w-0 flex-col"
     >
-      <div class="print-mount flex aspect-[4/5] items-center justify-center p-[10%] transition group-hover:-translate-y-0.5 group-hover:shadow-lg">
+      <div class="print-mount relative flex aspect-[4/5] items-center justify-center p-[10%] transition group-hover:-translate-y-0.5 group-hover:shadow-lg">
+        <.status_badge status={@print.status} class="absolute top-2 left-2 z-10" />
         <img
           src={Catalog.image_url(@print.image)}
           alt={"#{@print.artist}, #{@print.title}"}
@@ -59,6 +82,9 @@ defmodule JanPaintingsWeb.PageHTML do
       </p>
       <p :if={@print.medium != ""} class="mt-0.5 text-xs text-base-content/60 sm:text-sm">
         {@print.medium}
+      </p>
+      <p :if={@print.price != ""} class="mt-1 text-xs font-medium text-base-content/80 sm:text-sm">
+        {@print.price}
       </p>
     </.link>
     """

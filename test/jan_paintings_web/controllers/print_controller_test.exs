@@ -45,6 +45,37 @@ defmodule JanPaintingsWeb.PrintControllerTest do
     assert html =~ "Arms of Amsterdam"
   end
 
+  test "shows prices with their currency", %{conn: conn} do
+    html = conn |> get(~p"/prints/old-masters/dusart-fiddler-in-an-inn") |> html_response(200)
+    assert html =~ Catalog.get_print("dusart-fiddler-in-an-inn").price
+    assert html =~ "USD"
+
+    html = conn |> get(~p"/prints/canadian") |> html_response(200)
+    assert html =~ "$275 CAD"
+  end
+
+  test "sold prints get a badge in the list and on the detail page", %{conn: conn} do
+    sold = Catalog.get_print("buller-lovers")
+    assert sold.status == "sold"
+
+    list = conn |> get(~p"/prints/canadian") |> html_response(200)
+    assert list =~ ~r/>\s*sold\s*</
+
+    detail = conn |> get(~p"/prints/canadian/#{sold.slug}") |> html_response(200)
+    assert detail =~ ~r/>\s*sold\s*</
+    assert detail =~ "Ask about similar prints"
+    refute detail =~ "CAD"
+  end
+
+  test "reserved prints get a reserved badge", %{conn: conn} do
+    html =
+      conn
+      |> get(~p"/prints/old-masters/pencz-the-triumph-of-death-from-the-six-triumphs-of-petrarch")
+      |> html_response(200)
+
+    assert html =~ ~r/>\s*reserved\s*</
+  end
+
   test "404s for unknown category or mismatched print", %{conn: conn} do
     print = hd(Catalog.list_prints("old-masters"))
 
