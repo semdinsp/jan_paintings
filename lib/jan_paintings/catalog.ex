@@ -48,11 +48,19 @@ defmodule JanPaintings.Catalog do
 
   def get_print(slug), do: Enum.find(@prints, &(&1.slug == slug))
 
-  @doc "Returns one print per category, used as the homepage feature."
+  @doc "A spread of prints across the catalogue for the homepage, excluding category covers."
   def featured_prints do
-    for %{slug: slug} <- @categories,
-        print = Enum.find(@prints, &(&1.category == slug && &1.medium != "")),
-        do: print
+    covers = Enum.map(@categories, &cover_print(&1.slug))
+
+    @prints
+    |> Enum.filter(&(&1.medium != "" && &1 not in covers))
+    |> Enum.take_every(17)
+    |> Enum.take(6)
+  end
+
+  @doc "A representative print for a category, used on category cards."
+  def cover_print(category_slug) do
+    Enum.find(@prints, &(&1.category == category_slug && &1.medium != ""))
   end
 
   @doc "Absolute URL for an image path stored in the catalogue."

@@ -34,48 +34,75 @@ defmodule JanPaintingsWeb.Layouts do
   slot :inner_block, required: true
 
   def app(assigns) do
+    assigns = assign(assigns, :categories, JanPaintings.Catalog.categories())
+
     ~H"""
-    <header class="border-b border-base-300">
-      <div class="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-6 sm:flex-row sm:items-end sm:justify-between sm:px-6 lg:px-8">
-        <.link navigate={~p"/"} class="block">
-          <span class="block font-serif text-3xl tracking-tight">Jan Johnson</span>
-          <span class="block text-xs uppercase tracking-[0.25em] text-base-content/60">
-            Old Master &amp; Modern Prints
-          </span>
-        </.link>
-        <nav class="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm uppercase tracking-wider">
-          <.link
-            :for={category <- JanPaintings.Catalog.categories()}
-            navigate={~p"/prints/#{category.slug}"}
-            class="hover:text-primary"
-          >
-            {category.short}
+    <div class="flex min-h-screen flex-col">
+      <header class="border-b-4 border-secondary bg-primary text-primary-content">
+        <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
+          <.link navigate={~p"/"} class="block min-w-0">
+            <span class="block font-serif text-2xl tracking-tight sm:text-3xl">Jan Johnson</span>
+            <span class="block truncate text-[0.65rem] uppercase tracking-[0.25em] opacity-75 sm:text-xs">
+              Old Master &amp; Modern Prints
+            </span>
           </.link>
-          <.link navigate={~p"/about"} class="hover:text-primary">About</.link>
-          <.link navigate={~p"/contact"} class="hover:text-primary">Contact</.link>
-          <.theme_toggle />
-        </nav>
-      </div>
-    </header>
 
-    <main class="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
-      {render_slot(@inner_block)}
-    </main>
+          <nav class="hidden items-center gap-6 text-sm uppercase tracking-wider lg:flex">
+            <.link navigate={~p"/prints"} class="nav-link">All Prints</.link>
+            <.link :for={c <- @categories} navigate={~p"/prints/#{c.slug}"} class="nav-link">
+              {c.short}
+            </.link>
+            <.link navigate={~p"/about"} class="nav-link">About</.link>
+            <.link navigate={~p"/contact"} class="nav-link">Contact</.link>
+            <.theme_toggle />
+          </nav>
 
-    <footer class="border-t border-base-300 bg-base-200">
-      <div class="mx-auto grid max-w-6xl gap-2 px-4 py-8 text-sm text-base-content/70 sm:grid-cols-2 sm:px-6 lg:px-8">
-        <p>
-          Jan Johnson, Old Master &amp; Modern Prints, Inc.<br />
-          189 rue Saint-Pierre, Chambly, QC, Canada J3L 1L8
-        </p>
-        <p class="sm:text-right">
-          <a href="mailto:jan@janjohnsonprints.com" class="hover:text-primary">
-            jan@janjohnsonprints.com
-          </a>
-          <br /> Phone 450.658.2752 · Fax 450.658.7654
-        </p>
-      </div>
-    </footer>
+          <details class="group relative lg:hidden">
+            <summary
+              class="flex cursor-pointer list-none items-center rounded p-2 hover:bg-white/10 [&::-webkit-details-marker]:hidden"
+              aria-label="Menu"
+            >
+              <.icon name="hero-bars-3" class="size-6 group-open:hidden" />
+              <.icon name="hero-x-mark" class="hidden size-6 group-open:block" />
+            </summary>
+            <nav class="absolute right-0 z-20 mt-2 flex w-56 flex-col rounded-box bg-base-100 p-2 text-base-content shadow-xl">
+              <.link navigate={~p"/prints"} class="rounded px-3 py-2 hover:bg-base-200">All Prints</.link>
+              <.link
+                :for={c <- @categories}
+                navigate={~p"/prints/#{c.slug}"}
+                class="rounded px-3 py-2 hover:bg-base-200"
+              >
+                {c.name}
+              </.link>
+              <.link navigate={~p"/about"} class="rounded px-3 py-2 hover:bg-base-200">About</.link>
+              <.link navigate={~p"/contact"} class="rounded px-3 py-2 hover:bg-base-200">
+                Contact
+              </.link>
+              <div class="mt-2 border-t border-base-300 px-3 pt-3"><.theme_toggle /></div>
+            </nav>
+          </details>
+        </div>
+      </header>
+
+      <main class="flex-1 px-0 py-0 sm:px-4 sm:py-8 lg:py-12">
+        <div class="paper-sheet mx-auto max-w-6xl px-4 py-10 sm:px-8 sm:py-12 lg:px-12">
+          {render_slot(@inner_block)}
+        </div>
+      </main>
+
+      <footer class="border-t-4 border-secondary bg-primary text-sm text-primary-content/80">
+        <div class="mx-auto grid max-w-6xl gap-4 px-4 py-8 sm:grid-cols-2 sm:px-6 lg:px-8">
+          <p>
+            Jan Johnson, Old Master &amp; Modern Prints, Inc.<br />
+            189 rue Saint-Pierre, Chambly, QC, Canada J3L 1L8
+          </p>
+          <p class="sm:text-right">
+            <a href="mailto:jan@janjohnsonprints.com" class="nav-link">jan@janjohnsonprints.com</a>
+            <br /> Phone 450.658.2752 · Fax 450.658.7654
+          </p>
+        </div>
+      </footer>
+    </div>
 
     <.flash_group flash={@flash} />
     """

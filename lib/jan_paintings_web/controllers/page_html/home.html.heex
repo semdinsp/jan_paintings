@@ -1,32 +1,67 @@
 <Layouts.app flash={@flash}>
-  <section class="max-w-3xl">
-    <p class="text-xs uppercase tracking-[0.25em] text-base-content/60">Fine prints since 1979</p>
-    <h1 class="mt-3 font-serif text-4xl leading-tight sm:text-5xl">
-      Old Master, Modern and Canadian prints for collectors and museums.
-    </h1>
-    <p class="mt-6 text-lg text-base-content/70">
-      A carefully researched stock with an emphasis on fine impressions and good condition.
-      Browse a selection below, or get in touch to ask about holdings not shown here.
-    </p>
-  </section>
-
-  <section class="mt-16 grid gap-8 md:grid-cols-3">
+  <section class="grid items-center gap-10 md:grid-cols-[3fr_2fr] lg:gap-16">
+    <div>
+      <p class="text-xs uppercase tracking-[0.25em] text-base-content/60">
+        Fine prints since 1979
+      </p>
+      <h1 class="mt-3 font-serif text-3xl leading-tight sm:text-4xl lg:text-5xl">
+        Old Master, Modern and Canadian prints for collectors and museums.
+      </h1>
+      <p class="mt-6 text-base text-base-content/70 sm:text-lg">
+        A carefully researched stock with an emphasis on fine impressions and good condition.
+        Browse a selection below, or get in touch to ask about holdings not shown here.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <.link navigate={~p"/prints"} class="btn btn-primary">Browse the stock</.link>
+        <.link navigate={~p"/contact"} class="btn btn-ghost border-base-300">Get in touch</.link>
+      </div>
+    </div>
     <.link
-      :for={category <- @categories}
-      navigate={~p"/prints/#{category.slug}"}
-      class="group border border-base-300 p-6 transition hover:border-primary"
+      :if={@hero}
+      navigate={~p"/prints/#{@hero.category}/#{@hero.slug}"}
+      class="print-mount mx-auto block w-full max-w-sm p-6 sm:p-8"
     >
-      <h2 class="font-serif text-2xl group-hover:text-primary">{category.name}</h2>
-      <p class="mt-2 text-sm text-base-content/70">{category.blurb}</p>
-      <p class="mt-4 text-xs uppercase tracking-widest text-primary">
-        Browse <span aria-hidden="true">&rarr;</span>
+      <img
+        src={JanPaintings.Catalog.image_url(@hero.image)}
+        alt={"#{@hero.artist}, #{@hero.title}"}
+        class="mx-auto max-h-96 shadow-lg"
+      />
+      <p class="mt-4 text-center text-xs text-base-content/60">
+        {@hero.artist}, <span class="italic">{@hero.title}</span>
       </p>
     </.link>
   </section>
 
-  <section class="mt-20">
-    <h2 class="font-serif text-2xl">From the stock</h2>
-    <div class="mt-8 grid gap-10 sm:grid-cols-2 md:grid-cols-3">
+  <section class="mt-16 grid gap-6 sm:grid-cols-3">
+    <.link
+      :for={{category, cover} <- @categories}
+      navigate={~p"/prints/#{category.slug}"}
+      class="group flex flex-row items-center gap-4 border border-base-300 bg-base-100/60 p-4 transition hover:border-accent sm:flex-col sm:items-stretch sm:p-5"
+    >
+      <div class="print-mount flex size-24 shrink-0 items-center justify-center p-2 sm:h-56 sm:w-auto sm:p-5">
+        <img
+          :if={cover}
+          src={JanPaintings.Catalog.image_url(cover.image)}
+          alt=""
+          loading="lazy"
+          class="max-h-full max-w-full object-contain shadow"
+        />
+      </div>
+      <div>
+        <h2 class="font-serif text-xl group-hover:text-accent sm:text-2xl">{category.name}</h2>
+        <p class="mt-1 text-sm text-base-content/70">{category.blurb}</p>
+        <p class="mt-3 hidden text-xs uppercase tracking-widest text-accent sm:block">
+          Browse <span aria-hidden="true">&rarr;</span>
+        </p>
+      </div>
+    </.link>
+  </section>
+
+  <section class="mt-16 sm:mt-20">
+    <div class="flex items-baseline justify-between gap-4 border-b border-base-300 pb-3">
+      <h2 class="font-serif text-2xl">From the stock</h2>
+    </div>
+    <div class="mt-8 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-8 md:grid-cols-3">
       <.print_card :for={print <- @featured} print={print} />
     </div>
   </section>

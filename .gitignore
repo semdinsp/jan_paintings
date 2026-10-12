@@ -35,3 +35,6 @@ jan_paintings-*.tar
 npm-debug.log
 /assets/node_modules/
 
+
+# gstack browse/QA reports
+/.gstack/

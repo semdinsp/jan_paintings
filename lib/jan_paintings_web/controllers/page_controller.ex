@@ -4,8 +4,11 @@ defmodule JanPaintingsWeb.PageController do
   alias JanPaintings.Catalog
 
   def home(conn, _params) do
+    categories = Enum.map(Catalog.categories(), &{&1, Catalog.cover_print(&1.slug)})
+
     render(conn, :home,
-      categories: Catalog.categories(),
+      categories: categories,
+      hero: Catalog.get_print("pether-a-farriers-shop-after-joseph-wright-of-derby"),
       featured: Catalog.featured_prints()
     )
   end

@@ -1,13 +1,13 @@
 <Layouts.app flash={@flash}>
   <.link
     navigate={~p"/prints/#{@category.slug}"}
-    class="text-sm uppercase tracking-widest text-base-content/60 hover:text-primary"
+    class="text-sm uppercase tracking-widest text-base-content/60 hover:text-accent"
   >
     <span aria-hidden="true">&larr;</span> {@category.name}
   </.link>
 
-  <div class="mt-8 grid gap-10 lg:grid-cols-[3fr_2fr]">
-    <div class="flex items-start justify-center bg-base-200 p-6">
+  <div class="mt-6 grid gap-8 md:grid-cols-[3fr_2fr] lg:gap-12">
+    <div class="print-mount flex items-center justify-center p-4 sm:p-10">
       <img
         src={JanPaintings.Catalog.image_url(@print.image)}
         alt={"#{@print.artist}, #{@print.title}"}
@@ -19,12 +19,12 @@
       <p class="text-xs uppercase tracking-[0.2em] text-base-content/60">
         {@print.artist}<span :if={@print.dates != ""}> ({@print.dates})</span>
       </p>
-      <h1 class="mt-2 font-serif text-3xl leading-snug">{@print.title}</h1>
+      <h1 class="mt-2 font-serif text-2xl leading-snug sm:text-3xl">{@print.title}</h1>
       <p :if={@print.medium != ""} class="mt-4 text-lg text-base-content/80">{@print.medium}</p>
 
       <a
         href={"mailto:jan@janjohnsonprints.com?subject=" <> URI.encode("Enquiry: #{@print.artist}, #{@print.title}")}
-        class="btn btn-primary mt-8"
+        class="btn btn-primary mt-8 w-full sm:w-auto"
       >
         Enquire about this print
       </a>
