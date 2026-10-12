@@ -83,9 +83,6 @@ defmodule JanPaintingsWeb.PageHTML do
       <p :if={@print.medium != ""} class="mt-0.5 text-xs text-base-content/60 sm:text-sm">
         {@print.medium}
       </p>
-      <p :if={@print.price != ""} class="mt-1 text-xs font-medium text-base-content/80 sm:text-sm">
-        {@print.price}
-      </p>
     </.link>
     """
   end

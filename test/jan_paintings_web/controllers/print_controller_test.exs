@@ -50,8 +50,15 @@ defmodule JanPaintingsWeb.PrintControllerTest do
     assert html =~ Catalog.get_print("dusart-fiddler-in-an-inn").price
     assert html =~ "USD"
 
-    html = conn |> get(~p"/prints/canadian") |> html_response(200)
+    html = conn |> get(~p"/prints/canadian/greene-the-log-shack") |> html_response(200)
     assert html =~ "$275 CAD"
+  end
+
+  test "prices are not shown on the home page or print lists", %{conn: conn} do
+    for path <- [~p"/", ~p"/prints", ~p"/prints/canadian"] do
+      html = conn |> get(path) |> html_response(200)
+      refute html =~ ~r/\$[\d,]+ (USD|CAD)/, "price shown on #{path}"
+    end
   end
 
   test "sold prints get a badge in the list and on the detail page", %{conn: conn} do
