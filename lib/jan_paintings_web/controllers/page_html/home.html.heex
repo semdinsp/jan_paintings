@@ -11,7 +11,9 @@
         A carefully researched stock with an emphasis on fine impressions and good condition.
         Browse a selection below, or get in touch to ask about holdings not shown here.
       </p>
-      <.search_form class="mt-8 max-w-lg" />
+      <div class="mt-8">
+        {live_render(@conn, JanPaintingsWeb.SearchLive, id: "home-search-live")}
+      </div>
       <div class="mt-4 flex flex-wrap gap-3">
         <.link navigate={~p"/prints"} class="btn btn-ghost border-base-300">Browse the stock</.link>
         <.link href={~p"/about" <> "#contact"} class="btn btn-ghost border-base-300">

@@ -7,14 +7,19 @@
       {(@category && @category.blurb) ||
         "A selection from the stock across Old Master, Modern and Canadian prints."}
     </p>
-    <.search_form value={@query} class="mt-6 max-w-xl" />
+    <.search_form
+      value={@query}
+      class="mt-6 max-w-xl"
+      phx-change="search"
+      phx-submit="search"
+    />
     <div class="mt-4"><.category_filter current={@category} query={@query} /></div>
     <p class="mt-4 text-sm text-base-content/60">
       <%= if @query != "" do %>
         {length(@prints)} {if length(@prints) == 1, do: "print", else: "prints"} matching
         “<span class="font-medium text-base-content">{@query}</span>”.
         <.link
-          navigate={if @category, do: ~p"/prints/#{@category.slug}", else: ~p"/prints"}
+          patch={if @category, do: ~p"/prints/#{@category.slug}", else: ~p"/prints"}
           class="ml-1 text-accent underline underline-offset-4"
         >
           Clear search
@@ -32,7 +37,7 @@
     <p class="font-serif text-xl text-base-content">No prints found</p>
     <p class="mt-2">
       Try a different spelling, just the artist's surname, or <.link
-        navigate={~p"/prints?#{[q: @query]}"}
+        patch={~p"/prints?#{[q: @query]}"}
         class="text-accent underline underline-offset-4"
       >
         search all categories</.link>.
@@ -45,7 +50,10 @@
     </p>
   </div>
 
-  <div class="mt-10 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-8 md:grid-cols-3 lg:grid-cols-4">
+  <div
+    id="print-results"
+    class="mt-10 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-8 md:grid-cols-3 lg:grid-cols-4"
+  >
     <.print_card :for={print <- @prints} print={print} />
   </div>
 </Layouts.app>

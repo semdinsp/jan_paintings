@@ -37,17 +37,28 @@ defmodule JanPaintingsWeb.PageHTML do
   @doc "Search box for artist names and print titles; submits to the print list."
   attr :value, :string, default: ""
   attr :class, :any, default: nil
+  attr :id, :string, default: "search-form"
+  attr :rest, :global, doc: "LiveView bindings such as phx-change and phx-submit"
 
   def search_form(assigns) do
     ~H"""
-    <form action={~p"/prints"} method="get" role="search" class={["flex gap-2", @class]}>
+    <form
+      id={@id}
+      action={~p"/prints"}
+      method="get"
+      role="search"
+      class={["flex gap-2", @class]}
+      {@rest}
+    >
       <label class="input flex-1">
         <.icon name="hero-magnifying-glass" class="size-5 shrink-0 opacity-60" />
         <span class="sr-only">Search by artist or title</span>
         <input
+          id={"#{@id}-input"}
           type="search"
           name="q"
           value={@value}
+          phx-debounce="250"
           placeholder="Search by artist or title"
           autocomplete="off"
           class="grow"

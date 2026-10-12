@@ -1,7 +1,7 @@
 defmodule JanPaintingsWeb.PrintHTML do
   use JanPaintingsWeb, :html
 
-  import JanPaintingsWeb.PageHTML, only: [print_card: 1, search_form: 1, status_badge: 1]
+  import JanPaintingsWeb.PageHTML, only: [print_card: 1, status_badge: 1]
 
   embed_templates "print_html/*"
 
@@ -46,7 +46,7 @@ defmodule JanPaintingsWeb.PrintHTML do
     >
       <.link
         :for={{label, path, active} <- @options}
-        navigate={path}
+        patch={path}
         aria-current={active && "page"}
         class={[
           "shrink-0 rounded-full border px-4 py-1.5 text-sm transition",

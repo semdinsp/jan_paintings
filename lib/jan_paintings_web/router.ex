@@ -21,8 +21,8 @@ defmodule JanPaintingsWeb.Router do
     get "/about", PageController, :about
     post "/about", PageController, :create_message
     get "/contact", PageController, :contact_redirect
-    get "/prints", PrintController, :index
-    get "/prints/:category", PrintController, :index
+    live "/prints", PrintLive.Index, :index
+    live "/prints/:category", PrintLive.Index, :index
     get "/prints/:category/:slug", PrintController, :show
   end
 
