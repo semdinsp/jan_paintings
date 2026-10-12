@@ -32,7 +32,12 @@ defmodule JanPaintingsWeb.PrintController do
 
     if is_nil(print) or print.category != category.slug, do: raise_not_found()
 
-    render(conn, :show, page_title: print.title, category: category, print: print)
+    render(conn, :show,
+      page_title: print.title,
+      category: category,
+      print: print,
+      more_by_artist: Catalog.more_by_artist(print)
+    )
   end
 
   defp raise_not_found, do: raise(NotFoundError)

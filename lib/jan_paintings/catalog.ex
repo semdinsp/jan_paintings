@@ -58,6 +58,34 @@ defmodule JanPaintings.Catalog do
   def get_print(slug), do: Enum.find(@prints, &(&1.slug == slug))
 
   @doc """
+  Other prints by the same artist as `print`, in catalogue order.
+
+  Artists are matched on surname plus first given name, so "ARMINGTON,
+  Caroline" and "ARMINGTON, Frank" stay apart, while qualifiers such as
+  "GHISI, Giorgio, attributed to" still match "GHISI, Giorgio".
+  """
+  def more_by_artist(print) do
+    key = artist_key(print.artist)
+    Enum.filter(@prints, &(&1.slug != print.slug && artist_key(&1.artist) == key))
+  end
+
+  defp artist_key(artist) do
+    folded = artist |> String.replace(~r/\(.*?\)/, " ") |> fold()
+
+    {surname, given} =
+      case String.split(folded, ",", parts: 2) do
+        [surname, given] -> {surname, given}
+        [single] -> single |> String.split(" ", parts: 2, trim: true) |> List.to_tuple() |> pad()
+      end
+
+    first_given = given |> String.split(~r/[^\p{L}]+/u, trim: true) |> List.first()
+    {String.trim(surname), first_given}
+  end
+
+  defp pad({surname}), do: {surname, ""}
+  defp pad(pair), do: pair
+
+  @doc """
   Filters prints to those whose artist or title contains every word of the query.
 
   Matching ignores case and accents, so "dore" finds "DORÉ". A blank query

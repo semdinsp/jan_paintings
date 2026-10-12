@@ -20,6 +20,13 @@
         {@print.artist}<span :if={@print.dates != ""}> ({@print.dates})</span>
       </p>
       <h1 class="mt-2 font-serif text-2xl leading-snug sm:text-3xl">{@print.title}</h1>
+      <a
+        :if={@more_by_artist != []}
+        href="#more-by-artist"
+        class="mt-2 inline-block text-sm text-accent underline underline-offset-4 hover:opacity-70"
+      >
+        More by this artist ({length(@more_by_artist)})
+      </a>
       <.status_badge status={@print.status} class="mt-3" />
       <p :if={@print.details != ""} class="mt-4 leading-relaxed text-base-content/80">
         {@print.details}
@@ -49,4 +56,15 @@
       </.link>
     </div>
   </div>
+
+  <section
+    :if={@more_by_artist != []}
+    id="more-by-artist"
+    class="mt-16 scroll-mt-6 border-t border-base-300 pt-10"
+  >
+    <h2 class="font-serif text-2xl">More by this artist</h2>
+    <div class="mt-8 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-8 md:grid-cols-3 lg:grid-cols-4">
+      <.print_card :for={print <- @more_by_artist} print={print} />
+    </div>
+  </section>
 </Layouts.app>

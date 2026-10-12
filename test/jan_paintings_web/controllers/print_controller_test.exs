@@ -100,6 +100,22 @@ defmodule JanPaintingsWeb.PrintControllerTest do
     assert html =~ "No prints found"
   end
 
+  test "links to more prints by the same artist", %{conn: conn} do
+    html =
+      conn
+      |> get(~p"/prints/canadian/neilson-dredging-the-st-charles-river")
+      |> html_response(200)
+
+    assert html =~ "More by this artist (3)"
+    assert html =~ ~s(id="more-by-artist")
+    assert html =~ ~s(href="/prints/canadian/neilson-timber-ship-quebec")
+  end
+
+  test "omits the section when the artist has no other prints", %{conn: conn} do
+    html = conn |> get(~p"/prints/old-masters/dusart-fiddler-in-an-inn") |> html_response(200)
+    refute html =~ "More by this artist"
+  end
+
   test "404s for unknown category or mismatched print", %{conn: conn} do
     print = hd(Catalog.list_prints("old-masters"))
 

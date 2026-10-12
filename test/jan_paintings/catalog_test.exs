@@ -58,4 +58,25 @@ defmodule JanPaintings.CatalogTest do
       assert Catalog.search(prints, nil) == prints
     end
   end
+
+  describe "more_by_artist/1" do
+    test "lists the artist's other prints" do
+      print = Catalog.get_print("neilson-dredging-the-st-charles-river")
+      others = Catalog.more_by_artist(print)
+
+      assert length(others) == 3
+      assert Enum.all?(others, &(&1.artist =~ "NEILSON"))
+      refute print in others
+    end
+
+    test "keeps different artists with the same surname apart" do
+      print = Catalog.get_print("armington-the-mosque-on-the-mount-of-olives")
+      assert Catalog.more_by_artist(print) == []
+    end
+
+    test "ignores qualifiers such as 'attributed to'" do
+      print = Catalog.get_print("ghisi-the-visitation-after-francesco-salviati")
+      assert [%{artist: "GHISI, Giorgio, attributed to"}] = Catalog.more_by_artist(print)
+    end
+  end
 end
