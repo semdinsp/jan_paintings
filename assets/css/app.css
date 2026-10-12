@@ -104,8 +104,10 @@
 
 /* This file is for your main application CSS */
 
+/* Tinos (Google Fonts) is metric-compatible with Times New Roman. */
 @theme {
-  --font-serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --font-serif: "Tinos", "Times New Roman", Times, serif;
+  --font-sans: "Tinos", "Times New Roman", Times, serif;
 }
 
 /* Page background: sage paper texture, echoing the original site. */
