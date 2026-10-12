@@ -18,6 +18,10 @@ defmodule JanPaintingsWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+    get "/about", PageController, :about
+    get "/contact", PageController, :contact
+    get "/prints/:category", PrintController, :index
+    get "/prints/:category/:slug", PrintController, :show
   end
 
   # Other scopes may use custom stacks.
