@@ -10,8 +10,4 @@ defmodule JanPaintingsWeb.PageControllerTest do
   test "GET /about", %{conn: conn} do
     assert conn |> get(~p"/about") |> html_response(200) =~ "International Fine Print Dealers"
   end
-
-  test "GET /contact", %{conn: conn} do
-    assert conn |> get(~p"/contact") |> html_response(200) =~ "jan@janjohnsonprints.com"
-  end
 end

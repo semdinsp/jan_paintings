@@ -22,10 +22,13 @@
       the British Museum, the Rijksmuseum, the Metropolitan Museum of Art, the National Gallery of
       Art in Washington, the National Gallery of Canada and the Art Gallery of Ontario.
     </p>
-    <p>
-      <.link navigate={~p"/contact"} class="text-accent underline underline-offset-4">
-        Get in touch
-      </.link>
-    </p>
   </article>
+
+  <section class="mt-12 max-w-3xl border-t border-base-300 pt-10">
+    <h2 class="font-serif text-2xl sm:text-3xl">Contact</h2>
+    <.contact_details class="mt-6 text-base sm:text-lg" />
+    <.link navigate={~p"/contact"} class="btn btn-primary mt-8 w-full sm:w-auto">
+      Send us a message
+    </.link>
+  </section>
 </Layouts.app>

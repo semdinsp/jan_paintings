@@ -1,26 +1,48 @@
 <Layouts.app flash={@flash}>
-  <section class="max-w-2xl space-y-6">
-    <h1 class="font-serif text-4xl">Contact</h1>
-    <p class="text-lg text-base-content/80">
-      To ask about a print, request a stock list or book a viewing, email or call.
-      All prices are quoted in US dollars.
-    </p>
-    <dl class="grid gap-4 sm:grid-cols-[8rem_1fr]">
-      <dt class="text-xs uppercase tracking-widest text-base-content/60">Email</dt>
-      <dd>
-        <a
-          href="mailto:jan@janjohnsonprints.com"
-          class="text-accent underline underline-offset-4"
-        >
-          jan@janjohnsonprints.com
-        </a>
-      </dd>
-      <dt class="text-xs uppercase tracking-widest text-base-content/60">Phone</dt>
-      <dd>450.658.2752</dd>
-      <dt class="text-xs uppercase tracking-widest text-base-content/60">Fax</dt>
-      <dd>450.658.7654</dd>
-      <dt class="text-xs uppercase tracking-widest text-base-content/60">Address</dt>
-      <dd>189 rue Saint-Pierre<br />Chambly, QC, Canada J3L 1L8</dd>
-    </dl>
-  </section>
+  <div class="grid gap-12 lg:grid-cols-[2fr_3fr] lg:gap-16">
+    <section>
+      <h1 class="font-serif text-3xl sm:text-4xl">Contact</h1>
+      <p class="mt-4 text-base text-base-content/80 sm:text-lg">
+        To ask about a print, request a stock list or book a viewing, send a message or get in
+        touch directly. Prices are quoted in US dollars.
+      </p>
+      <.contact_details class="mt-8" />
+    </section>
+
+    <section class="print-mount p-5 sm:p-8">
+      <h2 class="font-serif text-2xl">Send a message</h2>
+      <p class="mt-1 text-sm text-base-content/60">
+        We'll reply by email, usually within a few days.
+      </p>
+
+      <.form for={@form} action={~p"/contact"} id="contact-form" class="mt-6">
+        <div class="grid gap-x-4 sm:grid-cols-2">
+          <.input field={@form[:name]} label="Name" autocomplete="name" required />
+          <.input field={@form[:email]} type="email" label="Email" autocomplete="email" required />
+        </div>
+        <div class="grid gap-x-4 sm:grid-cols-2">
+          <.input field={@form[:phone]} type="tel" label="Phone (optional)" autocomplete="tel" />
+          <.input field={@form[:subject]} label="Subject (optional)" />
+        </div>
+        <.input field={@form[:message]} type="textarea" label="Message" rows="6" required />
+        <.input field={@form[:print_slug]} type="hidden" />
+
+        <%!-- Spam trap: hidden from people, often filled in by bots. --%>
+        <div class="hidden" aria-hidden="true">
+          <label>
+            Leave this empty
+            <input
+              type="text"
+              name="contact_message[website]"
+              value=""
+              tabindex="-1"
+              autocomplete="off"
+            />
+          </label>
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-2 w-full sm:w-auto">Send message</button>
+      </.form>
+    </section>
+  </div>
 </Layouts.app>

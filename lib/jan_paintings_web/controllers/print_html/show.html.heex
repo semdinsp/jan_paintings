@@ -22,12 +22,12 @@
       <h1 class="mt-2 font-serif text-2xl leading-snug sm:text-3xl">{@print.title}</h1>
       <p :if={@print.medium != ""} class="mt-4 text-lg text-base-content/80">{@print.medium}</p>
 
-      <a
-        href={"mailto:jan@janjohnsonprints.com?subject=" <> URI.encode("Enquiry: #{@print.artist}, #{@print.title}")}
+      <.link
+        navigate={~p"/contact?#{[print: @print.slug]}"}
         class="btn btn-primary mt-8 w-full sm:w-auto"
       >
         Enquire about this print
-      </a>
+      </.link>
     </div>
   </div>
 </Layouts.app>

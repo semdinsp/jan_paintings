@@ -10,6 +10,30 @@ defmodule JanPaintingsWeb.PageHTML do
 
   embed_templates "page_html/*"
 
+  @doc "The gallery's address, email and phone numbers."
+  attr :class, :any, default: nil
+
+  def contact_details(assigns) do
+    ~H"""
+    <dl class={["grid gap-x-6 gap-y-3 sm:grid-cols-[6rem_1fr]", @class]}>
+      <dt class="text-xs uppercase tracking-widest text-base-content/60 sm:pt-1">Email</dt>
+      <dd>
+        <a href="mailto:jan@janjohnsonprints.com" class="text-accent underline underline-offset-4">
+          jan@janjohnsonprints.com
+        </a>
+      </dd>
+      <dt class="text-xs uppercase tracking-widest text-base-content/60 sm:pt-1">Phone</dt>
+      <dd><a href="tel:+14506582752" class="hover:text-accent">450.658.2752</a></dd>
+      <dt class="text-xs uppercase tracking-widest text-base-content/60 sm:pt-1">Fax</dt>
+      <dd>450.658.7654</dd>
+      <dt class="text-xs uppercase tracking-widest text-base-content/60 sm:pt-1">Address</dt>
+      <dd>189 rue Saint-Pierre<br />Chambly, QC, Canada J3L 1L8</dd>
+      <dt class="text-xs uppercase tracking-widest text-base-content/60 sm:pt-1">Visits</dt>
+      <dd>By appointment</dd>
+    </dl>
+    """
+  end
+
   @doc "A mounted print card linking to a print's detail page."
   attr :print, :map, required: true
 
