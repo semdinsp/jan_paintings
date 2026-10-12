@@ -11,6 +11,7 @@ defmodule JanPaintings.Catalog do
   @categories [
     %{
       slug: "old-masters",
+      banner: "images/New banner Old Masters.jpg",
       name: "Old Master Prints",
       short: "Old Masters",
       blurb:
@@ -18,12 +19,14 @@ defmodule JanPaintings.Catalog do
     },
     %{
       slug: "modern",
+      banner: "images/New banner Mods.jpg",
       name: "Modern Prints",
       short: "Modern",
       blurb: "European printmaking of the nineteenth and early twentieth centuries."
     },
     %{
       slug: "canadian",
+      banner: "images/New banner Canadians.jpg",
       name: "Canadian Prints",
       short: "Canadian",
       blurb:
@@ -41,6 +44,12 @@ defmodule JanPaintings.Catalog do
   def categories, do: @categories
 
   def get_category(slug), do: Enum.find(@categories, &(&1.slug == slug))
+
+  @doc "Header banner image for a category, falling back to the Old Masters banner."
+  def banner_url(category_slug) do
+    category = get_category(category_slug) || hd(@categories)
+    image_url(category.banner)
+  end
 
   def list_prints, do: @prints
 

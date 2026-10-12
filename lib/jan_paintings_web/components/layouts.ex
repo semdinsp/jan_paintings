@@ -31,6 +31,10 @@ defmodule JanPaintingsWeb.Layouts do
     default: nil,
     doc: "the current [scope](https://phoenix.hexdocs.pm/scopes.html)"
 
+  attr :banner, :string,
+    default: nil,
+    doc: "category slug whose print detail is shown in the header art strip"
+
   slot :inner_block, required: true
 
   def app(assigns) do
@@ -38,49 +42,60 @@ defmodule JanPaintingsWeb.Layouts do
 
     ~H"""
     <div class="flex min-h-screen flex-col">
-      <header class="border-b-4 border-secondary bg-primary text-primary-content">
-        <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
-          <.link navigate={~p"/"} class="block min-w-0">
-            <span class="block font-serif text-2xl tracking-tight sm:text-3xl">Jan Johnson</span>
-            <span class="block truncate text-[0.65rem] uppercase tracking-[0.25em] opacity-75 sm:text-xs">
-              Old Master &amp; Modern Prints
-            </span>
-          </.link>
+      <header>
+        <div class="relative overflow-hidden bg-primary text-primary-content">
+          <div
+            class="banner-art absolute inset-y-0 right-0 max-w-[65%] sm:max-w-[60%]"
+            style={"background-image: url('#{JanPaintings.Catalog.banner_url(@banner)}')"}
+            aria-hidden="true"
+          />
+          <div class="relative mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-5 sm:px-6 sm:py-7 lg:px-8">
+            <.link navigate={~p"/"} class="block min-w-0">
+              <span class="block font-serif text-2xl tracking-tight sm:text-4xl">Jan Johnson</span>
+              <span class="block truncate text-[0.65rem] uppercase tracking-[0.25em] opacity-80 sm:text-xs">
+                Old Master &amp; Modern Prints
+              </span>
+            </.link>
 
-          <nav class="hidden items-center gap-6 text-sm uppercase tracking-wider lg:flex">
+            <details class="group relative lg:hidden">
+              <summary
+                class="flex cursor-pointer list-none items-center rounded bg-primary/85 p-2 shadow hover:bg-primary [&::-webkit-details-marker]:hidden"
+                aria-label="Menu"
+              >
+                <.icon name="hero-bars-3" class="size-6 group-open:hidden" />
+                <.icon name="hero-x-mark" class="hidden size-6 group-open:block" />
+              </summary>
+              <nav class="absolute right-0 z-20 mt-2 flex w-56 flex-col rounded-box bg-base-100 p-2 text-base-content shadow-xl">
+                <.link navigate={~p"/prints"} class="rounded px-3 py-2 hover:bg-base-200">
+                  All Prints
+                </.link>
+                <.link
+                  :for={c <- @categories}
+                  navigate={~p"/prints/#{c.slug}"}
+                  class="rounded px-3 py-2 hover:bg-base-200"
+                >
+                  {c.name}
+                </.link>
+                <.link navigate={~p"/about"} class="rounded px-3 py-2 hover:bg-base-200">About</.link>
+                <.link navigate={~p"/contact"} class="rounded px-3 py-2 hover:bg-base-200">
+                  Contact
+                </.link>
+                <div class="mt-2 border-t border-base-300 px-3 pt-3"><.theme_toggle /></div>
+              </nav>
+            </details>
+          </div>
+        </div>
+
+        <div class="h-1 bg-secondary lg:h-auto">
+          <nav class="mx-auto hidden max-w-6xl items-center gap-7 px-8 py-2.5 text-sm uppercase tracking-wider text-secondary-content lg:flex">
             <.link navigate={~p"/prints"} class="nav-link">All Prints</.link>
             <.link :for={c <- @categories} navigate={~p"/prints/#{c.slug}"} class="nav-link">
               {c.short}
             </.link>
             <.link navigate={~p"/about"} class="nav-link">About</.link>
             <.link navigate={~p"/contact"} class="nav-link">Contact</.link>
-            <.theme_toggle />
+            <div class="ml-auto"><.theme_toggle /></div>
           </nav>
-
-          <details class="group relative lg:hidden">
-            <summary
-              class="flex cursor-pointer list-none items-center rounded p-2 hover:bg-white/10 [&::-webkit-details-marker]:hidden"
-              aria-label="Menu"
-            >
-              <.icon name="hero-bars-3" class="size-6 group-open:hidden" />
-              <.icon name="hero-x-mark" class="hidden size-6 group-open:block" />
-            </summary>
-            <nav class="absolute right-0 z-20 mt-2 flex w-56 flex-col rounded-box bg-base-100 p-2 text-base-content shadow-xl">
-              <.link navigate={~p"/prints"} class="rounded px-3 py-2 hover:bg-base-200">All Prints</.link>
-              <.link
-                :for={c <- @categories}
-                navigate={~p"/prints/#{c.slug}"}
-                class="rounded px-3 py-2 hover:bg-base-200"
-              >
-                {c.name}
-              </.link>
-              <.link navigate={~p"/about"} class="rounded px-3 py-2 hover:bg-base-200">About</.link>
-              <.link navigate={~p"/contact"} class="rounded px-3 py-2 hover:bg-base-200">
-                Contact
-              </.link>
-              <div class="mt-2 border-t border-base-300 px-3 pt-3"><.theme_toggle /></div>
-            </nav>
-          </details>
         </div>
       </header>
 

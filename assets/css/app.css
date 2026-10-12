@@ -146,3 +146,16 @@ body {
 
 .nav-link { transition: opacity 150ms; }
 .nav-link:hover { opacity: 0.7; }
+
+/* Header art strip: the print detail from the original site's category
+   banners. The banner's left half is the old logo, so anchor right and
+   fade the left edge into the header colour. */
+.banner-art {
+  /* The art occupies the right 552px of each 1024x125 banner. */
+  aspect-ratio: 552 / 125;
+  background-size: auto 100%;
+  background-position: right center;
+  background-repeat: no-repeat;
+  -webkit-mask-image: linear-gradient(to right, transparent, black 40%);
+  mask-image: linear-gradient(to right, transparent, black 40%);
+}
