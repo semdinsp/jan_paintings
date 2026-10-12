@@ -164,9 +164,10 @@ body {
 @media (min-width: 1024px) {
   .banner-art {
     aspect-ratio: auto;
-    width: min(62vw, 60rem);
+    width: min(50vw, 48rem);
     max-width: none;
-    background-size: calc(100% * 1024 / 552) auto;
+    /* Never shorter than the ~136px header: 136 * 1024 / 125 = 1114px. */
+    background-size: max(calc(100% * 1024 / 552), 1114px) auto;
     -webkit-mask-image: linear-gradient(to right, transparent, black 30%);
     mask-image: linear-gradient(to right, transparent, black 30%);
   }
