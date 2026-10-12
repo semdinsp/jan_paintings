@@ -33,4 +33,29 @@ defmodule JanPaintings.CatalogTest do
       assert price =~ "CAD"
     end
   end
+
+  describe "search/2" do
+    test "matches artist names and titles, ignoring case and accents" do
+      prints = Catalog.list_prints()
+
+      assert [%{slug: "dusart-fiddler-in-an-inn"}] = Catalog.search(prints, "fiddler")
+      assert Enum.all?(Catalog.search(prints, "neilson"), &(&1.artist =~ "NEILSON"))
+      assert Catalog.search(prints, "dore") |> Enum.any?(&(&1.artist =~ "DORÉ"))
+      assert Catalog.search(prints, "morpoue") |> Enum.any?(&(&1.title =~ "Morpoué"))
+    end
+
+    test "requires every word to match" do
+      prints = Catalog.list_prints()
+
+      assert [print] = Catalog.search(prints, "tissot prodigal")
+      assert print.artist =~ "TISSOT"
+      assert Catalog.search(prints, "tissot zebra") == []
+    end
+
+    test "returns everything for a blank query" do
+      prints = Catalog.list_prints()
+      assert Catalog.search(prints, "  ") == prints
+      assert Catalog.search(prints, nil) == prints
+    end
+  end
 end

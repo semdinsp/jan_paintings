@@ -7,18 +7,23 @@ defmodule JanPaintingsWeb.PrintController do
     defexception message: "print not found", plug_status: 404
   end
 
-  def index(conn, %{"category" => category_slug}) do
-    category = Catalog.get_category(category_slug) || raise_not_found()
+  def index(conn, params) do
+    category =
+      case params["category"] do
+        nil -> nil
+        slug -> Catalog.get_category(slug) || raise_not_found()
+      end
+
+    query = params |> Map.get("q", "") |> to_string() |> String.trim()
+    prints = if category, do: Catalog.list_prints(category.slug), else: Catalog.list_prints()
 
     render(conn, :index,
-      page_title: category.name,
+      page_title:
+        if(query != "", do: "Search: #{query}", else: (category && category.name) || "All Prints"),
       category: category,
-      prints: Catalog.list_prints(category.slug)
+      query: query,
+      prints: Catalog.search(prints, query)
     )
-  end
-
-  def index(conn, _params) do
-    render(conn, :index, page_title: "All Prints", category: nil, prints: Catalog.list_prints())
   end
 
   def show(conn, %{"category" => category_slug, "slug" => slug}) do

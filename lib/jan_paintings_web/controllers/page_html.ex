@@ -34,6 +34,30 @@ defmodule JanPaintingsWeb.PageHTML do
     """
   end
 
+  @doc "Search box for artist names and print titles; submits to the print list."
+  attr :value, :string, default: ""
+  attr :class, :any, default: nil
+
+  def search_form(assigns) do
+    ~H"""
+    <form action={~p"/prints"} method="get" role="search" class={["flex gap-2", @class]}>
+      <label class="input flex-1">
+        <.icon name="hero-magnifying-glass" class="size-5 shrink-0 opacity-60" />
+        <span class="sr-only">Search by artist or title</span>
+        <input
+          type="search"
+          name="q"
+          value={@value}
+          placeholder="Search by artist or title"
+          autocomplete="off"
+          class="grow"
+        />
+      </label>
+      <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+    """
+  end
+
   @doc "A Sold or Reserved badge; renders nothing for available prints."
   attr :status, :string, required: true
   attr :class, :any, default: nil

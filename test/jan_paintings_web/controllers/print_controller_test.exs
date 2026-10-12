@@ -83,6 +83,23 @@ defmodule JanPaintingsWeb.PrintControllerTest do
     assert html =~ ~r/>\s*reserved\s*</
   end
 
+  test "home page has a search box", %{conn: conn} do
+    html = conn |> get(~p"/") |> html_response(200)
+    assert html =~ ~s(role="search")
+    assert html =~ ~s(name="q")
+  end
+
+  test "searches by artist or title and keeps the search when filtering", %{conn: conn} do
+    html = conn |> get(~p"/prints?q=neilson") |> html_response(200)
+    assert html =~ "4 prints matching"
+    assert html =~ "Dredging the St. Charles River"
+    assert html =~ ~s(href="/prints/canadian?q=neilson")
+
+    html = conn |> get(~p"/prints/modern?q=neilson") |> html_response(200)
+    assert html =~ "0 prints matching"
+    assert html =~ "No prints found"
+  end
+
   test "404s for unknown category or mismatched print", %{conn: conn} do
     print = hd(Catalog.list_prints("old-masters"))
 

@@ -1,7 +1,7 @@
 defmodule JanPaintingsWeb.PrintHTML do
   use JanPaintingsWeb, :html
 
-  import JanPaintingsWeb.PageHTML, only: [print_card: 1, status_badge: 1]
+  import JanPaintingsWeb.PageHTML, only: [print_card: 1, search_form: 1, status_badge: 1]
 
   embed_templates "print_html/*"
 
@@ -20,16 +20,20 @@ defmodule JanPaintingsWeb.PrintHTML do
 
   @doc "Filter tabs for switching between all prints and each category."
   attr :current, :map, default: nil
+  attr :query, :string, default: ""
 
   def category_filter(assigns) do
+    # Switching category keeps the current search.
+    params = if assigns.query != "", do: [q: assigns.query], else: []
+
     assigns =
       assign(assigns,
         options: [
-          {"All", ~p"/prints", is_nil(assigns.current)}
+          {"All", ~p"/prints?#{params}", is_nil(assigns.current)}
           | for(
               c <- JanPaintings.Catalog.categories(),
               do:
-                {c.short, ~p"/prints/#{c.slug}",
+                {c.short, ~p"/prints/#{c.slug}?#{params}",
                  assigns.current && assigns.current.slug == c.slug}
             )
         ]

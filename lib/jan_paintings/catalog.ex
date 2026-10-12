@@ -57,6 +57,34 @@ defmodule JanPaintings.Catalog do
 
   def get_print(slug), do: Enum.find(@prints, &(&1.slug == slug))
 
+  @doc """
+  Filters prints to those whose artist or title contains every word of the query.
+
+  Matching ignores case and accents, so "dore" finds "DORÉ". A blank query
+  returns the prints unchanged.
+  """
+  def search(prints, query) when is_binary(query) do
+    case query |> fold() |> String.split(~r/[^\p{L}\p{N}]+/u, trim: true) do
+      [] ->
+        prints
+
+      terms ->
+        Enum.filter(prints, fn print ->
+          haystack = fold(print.artist <> " " <> print.title)
+          Enum.all?(terms, &String.contains?(haystack, &1))
+        end)
+    end
+  end
+
+  def search(prints, _query), do: prints
+
+  defp fold(text) do
+    text
+    |> String.normalize(:nfd)
+    |> String.replace(~r/\p{Mn}/u, "")
+    |> String.downcase()
+  end
+
   @doc "A spread of prints across the catalogue for the homepage, excluding category covers."
   def featured_prints do
     covers = Enum.map(@categories, &cover_print(&1.slug))
