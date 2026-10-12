@@ -12,6 +12,23 @@ defmodule JanPaintingsWeb.PrintControllerTest do
     end
   end
 
+  test "lists all prints with category filter", %{conn: conn} do
+    html = conn |> get(~p"/prints") |> html_response(200)
+    assert html =~ "All Prints"
+    assert html =~ "#{length(Catalog.list_prints())} prints shown"
+
+    for category <- Catalog.categories() do
+      assert html =~ ~s(href="/prints/#{category.slug}")
+    end
+  end
+
+  test "marks the active filter", %{conn: conn} do
+    html = conn |> get(~p"/prints/modern") |> html_response(200)
+
+    assert html =~
+             ~r/href="\/prints\/modern"[^>]*aria-current="page"|aria-current="page"[^>]*href="\/prints\/modern"/
+  end
+
   test "shows a print", %{conn: conn} do
     print = hd(Catalog.list_prints("old-masters"))
     html = conn |> get(~p"/prints/old-masters/#{print.slug}") |> html_response(200)

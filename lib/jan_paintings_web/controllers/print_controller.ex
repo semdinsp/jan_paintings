@@ -17,6 +17,10 @@ defmodule JanPaintingsWeb.PrintController do
     )
   end
 
+  def index(conn, _params) do
+    render(conn, :index, page_title: "All Prints", category: nil, prints: Catalog.list_prints())
+  end
+
   def show(conn, %{"category" => category_slug, "slug" => slug}) do
     category = Catalog.get_category(category_slug) || raise_not_found()
     print = Catalog.get_print(slug)
