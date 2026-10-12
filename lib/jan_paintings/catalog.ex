@@ -1,0 +1,60 @@
+defmodule JanPaintings.Catalog do
+  @moduledoc """
+  Read-only print catalogue, compiled from `priv/data/prints.json`.
+
+  The data was scraped from the "Selected Stock" pages of janjohnsonprints.com.
+  Images are served from that site, so only relative paths are stored here.
+  """
+
+  @image_host "https://janjohnsonprints.com/"
+
+  @categories [
+    %{
+      slug: "old-masters",
+      name: "Old Master Prints",
+      short: "Old Masters",
+      blurb:
+        "Engravings, etchings, woodcuts and mezzotints from the fifteenth to the eighteenth century."
+    },
+    %{
+      slug: "modern",
+      name: "Modern Prints",
+      short: "Modern",
+      blurb: "European printmaking of the nineteenth and early twentieth centuries."
+    },
+    %{
+      slug: "canadian",
+      name: "Canadian Prints",
+      short: "Canadian",
+      blurb:
+        "Etchings, woodcuts and linocuts by Canadian printmakers of the early twentieth century."
+    }
+  ]
+
+  @data_path Path.join(:code.priv_dir(:jan_paintings), "data/prints.json")
+  @external_resource @data_path
+
+  @prints @data_path
+          |> File.read!()
+          |> Jason.decode!(keys: :atoms)
+
+  def categories, do: @categories
+
+  def get_category(slug), do: Enum.find(@categories, &(&1.slug == slug))
+
+  def list_prints, do: @prints
+
+  def list_prints(category_slug), do: Enum.filter(@prints, &(&1.category == category_slug))
+
+  def get_print(slug), do: Enum.find(@prints, &(&1.slug == slug))
+
+  @doc "Returns one print per category, used as the homepage feature."
+  def featured_prints do
+    for %{slug: slug} <- @categories,
+        print = Enum.find(@prints, &(&1.category == slug && &1.medium != "")),
+        do: print
+  end
+
+  @doc "Absolute URL for an image path stored in the catalogue."
+  def image_url(path), do: @image_host <> URI.encode(path)
+end
