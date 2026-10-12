@@ -21,7 +21,7 @@ defmodule JanPaintingsWeb.SearchLiveTest do
       view |> form("#search-form", q: "") |> render_change()
 
       assert_patch(view, ~p"/prints")
-      assert render(view) =~ "157 prints shown"
+      assert render(view) =~ "180 prints shown"
     end
 
     test "searching within a category stays in that category", %{conn: conn} do

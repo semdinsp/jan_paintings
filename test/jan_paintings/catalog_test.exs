@@ -3,12 +3,13 @@ defmodule JanPaintings.CatalogTest do
 
   alias JanPaintings.Catalog
 
-  # Counts of distinct prints on the original janjohnsonprints.com site.
+  # Distinct prints on the original janjohnsonprints.com site, including those
+  # reachable only through its "more by this artist" pages.
   test "matches the print count of the original site" do
-    assert length(Catalog.list_prints()) == 157
-    assert length(Catalog.list_prints("old-masters")) == 81
-    assert length(Catalog.list_prints("modern")) == 44
-    assert length(Catalog.list_prints("canadian")) == 32
+    assert length(Catalog.list_prints()) == 180
+    assert length(Catalog.list_prints("old-masters")) == 89
+    assert length(Catalog.list_prints("modern")) == 54
+    assert length(Catalog.list_prints("canadian")) == 37
   end
 
   test "every print has a unique slug, an artist, a title and an image" do
@@ -25,7 +26,7 @@ defmodule JanPaintings.CatalogTest do
   test "available prints have a price; sold and reserved ones match the original site" do
     by_status = Enum.group_by(Catalog.list_prints(), & &1.status)
 
-    assert length(by_status["sold"]) == 4
+    assert length(by_status["sold"]) == 7
     assert length(by_status["reserved"]) == 2
     assert Enum.all?(by_status["available"], &(&1.price != ""))
 
@@ -78,5 +79,10 @@ defmodule JanPaintings.CatalogTest do
       print = Catalog.get_print("ghisi-the-visitation-after-francesco-salviati")
       assert [%{artist: "GHISI, Giorgio, attributed to"}] = Catalog.more_by_artist(print)
     end
+  end
+
+  test "includes the Tiepolo prints from the original site's more-by-artist pages" do
+    tiepolo = Catalog.list_prints() |> Enum.filter(&(&1.artist =~ "TIEPOLO"))
+    assert length(tiepolo) == 3
   end
 end
