@@ -194,6 +194,10 @@ defmodule JanPaintingsWeb.UserAuth do
       on user_token.
       Redirects to login page if there's no logged user.
 
+    * `:require_admin` - Like `:require_authenticated`, but also
+      requires the user to be an admin. Other users are sent to the
+      home page.
+
   ## Examples
 
   Use the `on_mount` lifecycle macro in LiveViews to mount or authenticate
@@ -228,6 +232,25 @@ defmodule JanPaintingsWeb.UserAuth do
         |> Phoenix.LiveView.redirect(to: ~p"/users/log-in")
 
       {:halt, socket}
+    end
+  end
+
+  def on_mount(:require_admin, params, session, socket) do
+    case on_mount(:require_authenticated, params, session, socket) do
+      {:cont, socket} ->
+        if Scope.admin?(socket.assigns.current_scope) do
+          {:cont, socket}
+        else
+          socket =
+            socket
+            |> Phoenix.LiveView.put_flash(:error, "You do not have access to that page.")
+            |> Phoenix.LiveView.redirect(to: ~p"/")
+
+          {:halt, socket}
+        end
+
+      halted ->
+        halted
     end
   end
 
@@ -276,6 +299,22 @@ defmodule JanPaintingsWeb.UserAuth do
       |> put_flash(:error, "You must log in to access this page.")
       |> maybe_store_return_to()
       |> redirect(to: ~p"/users/log-in")
+      |> halt()
+    end
+  end
+
+  @doc """
+  Used for routes that require the user to be an admin.
+
+  Must come after `require_authenticated_user` in the pipeline.
+  """
+  def require_admin_user(conn, _opts) do
+    if Scope.admin?(conn.assigns.current_scope) do
+      conn
+    else
+      conn
+      |> put_flash(:error, "You do not have access to that page.")
+      |> redirect(to: ~p"/")
       |> halt()
     end
   end

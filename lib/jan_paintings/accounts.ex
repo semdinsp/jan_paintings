@@ -80,6 +80,40 @@ defmodule JanPaintings.Accounts do
     |> Repo.insert()
   end
 
+  ## Admin access
+
+  @doc """
+  Grants or revokes admin access for a user.
+
+  ## Examples
+
+      iex> set_admin(user, true)
+      {:ok, %User{is_admin: true}}
+
+  """
+  def set_admin(%User{} = user, is_admin) when is_boolean(is_admin) do
+    user
+    |> User.admin_changeset(is_admin)
+    |> Repo.update()
+  end
+
+  @doc """
+  Grants admin access to the user with `email`, creating the account first if
+  it does not exist. The user then logs in with a magic link sent to that email.
+  """
+  def grant_admin(email) when is_binary(email) do
+    with {:ok, user} <- get_or_register_user(email) do
+      set_admin(user, true)
+    end
+  end
+
+  defp get_or_register_user(email) do
+    case get_user_by_email(email) do
+      %User{} = user -> {:ok, user}
+      nil -> register_user(%{email: email})
+    end
+  end
+
   ## Settings
 
   @doc """

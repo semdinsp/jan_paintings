@@ -7,6 +7,7 @@ defmodule JanPaintings.Accounts.User do
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :confirmed_at, :utc_datetime
+    field :is_admin, :boolean, default: false
     field :authenticated_at, :utc_datetime, virtual: true
 
     timestamps(type: :utc_datetime)
@@ -104,6 +105,16 @@ defmodule JanPaintings.Accounts.User do
     else
       changeset
     end
+  end
+
+  @doc """
+  A changeset for granting or revoking admin access.
+
+  Kept separate from the registration and settings changesets so users can
+  never make themselves admins through a form.
+  """
+  def admin_changeset(user, is_admin) when is_boolean(is_admin) do
+    change(user, is_admin: is_admin)
   end
 
   @doc """

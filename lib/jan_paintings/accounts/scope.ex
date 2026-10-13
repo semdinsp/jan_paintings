@@ -30,4 +30,8 @@ defmodule JanPaintings.Accounts.Scope do
   end
 
   def for_user(nil), do: nil
+
+  @doc "Returns true when the scope belongs to a logged-in admin."
+  def admin?(%__MODULE__{user: %User{is_admin: true}}), do: true
+  def admin?(_scope), do: false
 end

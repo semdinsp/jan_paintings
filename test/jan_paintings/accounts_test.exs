@@ -4,7 +4,7 @@ defmodule JanPaintings.AccountsTest do
   alias JanPaintings.Accounts
 
   import JanPaintings.AccountsFixtures
-  alias JanPaintings.Accounts.{User, UserToken}
+  alias JanPaintings.Accounts.{Scope, User, UserToken}
 
   describe "get_user_by_email/1" do
     test "does not return the user if the email does not exist" do
@@ -84,6 +84,47 @@ defmodule JanPaintings.AccountsTest do
       assert is_nil(user.hashed_password)
       assert is_nil(user.confirmed_at)
       assert is_nil(user.password)
+    end
+  end
+
+  describe "admin access" do
+    test "users are not admins by default" do
+      refute user_fixture().is_admin
+    end
+
+    test "registration ignores is_admin" do
+      {:ok, user} = Accounts.register_user(%{email: unique_user_email(), is_admin: true})
+      refute user.is_admin
+    end
+
+    test "set_admin/2 grants and revokes admin access" do
+      user = user_fixture()
+      assert {:ok, %User{is_admin: true} = user} = Accounts.set_admin(user, true)
+      assert {:ok, %User{is_admin: false}} = Accounts.set_admin(user, false)
+    end
+
+    test "grant_admin/1 promotes an existing user" do
+      user = user_fixture()
+      assert {:ok, %User{id: id, is_admin: true}} = Accounts.grant_admin(user.email)
+      assert id == user.id
+    end
+
+    test "grant_admin/1 creates a passwordless account for a new email" do
+      email = unique_user_email()
+      assert {:ok, %User{is_admin: true, hashed_password: nil}} = Accounts.grant_admin(email)
+      assert Accounts.get_user_by_email(email).is_admin
+    end
+
+    test "grant_admin/1 rejects an invalid email" do
+      assert {:error, %Ecto.Changeset{}} = Accounts.grant_admin("not an email")
+    end
+
+    test "Scope.admin?/1 reflects the flag" do
+      user = user_fixture()
+      refute Scope.admin?(Scope.for_user(user))
+      {:ok, admin} = Accounts.set_admin(user, true)
+      assert Scope.admin?(Scope.for_user(admin))
+      refute Scope.admin?(nil)
     end
   end
 

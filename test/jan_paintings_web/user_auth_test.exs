@@ -293,6 +293,46 @@ defmodule JanPaintingsWeb.UserAuthTest do
     end
   end
 
+  describe "on_mount :require_admin" do
+    setup do
+      %{
+        socket: %LiveView.Socket{
+          endpoint: JanPaintingsWeb.Endpoint,
+          assigns: %{__changed__: %{}, flash: %{}}
+        }
+      }
+    end
+
+    test "continues for an admin", %{conn: conn, user: user, socket: socket} do
+      {:ok, user} = Accounts.set_admin(user, true)
+
+      session =
+        conn
+        |> put_session(:user_token, Accounts.generate_user_session_token(user))
+        |> get_session()
+
+      assert {:cont, updated_socket} = UserAuth.on_mount(:require_admin, %{}, session, socket)
+      assert updated_socket.assigns.current_scope.user.id == user.id
+    end
+
+    test "halts for a user who is not an admin", %{conn: conn, user: user, socket: socket} do
+      session =
+        conn
+        |> put_session(:user_token, Accounts.generate_user_session_token(user))
+        |> get_session()
+
+      assert {:halt, updated_socket} = UserAuth.on_mount(:require_admin, %{}, session, socket)
+      assert updated_socket.redirected == {:redirect, %{to: ~p"/", status: 302}}
+    end
+
+    test "halts when nobody is logged in", %{conn: conn, socket: socket} do
+      assert {:halt, updated_socket} =
+               UserAuth.on_mount(:require_admin, %{}, get_session(conn), socket)
+
+      assert updated_socket.assigns.current_scope == nil
+    end
+  end
+
   describe "on_mount :require_sudo_mode" do
     test "allows users that have authenticated in the last 10 minutes", %{conn: conn, user: user} do
       user_token = Accounts.generate_user_session_token(user)
@@ -374,6 +414,31 @@ defmodule JanPaintingsWeb.UserAuthTest do
 
       refute conn.halted
       refute conn.status
+    end
+  end
+
+  describe "require_admin_user/2" do
+    test "allows admins through", %{conn: conn, user: user} do
+      {:ok, user} = Accounts.set_admin(user, true)
+
+      conn =
+        conn |> assign(:current_scope, Scope.for_user(user)) |> UserAuth.require_admin_user([])
+
+      refute conn.halted
+    end
+
+    test "redirects users who are not admins", %{conn: conn, user: user} do
+      conn =
+        conn
+        |> fetch_flash()
+        |> assign(:current_scope, Scope.for_user(user))
+        |> UserAuth.require_admin_user([])
+
+      assert conn.halted
+      assert redirected_to(conn) == ~p"/"
+
+      assert Phoenix.Flash.get(conn.assigns.flash, :error) ==
+               "You do not have access to that page."
     end
   end
 
