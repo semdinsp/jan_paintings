@@ -24,6 +24,13 @@ defmodule JanPaintings.Catalog.SeedTest do
     abel = Catalog.get_print("abel-portrait-of-the-artists-father-melchior-or-self-portrait")
     assert abel.catalogue_references =~ "Heller-Andresen 2"
     assert abel.state == "First state of two"
+    # The references moved out of the description; only the medium was left.
+    assert abel.details == ""
+    assert abel.medium == "Etching"
+
+    penance = Catalog.get_print("beham-the-penance-of-st-john-chrysostom")
+    assert penance.medium == "Engraving, ca. 1545"
+    assert penance.catalogue_references =~ "Hollstein 70"
 
     beham = Catalog.get_print("beham-leda-and-the-swan")
     assert beham.sheet_size == "55 × 68mm"

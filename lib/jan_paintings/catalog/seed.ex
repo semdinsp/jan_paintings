@@ -1,8 +1,10 @@
 defmodule JanPaintings.Catalog.Seed do
   @moduledoc """
-  Loads catalogue details (references, states, sheet sizes and a few
-  corrections) from `priv/repo/seeds/print_catalogue_details.json` into the
-  prints table.
+  Loads catalogue details (references, states, sheet sizes, missing media)
+  and corrections from `priv/repo/seeds/print_catalogue_details.json` into
+  the prints table. The corrections take the catalogue references out of the
+  descriptions, now that they have their own field, and fix four records
+  whose condition was stored as the description.
 
   Safe to run repeatedly, locally or in production:
 
@@ -19,7 +21,7 @@ defmodule JanPaintings.Catalog.Seed do
   alias JanPaintings.Catalog.Print
   alias JanPaintings.Repo
 
-  @fill_fields ~w(catalogue_references state sheet_size)
+  @fill_fields ~w(catalogue_references state sheet_size medium)
 
   def default_path,
     do: Path.join(:code.priv_dir(:jan_paintings), "repo/seeds/print_catalogue_details.json")
