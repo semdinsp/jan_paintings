@@ -185,7 +185,7 @@ defmodule JanPaintingsWeb.SEO do
       "creator" => creator(print),
       "height" => height && quantity(height),
       "width" => width && quantity(width),
-      "citation" => catalogue_citation(print.details),
+      "citation" => catalogue_citation(print),
       "offers" => offers(print)
     }
     |> reject_nils()
@@ -298,9 +298,12 @@ defmodule JanPaintingsWeb.SEO do
     if medium == "", do: nil, else: medium
   end
 
-  # The details line holds catalogue references when there are any.
+  # Prefer the catalogue references field; older records may only have them
+  # inside the details line.
   @catalogues ~r/Bartsch|Hollstein|TIB|Hind|Lugt|Delteil|Béraldi|Dodgson|Le ?Blanc|Nagler|Passavant|Heller|Andresen|Meyer|Wentworth|Godefroy|Guérin|Inventaire/u
-  defp catalogue_citation(details) do
+  defp catalogue_citation(%{catalogue_references: refs}) when refs not in [nil, ""], do: refs
+
+  defp catalogue_citation(%{details: details}) do
     if details && Regex.match?(@catalogues, details), do: details
   end
 

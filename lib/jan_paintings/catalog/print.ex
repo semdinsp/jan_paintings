@@ -3,7 +3,8 @@ defmodule JanPaintings.Catalog.Print do
   A print in the gallery's stock.
 
   Text fields are never nil: an empty field is stored as "" so templates can
-  test `field != ""`. Image fields hold site paths such as
+  test `field != ""`. `dimensions` is the plate or image size as catalogued;
+  `sheet_size` is recorded only when the sheet size is stated separately. Image fields hold site paths such as
   "/images/catalogue/abel-josef-portrait-of-melchior-lg.jpg" or
   "/uploads/prints/<file>".
   """
@@ -13,7 +14,7 @@ defmodule JanPaintings.Catalog.Print do
   @statuses ~w(available sold reserved)
 
   @text_fields ~w(dates medium details provenance watermark condition dimensions price
-                  thumb large_image)a
+                  thumb large_image catalogue_references state sheet_size)a
 
   schema "prints" do
     field :slug, :string
@@ -27,6 +28,9 @@ defmodule JanPaintings.Catalog.Print do
     field :watermark, :string, default: ""
     field :condition, :string, default: ""
     field :dimensions, :string, default: ""
+    field :sheet_size, :string, default: ""
+    field :catalogue_references, :string, default: ""
+    field :state, :string, default: ""
     field :status, :string, default: "available"
     field :price, :string, default: ""
     field :thumb, :string, default: ""

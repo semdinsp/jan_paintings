@@ -156,13 +156,24 @@ defmodule JanPaintingsWeb.Admin.PrintLiveTest do
       assert html =~ print.title
 
       view
-      |> form("#print-form", print: %{price: "$4,000 USD", condition: "Fine."})
+      |> form("#print-form",
+        print: %{
+          price: "$4,000 USD",
+          condition: "Fine.",
+          catalogue_references: "Béraldi XII, 50",
+          state: "First state",
+          sheet_size: "400 × 500mm"
+        }
+      )
       |> render_submit()
 
       assert_redirect(view, ~p"/admin/prints")
       updated = Catalog.get_print(print.slug)
       assert updated.price == "$4,000 USD"
       assert updated.condition == "Fine."
+      assert updated.catalogue_references == "Béraldi XII, 50"
+      assert updated.state == "First state"
+      assert updated.sheet_size == "400 × 500mm"
       assert updated.image == print.image
       assert updated.gallery == print.gallery
     end

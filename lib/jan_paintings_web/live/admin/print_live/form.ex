@@ -70,7 +70,22 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Form do
             <.input field={@form[:price]} label="Price" placeholder="$1,500 USD (blank = On request)" />
           </div>
           <.input field={@form[:details]} type="textarea" label="Details" rows="3" />
-          <.input field={@form[:dimensions]} label="Size" placeholder="206 × 160mm" />
+          <.input
+            field={@form[:catalogue_references]}
+            type="textarea"
+            label="Catalogue references"
+            rows="2"
+            placeholder="Bartsch 96; New Hollstein 12"
+          />
+          <.input field={@form[:state]} label="State" placeholder="Second state of three" />
+          <div class="grid gap-x-4 sm:grid-cols-2">
+            <.input
+              field={@form[:dimensions]}
+              label="Size (plate or image)"
+              placeholder="206 × 160mm"
+            />
+            <.input field={@form[:sheet_size]} label="Sheet size" placeholder="If stated" />
+          </div>
           <.input field={@form[:condition]} type="textarea" label="Condition" rows="3" />
           <.input field={@form[:provenance]} type="textarea" label="Provenance" rows="2" />
           <.input field={@form[:watermark]} label="Watermark" />

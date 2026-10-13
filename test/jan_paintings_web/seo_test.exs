@@ -87,6 +87,25 @@ defmodule JanPaintingsWeb.SEOTest do
       assert String.length(description) <= 155
     end
 
+    test "show references, state and sheet size when present", %{conn: conn} do
+      print = Catalog.get_print("beham-leda-and-the-swan")
+
+      {:ok, print} =
+        Catalog.update_print(print, %{
+          "catalogue_references" => "Hollstein 106",
+          "state" => "Second state of two",
+          "sheet_size" => "55 × 68mm"
+        })
+
+      html = conn |> get(SEO.print_path(print)) |> html_response(200)
+      assert html =~ "References"
+      assert html =~ "Hollstein 106"
+      assert html =~ "Second state of two"
+      assert html =~ "Sheet"
+      assert html =~ "55 × 68mm"
+      assert json_ld(html)["citation"] == "Hollstein 106"
+    end
+
     test "show medium and date", %{conn: conn} do
       html = conn |> get("/prints/old-masters/beham-leda-and-the-swan") |> html_response(200)
       assert html =~ "Medium"
