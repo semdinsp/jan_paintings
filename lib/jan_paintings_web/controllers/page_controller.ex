@@ -5,11 +5,14 @@ defmodule JanPaintingsWeb.PageController do
 
   alias JanPaintings.{Catalog, Inquiries}
   alias JanPaintings.Inquiries.ContactMessage
+  alias JanPaintingsWeb.SEO
 
   def home(conn, _params) do
     categories = Enum.map(Catalog.categories(), &{&1, Catalog.cover_print(&1.slug)})
 
     render(conn, :home,
+      canonical_path: "/",
+      json_ld: SEO.gallery_json_ld(),
       categories: categories,
       hero: Catalog.get_print("pether-a-farriers-shop-after-joseph-wright-of-derby"),
       featured: Catalog.featured_prints()
@@ -25,7 +28,17 @@ defmodule JanPaintingsWeb.PageController do
         else: %{}
 
     form = %ContactMessage{} |> Inquiries.change_contact_message(attrs) |> to_form()
-    render(conn, :about, page_title: "About", form: form)
+    render(conn, :about, [form: form] ++ about_meta())
+  end
+
+  defp about_meta do
+    [
+      page_title: "About the gallery",
+      meta_description:
+        "Jan Johnson has dealt in fine prints since 1979, first in London and from 1982 in Montreal. Visit by appointment in Chambly, Quebec, or send an enquiry.",
+      canonical_path: "/about",
+      json_ld: SEO.gallery_json_ld()
+    ]
   end
 
   # The old contact page now lives on the about page; keep links working.
@@ -49,7 +62,7 @@ defmodule JanPaintingsWeb.PageController do
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)
-        |> render(:about, page_title: "About", form: to_form(changeset))
+        |> render(:about, [form: to_form(changeset)] ++ about_meta())
     end
   end
 

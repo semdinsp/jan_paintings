@@ -6,6 +6,7 @@ defmodule JanPaintingsWeb.PrintLive.Index do
   import JanPaintingsWeb.PrintHTML, only: [category_filter: 1]
 
   alias JanPaintings.Catalog
+  alias JanPaintingsWeb.SEO
 
   @impl true
   def handle_params(params, _uri, socket) do
@@ -18,12 +19,26 @@ defmodule JanPaintingsWeb.PrintLive.Index do
     query = params |> Map.get("q", "") |> to_string() |> String.trim()
     prints = if category, do: Catalog.list_prints(category.slug), else: Catalog.list_prints()
 
+    shown = Catalog.search(prints, query)
+    path = if category, do: "/prints/#{category.slug}", else: "/prints"
+    description = description(category, length(prints))
+
     {:noreply,
      assign(socket,
        page_title: page_title(category, query),
+       meta_description: description,
+       canonical_path: path,
+       og_image: List.first(Enum.map(shown, & &1.image)),
+       json_ld:
+         SEO.collection_json_ld(
+           (category && category.name) || "All Prints",
+           description,
+           path,
+           shown
+         ),
        category: category,
        query: query,
-       prints: Catalog.search(prints, query)
+       prints: shown
      )}
   end
 
@@ -38,7 +53,15 @@ defmodule JanPaintingsWeb.PrintLive.Index do
     if category, do: ~p"/prints/#{category.slug}?#{params}", else: ~p"/prints?#{params}"
   end
 
+  defp description(nil, count) do
+    "#{count} fine prints in stock: Old Master engravings and etchings, nineteenth- and early twentieth-century European prints, and Canadian printmaking."
+  end
+
+  defp description(category, count) do
+    "#{category.name} at Jan Johnson: #{count} in stock. #{category.blurb}"
+  end
+
   defp page_title(_category, query) when query != "", do: "Search: #{query}"
-  defp page_title(nil, _query), do: "All Prints"
+  defp page_title(nil, _query), do: "All Prints: Old Master, Modern and Canadian"
   defp page_title(category, _query), do: category.name
 end

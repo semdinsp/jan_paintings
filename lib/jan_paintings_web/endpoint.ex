@@ -11,6 +11,9 @@ defmodule JanPaintingsWeb.Endpoint do
     same_site: "Lax"
   ]
 
+  # Send other hostnames to the canonical one, when configured.
+  plug JanPaintingsWeb.Plugs.CanonicalHost
+
   socket "/live", Phoenix.LiveView.Socket,
     websocket: [connect_info: [session: @session_options]],
     longpoll: [connect_info: [session: @session_options]]
