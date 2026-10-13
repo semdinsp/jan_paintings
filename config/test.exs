@@ -1,5 +1,7 @@
 import Config
 
+config :jan_paintings, :uploads_dir, Path.expand("../tmp/test_uploads", __DIR__)
+
 # Only in tests, remove the complexity from the password hashing algorithm
 config :bcrypt_elixir, :log_rounds, 1
 

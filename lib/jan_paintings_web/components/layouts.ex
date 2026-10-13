@@ -87,6 +87,13 @@ defmodule JanPaintingsWeb.Layouts do
                   <p class="truncate px-3 py-1 text-xs text-base-content/60">
                     {@current_scope.user.email}
                   </p>
+                  <.link
+                    :if={JanPaintings.Accounts.Scope.admin?(@current_scope)}
+                    navigate={~p"/admin/prints"}
+                    class="block rounded px-3 py-2 hover:bg-base-200"
+                  >
+                    Admin
+                  </.link>
                   <.link href={~p"/users/settings"} class="block rounded px-3 py-2 hover:bg-base-200">
                     Account
                   </.link>
@@ -113,6 +120,13 @@ defmodule JanPaintingsWeb.Layouts do
             <.link navigate={~p"/about"} class="nav-link">About</.link>
             <.link href={~p"/about" <> "#contact"} class="nav-link">Contact</.link>
             <div class="ml-auto flex items-center gap-5">
+              <.link
+                :if={JanPaintings.Accounts.Scope.admin?(@current_scope)}
+                navigate={~p"/admin/prints"}
+                class="nav-link"
+              >
+                Admin
+              </.link>
               <.link
                 :if={@current_scope}
                 href={~p"/users/settings"}
