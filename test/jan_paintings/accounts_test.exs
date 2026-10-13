@@ -87,6 +87,82 @@ defmodule JanPaintings.AccountsTest do
     end
   end
 
+  describe "get_or_register_user_from_identity/1" do
+    defp google(attrs \\ %{}) do
+      Enum.into(attrs, %{
+        provider: "google",
+        provider_uid: "google-#{System.unique_integer([:positive])}",
+        email: unique_user_email(),
+        email_verified: true
+      })
+    end
+
+    test "creates a confirmed, passwordless user for a new verified email" do
+      attrs = google()
+      assert {:ok, %User{} = user} = Accounts.get_or_register_user_from_identity(attrs)
+      assert user.email == attrs.email
+      assert user.confirmed_at
+      refute user.hashed_password
+      refute user.is_admin
+
+      assert [%{provider: "google", provider_uid: uid}] =
+               Repo.preload(user, :identities).identities
+
+      assert uid == attrs.provider_uid
+    end
+
+    test "returns the linked user even after the Google email changes" do
+      attrs = google()
+      {:ok, user} = Accounts.get_or_register_user_from_identity(attrs)
+
+      assert {:ok, %User{id: id}} =
+               Accounts.get_or_register_user_from_identity(%{attrs | email: unique_user_email()})
+
+      assert id == user.id
+    end
+
+    test "links to an existing confirmed user with the same email" do
+      user = user_fixture() |> set_password()
+      attrs = google(%{email: user.email})
+
+      assert {:ok, %User{id: id} = linked} = Accounts.get_or_register_user_from_identity(attrs)
+      assert id == user.id
+      assert linked.hashed_password == user.hashed_password
+    end
+
+    test "confirms an unconfirmed user and removes any password set on it" do
+      user = unconfirmed_user_fixture()
+
+      {:ok, user} =
+        user
+        |> User.password_changeset(%{password: valid_user_password()})
+        |> Repo.update()
+
+      assert {:ok, %User{id: id} = linked} =
+               Accounts.get_or_register_user_from_identity(google(%{email: user.email}))
+
+      assert id == user.id
+      assert linked.confirmed_at
+      refute linked.hashed_password
+    end
+
+    test "refuses an unverified email that is not already linked" do
+      user = user_fixture()
+
+      assert {:error, :unverified_email} =
+               Accounts.get_or_register_user_from_identity(
+                 google(%{email: user.email, email_verified: false})
+               )
+
+      assert Repo.preload(user, :identities).identities == []
+    end
+
+    test "rejects unknown providers" do
+      assert {:error, %Ecto.Changeset{}} =
+               Accounts.get_or_register_user_from_identity(google(%{provider: "myspace"}))
+    end
+  end
+
   describe "admin access" do
     test "users are not admins by default" do
       refute user_fixture().is_admin

@@ -6,7 +6,7 @@ defmodule JanPaintings.Accounts do
   import Ecto.Query, warn: false
   alias JanPaintings.Repo
 
-  alias JanPaintings.Accounts.{User, UserToken, UserNotifier}
+  alias JanPaintings.Accounts.{User, UserIdentity, UserToken, UserNotifier}
 
   ## Database getters
 
@@ -77,6 +77,79 @@ defmodule JanPaintings.Accounts do
   def register_user(attrs) do
     %User{}
     |> User.email_changeset(attrs)
+    |> Repo.insert()
+  end
+
+  ## External identity providers (for example Google)
+
+  @doc """
+  Finds or creates the user for a login from an external identity provider.
+
+  This is the hook for "Sign in with Google" (or another OAuth provider). An
+  OAuth callback controller verifies the provider's response, calls this with
+  the provider's account details, then logs the user in with
+  `JanPaintingsWeb.UserAuth.log_in_user/3`. Only `"google"` is accepted for
+  now; see `JanPaintings.Accounts.UserIdentity.providers/0`.
+
+  `attrs` needs `:provider`, `:provider_uid` (Google's `sub` claim), `:email`
+  and `:email_verified`. The user is resolved in this order:
+
+    1. A user already linked to this provider account.
+    2. A user with the same email, if the provider has verified the email.
+       The identity is linked to that user. An unconfirmed account is confirmed
+       and any password on it is removed, so a password set by someone else
+       before the real owner confirmed the email cannot be used.
+    3. Otherwise a new, confirmed, passwordless user with the identity linked.
+
+  Returns `{:error, :unverified_email}` when no linked user exists and the
+  provider has not verified the email.
+  """
+  def get_or_register_user_from_identity(attrs) do
+    %{provider: provider, provider_uid: uid, email: email} = attrs
+
+    case Repo.get_by(UserIdentity, provider: provider, provider_uid: to_string(uid)) do
+      %UserIdentity{} = identity ->
+        {:ok, Repo.preload(identity, :user).user}
+
+      nil when attrs.email_verified != true ->
+        {:error, :unverified_email}
+
+      nil ->
+        Repo.transact(fn ->
+          with {:ok, user} <- user_for_verified_email(email),
+               {:ok, _identity} <- link_identity(user, provider, uid, email) do
+            {:ok, user}
+          end
+        end)
+    end
+  end
+
+  defp user_for_verified_email(email) do
+    case get_user_by_email(email) do
+      nil ->
+        %User{}
+        |> User.email_changeset(%{email: email})
+        |> User.confirm_changeset()
+        |> Repo.insert()
+
+      %User{confirmed_at: nil} = user ->
+        user
+        |> User.confirm_changeset()
+        |> Ecto.Changeset.put_change(:hashed_password, nil)
+        |> update_user_and_delete_all_tokens()
+        |> case do
+          {:ok, {user, _tokens}} -> {:ok, user}
+          error -> error
+        end
+
+      user ->
+        {:ok, user}
+    end
+  end
+
+  defp link_identity(user, provider, uid, email) do
+    %UserIdentity{user_id: user.id}
+    |> UserIdentity.changeset(%{provider: provider, provider_uid: to_string(uid), email: email})
     |> Repo.insert()
   end
 

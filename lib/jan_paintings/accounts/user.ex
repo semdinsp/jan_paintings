@@ -10,6 +10,8 @@ defmodule JanPaintings.Accounts.User do
     field :is_admin, :boolean, default: false
     field :authenticated_at, :utc_datetime, virtual: true
 
+    has_many :identities, JanPaintings.Accounts.UserIdentity
+
     timestamps(type: :utc_datetime)
   end
 
