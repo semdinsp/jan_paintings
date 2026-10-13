@@ -4,6 +4,11 @@ defmodule JanPaintingsWeb.UserLive.LoginTest do
   import Phoenix.LiveViewTest
   import JanPaintings.AccountsFixtures
 
+  test "does not mention the dev mailbox outside development", %{conn: conn} do
+    {:ok, _lv, html} = live(conn, ~p"/users/log-in")
+    refute html =~ "mailbox"
+  end
+
   describe "login page" do
     test "renders login page", %{conn: conn} do
       {:ok, _lv, html} = live(conn, ~p"/users/log-in")
