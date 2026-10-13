@@ -38,3 +38,27 @@ npm-debug.log
 
 # gstack browse/QA reports
 /.gstack/
+
+# Environment files with local secrets (BASIC_AUTH_PASSWORD, mail API keys, etc.).
+.env
+.env.*
+!.env.example
+
+# Uploaded print images from the admin pages (stored outside git).
+/priv/static/uploads/
+
+# Elixir language servers and editors.
+/.elixir_ls/
+/.elixir-tools/
+/.lexical/
+/.expert/
+/.vscode/
+/.idea/
+*.swp
+*~
+
+# macOS.
+.DS_Store
+
+# Logs.
+*.log
