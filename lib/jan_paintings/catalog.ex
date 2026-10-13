@@ -3,15 +3,14 @@ defmodule JanPaintings.Catalog do
   Read-only print catalogue, compiled from `priv/data/prints.json`.
 
   The data was scraped from the "Selected Stock" pages of janjohnsonprints.com.
-  Images are served from that site, so only relative paths are stored here.
+  Images were copied from that site (colour-corrected where the photo had a
+  yellow cast) and are served from priv/static/images/catalogue.
   """
-
-  @image_host "https://janjohnsonprints.com/"
 
   @categories [
     %{
       slug: "old-masters",
-      banner: "images/New banner Old Masters.jpg",
+      banner: "/images/catalogue/new-banner-old-masters.jpg",
       name: "Old Master Prints",
       short: "Old Masters",
       blurb:
@@ -19,14 +18,14 @@ defmodule JanPaintings.Catalog do
     },
     %{
       slug: "modern",
-      banner: "images/New banner Mods.jpg",
+      banner: "/images/catalogue/new-banner-mods.jpg",
       name: "Modern Prints",
       short: "Modern",
       blurb: "European printmaking of the nineteenth and early twentieth centuries."
     },
     %{
       slug: "canadian",
-      banner: "images/New banner Canadians.jpg",
+      banner: "/images/catalogue/new-banner-canadians.jpg",
       name: "Canadian Prints",
       short: "Canadian",
       blurb:
@@ -145,13 +144,6 @@ defmodule JanPaintings.Catalog do
     Enum.find(@prints, &(&1.category == category_slug && &1.medium != ""))
   end
 
-  @doc """
-  URL for an image path stored in the catalogue.
-
-  Paths starting with "/" are images served by this site (for example
-  colour-corrected photos in priv/static/images/prints); anything else is
-  still loaded from the original site.
-  """
-  def image_url("/" <> _ = local_path), do: local_path
-  def image_url(path), do: @image_host <> URI.encode(path)
+  @doc "URL for an image path stored in the catalogue. All images are served by this site."
+  def image_url("/" <> _ = path), do: path
 end

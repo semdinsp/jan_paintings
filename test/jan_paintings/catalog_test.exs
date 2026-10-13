@@ -86,8 +86,18 @@ defmodule JanPaintings.CatalogTest do
     assert length(tiepolo) == 3
   end
 
-  test "local image paths are served by this site; others come from the original site" do
-    assert Catalog.image_url("/images/prints/example.jpg") == "/images/prints/example.jpg"
-    assert Catalog.image_url("images/A B.jpg") == "https://janjohnsonprints.com/images/A%20B.jpg"
+  test "every catalogue image is served by this site and exists on disk" do
+    static = Path.join(:code.priv_dir(:jan_paintings), "static")
+
+    paths =
+      Enum.map(Catalog.categories(), & &1.banner) ++
+        Enum.flat_map(Catalog.list_prints(), fn print ->
+          Enum.reject([print.thumb, print.image, print.large_image], &(&1 == "")) ++ print.gallery
+        end)
+
+    for path <- paths do
+      assert Catalog.image_url(path) == path
+      assert File.exists?(Path.join(static, path)), "missing #{path}"
+    end
   end
 end
