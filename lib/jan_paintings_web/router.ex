@@ -15,8 +15,21 @@ defmodule JanPaintingsWeb.Router do
     plug JanPaintingsWeb.Plugs.BasicAuth
   end
 
+  # Crawler files (sitemap, robots, llms.txt): no session, same optional password.
+  pipeline :crawler_files do
+    plug JanPaintingsWeb.Plugs.BasicAuth
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
+  end
+
+  scope "/", JanPaintingsWeb do
+    pipe_through :crawler_files
+
+    get "/sitemap.xml", SEOController, :sitemap
+    get "/robots.txt", SEOController, :robots
+    get "/llms.txt", SEOController, :llms
   end
 
   scope "/", JanPaintingsWeb do

@@ -2,6 +2,7 @@ defmodule JanPaintingsWeb.PrintController do
   use JanPaintingsWeb, :controller
 
   alias JanPaintings.Catalog
+  alias JanPaintingsWeb.SEO
 
   def show(conn, %{"category" => category_slug, "slug" => slug}) do
     category = Catalog.get_category(category_slug) || raise_not_found()
@@ -10,7 +11,12 @@ defmodule JanPaintingsWeb.PrintController do
     if is_nil(print) or print.category != category.slug, do: raise_not_found()
 
     render(conn, :show,
-      page_title: print.title,
+      page_title: SEO.print_title(print),
+      meta_description: SEO.print_description(print),
+      canonical_path: SEO.print_path(print),
+      og_image: print.image,
+      og_type: "product",
+      json_ld: SEO.print_json_ld(print),
       category: category,
       print: print,
       views: Catalog.views(print),

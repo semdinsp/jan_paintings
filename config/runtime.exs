@@ -47,6 +47,10 @@ if config_env() == :prod do
     username: System.get_env("BASIC_AUTH_USERNAME", "jan"),
     password: System.get_env("BASIC_AUTH_PASSWORD")
 
+  # Optional: 301-redirect every other hostname (such as jan-prints.fly.dev)
+  # to this one. Set PHX_HOST to the same value.
+  config :jan_paintings, :canonical_host, System.get_env("CANONICAL_HOST")
+
   # Images uploaded from the admin pages. Point this at persistent storage
   # (for example a mounted volume) so uploads survive deploys.
   config :jan_paintings,

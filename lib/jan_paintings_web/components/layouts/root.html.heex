@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="csrf-token" content={get_csrf_token()} />
     <.live_title
-      default="Jan Johnson · Old Master & Modern Prints"
-      suffix=" · Jan Johnson Prints"
+      default={JanPaintingsWeb.SEO.default_title()}
+      suffix={JanPaintingsWeb.SEO.title_suffix()}
       phx-no-format
     >{assigns[:page_title]}</.live_title>
+    <JanPaintingsWeb.SEO.head_tags assigns={assigns} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
