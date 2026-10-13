@@ -57,6 +57,18 @@ defmodule JanPaintingsWeb.Router do
     end
   end
 
+  # Admin pages: only logged-in users with is_admin set. The plugs guard the
+  # first page load; the :require_admin on_mount guards live navigation.
+  scope "/admin", JanPaintingsWeb.Admin do
+    pipe_through [:browser, :require_authenticated_user, :require_admin_user]
+
+    live_session :admin, on_mount: [{JanPaintingsWeb.UserAuth, :require_admin}] do
+      live "/prints", PrintLive.Index, :index
+      live "/prints/new", PrintLive.Form, :new
+      live "/prints/:id/edit", PrintLive.Form, :edit
+    end
+  end
+
   ## Authentication routes
 
   scope "/", JanPaintingsWeb do

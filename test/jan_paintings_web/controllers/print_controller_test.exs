@@ -126,7 +126,7 @@ defmodule JanPaintingsWeb.PrintControllerTest do
 
     assert html =~ ~s(id="print-gallery")
     assert html =~ "3 views"
-    assert html =~ "Tissot%20Working%20proof%202%20495.jpg"
+    assert html =~ "/images/catalogue/tissot-working-proof-2-495.jpg"
   end
 
   test "links to a larger image when one exists", %{conn: conn} do

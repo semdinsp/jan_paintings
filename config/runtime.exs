@@ -47,6 +47,13 @@ if config_env() == :prod do
     username: System.get_env("BASIC_AUTH_USERNAME", "jan"),
     password: System.get_env("BASIC_AUTH_PASSWORD")
 
+  # Images uploaded from the admin pages. Point this at persistent storage
+  # (for example a mounted volume) so uploads survive deploys.
+  config :jan_paintings,
+         :uploads_dir,
+         System.get_env("UPLOADS_DIR") ||
+           raise("environment variable UPLOADS_DIR is missing, e.g. /data/uploads")
+
   database_url =
     System.get_env("DATABASE_URL") ||
       raise """

@@ -54,6 +54,10 @@ config :jan_paintings, JanPaintings.Inquiries.Notifier,
   to: {"Jan Johnson", "jan@janjohnsonprints.com"},
   from: {"Jan Johnson Prints website", "website@janjohnsonprints.com"}
 
+# Where images uploaded from the admin pages are stored (see JanPaintings.Uploads).
+# Production sets this from UPLOADS_DIR in runtime.exs.
+config :jan_paintings, :uploads_dir, Path.expand("../priv/uploads", __DIR__)
+
 # Sender for account emails (log in links, confirmations).
 config :jan_paintings, JanPaintings.Accounts.UserNotifier,
   from: {"Jan Johnson Prints", "website@janjohnsonprints.com"}
