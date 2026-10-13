@@ -14,6 +14,14 @@ kill_signal = 'SIGTERM'
 [env]
   PHX_HOST = 'jan-prints.fly.dev'
   PORT = '8080'
+  # Images uploaded from the admin pages, kept on the volume below.
+  UPLOADS_DIR = '/data/uploads'
+
+# Persistent storage for uploads. Fly creates the volume on first deploy.
+[[mounts]]
+  source = 'jan_prints_data'
+  destination = '/data'
+  initial_size = '1gb'
 
 [http_service]
   internal_port = 8080
