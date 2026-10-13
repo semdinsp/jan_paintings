@@ -1,11 +1,18 @@
 defmodule JanPaintings.Catalog do
   @moduledoc """
-  Read-only print catalogue, compiled from `priv/data/prints.json`.
+  The print catalogue, stored in the `prints` table.
 
-  The data was scraped from the "Selected Stock" pages of janjohnsonprints.com.
-  Images were copied from that site (colour-corrected where the photo had a
-  yellow cast) and are served from priv/static/images/catalogue.
+  The stock was first scraped from the "Selected Stock" pages of
+  janjohnsonprints.com into `priv/data/prints.json`, which a migration loads
+  once; after that, prints are managed from the admin pages. Images copied
+  from that site (colour-corrected where the photo had a yellow cast) are
+  served from priv/static/images/catalogue.
   """
+
+  import Ecto.Query
+
+  alias JanPaintings.Catalog.Print
+  alias JanPaintings.Repo
 
   @categories [
     %{
@@ -33,13 +40,6 @@ defmodule JanPaintings.Catalog do
     }
   ]
 
-  @data_path Path.join(:code.priv_dir(:jan_paintings), "data/prints.json")
-  @external_resource @data_path
-
-  @prints @data_path
-          |> File.read!()
-          |> Jason.decode!(keys: :atoms)
-
   def categories, do: @categories
 
   def get_category(slug), do: Enum.find(@categories, &(&1.slug == slug))
@@ -50,11 +50,44 @@ defmodule JanPaintings.Catalog do
     image_url(category.banner)
   end
 
-  def list_prints, do: @prints
+  @doc "All prints, grouped by category in menu order, then by artist and title."
+  def list_prints, do: Print |> Repo.all() |> sort()
 
-  def list_prints(category_slug), do: Enum.filter(@prints, &(&1.category == category_slug))
+  @doc "Prints in one category, by artist and title."
+  def list_prints(category_slug) do
+    from(p in Print, where: p.category == ^category_slug) |> Repo.all() |> sort()
+  end
 
-  def get_print(slug), do: Enum.find(@prints, &(&1.slug == slug))
+  def get_print(slug), do: Repo.get_by(Print, slug: slug)
+
+  # Sorted in Elixir so accented names ("DORÉ") sort with their plain letters.
+  defp sort(prints) do
+    order = @categories |> Enum.map(& &1.slug) |> Enum.with_index() |> Map.new()
+    Enum.sort_by(prints, &{Map.get(order, &1.category, 99), fold(&1.artist), fold(&1.title)})
+  end
+
+  ## Admin
+
+  def get_print!(id), do: Repo.get!(Print, id)
+
+  def change_print(%Print{} = print, attrs \\ %{}) do
+    Print.changeset(print, attrs, Enum.map(@categories, & &1.slug))
+  end
+
+  def create_print(attrs) do
+    %Print{} |> change_print(attrs) |> Repo.insert()
+  end
+
+  def update_print(%Print{} = print, attrs) do
+    print |> change_print(attrs) |> Repo.update()
+  end
+
+  @doc "Sets a print's status: \"available\", \"sold\" or \"reserved\"."
+  def set_status(%Print{} = print, status) do
+    update_print(print, %{"status" => status})
+  end
+
+  def delete_print(%Print{} = print), do: Repo.delete(print)
 
   @doc """
   Every image of a print for its detail page gallery: the main image first,
@@ -82,7 +115,7 @@ defmodule JanPaintings.Catalog do
   """
   def more_by_artist(print) do
     key = artist_key(print.artist)
-    Enum.filter(@prints, &(&1.slug != print.slug && artist_key(&1.artist) == key))
+    Enum.filter(list_prints(), &(&1.slug != print.slug && artist_key(&1.artist) == key))
   end
 
   defp artist_key(artist) do
@@ -131,9 +164,10 @@ defmodule JanPaintings.Catalog do
 
   @doc "A spread of prints across the catalogue for the homepage, excluding category covers."
   def featured_prints do
-    covers = Enum.map(@categories, &cover_print(&1.slug))
+    prints = list_prints()
+    covers = Enum.map(@categories, fn c -> first_with_medium(prints, c.slug) end)
 
-    @prints
+    prints
     |> Enum.filter(&(&1.medium != "" && &1 not in covers))
     |> Enum.take_every(17)
     |> Enum.take(6)
@@ -141,7 +175,11 @@ defmodule JanPaintings.Catalog do
 
   @doc "A representative print for a category, used on category cards."
   def cover_print(category_slug) do
-    Enum.find(@prints, &(&1.category == category_slug && &1.medium != ""))
+    category_slug |> list_prints() |> first_with_medium(category_slug)
+  end
+
+  defp first_with_medium(prints, category_slug) do
+    Enum.find(prints, &(&1.category == category_slug && &1.medium != ""))
   end
 
   @doc "URL for an image path stored in the catalogue. All images are served by this site."

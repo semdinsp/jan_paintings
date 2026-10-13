@@ -1,5 +1,5 @@
 defmodule JanPaintings.CatalogTest do
-  use ExUnit.Case, async: true
+  use JanPaintings.DataCase, async: true
 
   alias JanPaintings.Catalog
 
@@ -98,6 +98,67 @@ defmodule JanPaintings.CatalogTest do
     for path <- paths do
       assert Catalog.image_url(path) == path
       assert File.exists?(Path.join(static, path)), "missing #{path}"
+    end
+  end
+
+  describe "managing prints" do
+    @valid %{
+      "category" => "canadian",
+      "artist" => "LEDUC, Ozias",
+      "dates" => "1864–1955",
+      "title" => "Neige dorée",
+      "image" => "/uploads/prints/neige.jpg",
+      "price" => "$900 CAD",
+      "details" => ""
+    }
+
+    test "create_print/1 builds a slug from the surname and title" do
+      assert {:ok, print} = Catalog.create_print(@valid)
+      assert print.slug == "leduc-neige-doree"
+      assert print.status == "available"
+      assert print.details == ""
+      assert print.gallery == []
+      assert Catalog.get_print("leduc-neige-doree").id == print.id
+      assert print in Catalog.list_prints("canadian")
+    end
+
+    test "create_print/1 validates the required fields, category and status" do
+      assert {:error, changeset} =
+               Catalog.create_print(%{"category" => "sculpture", "status" => "lost"})
+
+      errors = errors_on(changeset)
+      assert errors.artist == ["can't be blank"]
+      assert errors.title == ["can't be blank"]
+      assert errors.image == ["add an image"]
+      assert errors.category == ["is invalid"]
+      assert errors.status == ["is invalid"]
+    end
+
+    test "create_print/1 rejects a duplicate or malformed slug" do
+      existing = hd(Catalog.list_prints())
+
+      assert {:error, changeset} = Catalog.create_print(Map.put(@valid, "slug", existing.slug))
+      assert errors_on(changeset).slug == ["has already been taken"]
+
+      assert {:error, changeset} = Catalog.create_print(Map.put(@valid, "slug", "Not A Slug"))
+      assert errors_on(changeset).slug == ["use lower-case letters, numbers and dashes"]
+    end
+
+    test "update_print/2 and set_status/2 change a print" do
+      print = Catalog.get_print("neilson-dredging-the-st-charles-river")
+
+      assert {:ok, print} =
+               Catalog.update_print(print, %{"price" => "$1,000 CAD", "watermark" => ""})
+
+      assert print.price == "$1,000 CAD"
+      assert {:ok, %{status: "sold"}} = Catalog.set_status(print, "sold")
+      assert {:error, _} = Catalog.set_status(print, "stolen")
+    end
+
+    test "delete_print/1 removes it from the catalogue" do
+      print = Catalog.get_print("neilson-dredging-the-st-charles-river")
+      assert {:ok, _} = Catalog.delete_print(print)
+      refute Catalog.get_print(print.slug)
     end
   end
 end
