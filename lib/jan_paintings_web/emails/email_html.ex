@@ -16,6 +16,8 @@ defmodule JanPaintingsWeb.EmailHTML do
   @rule "#d4dacc"
   @serif "Georgia, 'Times New Roman', Times, serif"
 
+  @colors %{primary: @primary, ink: @ink, muted: @muted, rule: @rule, serif: @serif}
+
   @doc """
   Renders an action email (a heading, some paragraphs and one button) to an
   HTML string.
@@ -25,16 +27,148 @@ defmodule JanPaintingsWeb.EmailHTML do
     * `:button` - `{label, url}` for the call to action.
     * `:footnote` - small print below the button, such as "ignore this if...".
   """
-  def action_email(assigns) do
-    assigns
+  def action_email(content) do
+    content
     |> Map.new()
     |> Map.put_new(:footnote, nil)
-    |> layout_with_action()
-    |> Phoenix.HTML.Safe.to_iodata()
-    |> IO.iodata_to_binary()
+    |> Map.merge(@colors)
+    |> action_body()
+    |> to_html()
   end
 
-  defp layout_with_action(assigns) do
+  @doc """
+  Renders a message email (a heading, a table of details, a quoted message
+  and a reply button) to an HTML string. Used for contact form enquiries.
+
+    * `:heading` - the large heading.
+    * `:intro` - a line above the details.
+    * `:details` - `{label, value}` rows; rows with a nil or blank value are
+      left out. A value may be `{text, url}` to show a link.
+    * `:message` - the sender's message; line breaks are kept.
+    * `:button` - `{label, url}`, usually a mailto: reply link.
+  """
+  def message_email(content) do
+    content
+    |> Map.new()
+    |> Map.update!(:details, fn rows -> Enum.reject(rows, &blank?(elem(&1, 1))) end)
+    |> Map.merge(@colors)
+    |> message_body()
+    |> to_html()
+  end
+
+  defp blank?(value), do: value in [nil, ""]
+
+  # The sender's message as paragraphs (split on blank lines) of lines.
+  defp message_paragraphs(message) do
+    message
+    |> String.split(~r/\R\s*\R/u, trim: true)
+    |> Enum.map(&String.split(String.trim(&1), ~r/\R/u))
+  end
+
+  defp to_html(rendered) do
+    rendered |> Phoenix.HTML.Safe.to_iodata() |> IO.iodata_to_binary()
+  end
+
+  defp action_body(assigns) do
+    ~H"""
+    <.shell heading={@heading}>
+      <p :for={paragraph <- @paragraphs} style="margin:0 0 16px;font-size:16px;line-height:1.6;">
+        {paragraph}
+      </p>
+      <.email_button label={elem(@button, 0)} url={elem(@button, 1)} />
+      <p style={"margin:0 0 8px;font-size:13px;line-height:1.5;color:#{@muted};"}>
+        If the button doesn't work, copy this link into your browser:
+      </p>
+      <p style="margin:0 0 16px;font-size:13px;line-height:1.5;word-break:break-all;">
+        <a href={elem(@button, 1)} style={"color:#{@primary};"}>{elem(@button, 1)}</a>
+      </p>
+      <p
+        :if={@footnote}
+        style={"margin:24px 0 0;padding-top:16px;border-top:1px solid #{@rule};font-size:13px;line-height:1.5;color:#{@muted};"}
+      >
+        {@footnote}
+      </p>
+    </.shell>
+    """
+  end
+
+  defp message_body(assigns) do
+    ~H"""
+    <.shell heading={@heading}>
+      <p style="margin:0 0 20px;font-size:16px;line-height:1.6;">{@intro}</p>
+      <table
+        role="presentation"
+        width="100%"
+        cellpadding="0"
+        cellspacing="0"
+        border="0"
+        style={"border-top:1px solid #{@rule};"}
+      >
+        <tr :for={{label, value} <- @details}>
+          <td
+            valign="top"
+            width="90"
+            style={"padding:10px 12px 10px 0;border-bottom:1px solid #{@rule};font-family:#{@serif};font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#{@muted};"}
+          >
+            {label}
+          </td>
+          <td
+            valign="top"
+            style={"padding:8px 0;border-bottom:1px solid #{@rule};font-family:#{@serif};font-size:15px;line-height:1.5;color:#{@ink};"}
+          >
+            <%= case value do %>
+              <% {text, url} -> %>
+                <a href={url} style={"color:#{@primary};"}>{text}</a>
+              <% text -> %>
+                {text}
+            <% end %>
+          </td>
+        </tr>
+      </table>
+      <p style={"margin:24px 0 8px;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#{@muted};"}>
+        Message
+      </p>
+      <div style={"margin:0;padding:4px 0 4px 16px;border-left:3px solid #{@primary};"}>
+        <p
+          :for={lines <- message_paragraphs(@message)}
+          style="margin:0 0 12px;font-size:16px;line-height:1.6;"
+        >
+          <%= for {line, index} <- Enum.with_index(lines) do %>
+            <br :if={index > 0} />{line}
+          <% end %>
+        </p>
+      </div>
+      <.email_button label={elem(@button, 0)} url={elem(@button, 1)} />
+    </.shell>
+    """
+  end
+
+  attr :label, :string, required: true
+  attr :url, :string, required: true
+
+  defp email_button(assigns) do
+    assigns = Map.merge(assigns, @colors)
+
+    ~H"""
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:24px 0;">
+      <tr>
+        <td style={"background-color:#{@primary};border-radius:4px;"}>
+          <a
+            href={@url}
+            style={"display:inline-block;padding:12px 24px;font-family:#{@serif};font-size:16px;font-weight:bold;color:#ffffff;text-decoration:none;"}
+          >
+            {@label}
+          </a>
+        </td>
+      </tr>
+    </table>
+    """
+  end
+
+  attr :heading, :string, required: true
+  slot :inner_block, required: true
+
+  defp shell(assigns) do
     assigns =
       Map.merge(assigns, %{
         logo_url: JanPaintingsWeb.Endpoint.url() <> "/images/jan-johnson-logo.png",
@@ -43,8 +177,6 @@ defmodule JanPaintingsWeb.EmailHTML do
         page: @page,
         paper: @paper,
         ink: @ink,
-        muted: @muted,
-        rule: @rule,
         serif: @serif
       })
 
@@ -94,42 +226,7 @@ defmodule JanPaintingsWeb.EmailHTML do
                     <h1 style={"margin:0 0 16px;font-family:#{@serif};font-size:26px;line-height:1.25;font-weight:normal;color:#{@ink};"}>
                       {@heading}
                     </h1>
-                    <p
-                      :for={paragraph <- @paragraphs}
-                      style="margin:0 0 16px;font-size:16px;line-height:1.6;"
-                    >
-                      {paragraph}
-                    </p>
-                    <table
-                      role="presentation"
-                      cellpadding="0"
-                      cellspacing="0"
-                      border="0"
-                      style="margin:24px 0;"
-                    >
-                      <tr>
-                        <td style={"background-color:#{@primary};border-radius:4px;"}>
-                          <a
-                            href={elem(@button, 1)}
-                            style={"display:inline-block;padding:12px 24px;font-family:#{@serif};font-size:16px;font-weight:bold;color:#ffffff;text-decoration:none;"}
-                          >
-                            {elem(@button, 0)}
-                          </a>
-                        </td>
-                      </tr>
-                    </table>
-                    <p style={"margin:0 0 8px;font-size:13px;line-height:1.5;color:#{@muted};"}>
-                      If the button doesn't work, copy this link into your browser:
-                    </p>
-                    <p style="margin:0 0 16px;font-size:13px;line-height:1.5;word-break:break-all;">
-                      <a href={elem(@button, 1)} style={"color:#{@primary};"}>{elem(@button, 1)}</a>
-                    </p>
-                    <p
-                      :if={@footnote}
-                      style={"margin:24px 0 0;padding-top:16px;border-top:1px solid #{@rule};font-size:13px;line-height:1.5;color:#{@muted};"}
-                    >
-                      {@footnote}
-                    </p>
+                    {render_slot(@inner_block)}
                   </td>
                 </tr>
                 <tr>
