@@ -1,0 +1,11 @@
+#!/bin/sh
+# Starts as root only to prepare the uploads directory on the mounted volume
+# (Fly mounts volumes owned by root), then runs the command as nobody.
+set -eu
+
+if [ -n "${UPLOADS_DIR:-}" ]; then
+  mkdir -p "$UPLOADS_DIR"
+  chown nobody "$UPLOADS_DIR"
+fi
+
+exec gosu nobody "$@"
