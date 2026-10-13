@@ -20,7 +20,7 @@ defmodule JanPaintingsWeb.Layouts do
 
   ## Examples
 
-      <Layouts.app flash={@flash}>
+      <Layouts.app flash={@flash} current_scope={@current_scope}>
         <h1>Content</h1>
       </Layouts.app>
 
@@ -83,6 +83,21 @@ defmodule JanPaintingsWeb.Layouts do
                 <.link href={~p"/about" <> "#contact"} class="rounded px-3 py-2 hover:bg-base-200">
                   Contact
                 </.link>
+                <div :if={@current_scope} class="mt-2 border-t border-base-300 pt-2">
+                  <p class="truncate px-3 py-1 text-xs text-base-content/60">
+                    {@current_scope.user.email}
+                  </p>
+                  <.link href={~p"/users/settings"} class="block rounded px-3 py-2 hover:bg-base-200">
+                    Account
+                  </.link>
+                  <.link
+                    href={~p"/users/log-out"}
+                    method="delete"
+                    class="block rounded px-3 py-2 hover:bg-base-200"
+                  >
+                    Log out
+                  </.link>
+                </div>
                 <div class="mt-2 border-t border-base-300 px-3 pt-3"><.theme_toggle /></div>
               </nav>
             </details>
@@ -97,7 +112,20 @@ defmodule JanPaintingsWeb.Layouts do
             </.link>
             <.link navigate={~p"/about"} class="nav-link">About</.link>
             <.link href={~p"/about" <> "#contact"} class="nav-link">Contact</.link>
-            <div class="ml-auto"><.theme_toggle /></div>
+            <div class="ml-auto flex items-center gap-5">
+              <.link
+                :if={@current_scope}
+                href={~p"/users/settings"}
+                class="nav-link max-w-48 truncate normal-case tracking-normal"
+                title={@current_scope.user.email}
+              >
+                {@current_scope.user.email}
+              </.link>
+              <.link :if={@current_scope} href={~p"/users/log-out"} method="delete" class="nav-link">
+                Log out
+              </.link>
+              <.theme_toggle />
+            </div>
           </nav>
         </div>
       </header>
@@ -118,6 +146,9 @@ defmodule JanPaintingsWeb.Layouts do
             <a href="mailto:jan@janjohnsonprints.com" class="nav-link">jan@janjohnsonprints.com</a>
             <br /> Phone <a href="tel:+14506582752" class="nav-link">450.658.2752</a>
             · Cell <a href="tel:+15146086959" class="nav-link">514.608.6959</a>
+          </p>
+          <p :if={!@current_scope} class="text-xs sm:col-span-2 sm:text-right">
+            <.link navigate={~p"/users/log-in"} class="nav-link opacity-70">Log in</.link>
           </p>
         </div>
       </footer>

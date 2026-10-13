@@ -26,8 +26,12 @@ defmodule JanPaintingsWeb.Router do
     get "/about", PageController, :about
     post "/about", PageController, :create_message
     get "/contact", PageController, :contact_redirect
-    live "/prints", PrintLive.Index, :index
-    live "/prints/:category", PrintLive.Index, :index
+
+    live_session :public, on_mount: [{JanPaintingsWeb.UserAuth, :mount_current_scope}] do
+      live "/prints", PrintLive.Index, :index
+      live "/prints/:category", PrintLive.Index, :index
+    end
+
     get "/prints/:category/:slug", PrintController, :show
   end
 

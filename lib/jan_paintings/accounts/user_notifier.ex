@@ -9,7 +9,7 @@ defmodule JanPaintings.Accounts.UserNotifier do
     email =
       new()
       |> to(recipient)
-      |> from({"JanPaintings", "contact@example.com"})
+      |> from(Application.fetch_env!(:jan_paintings, __MODULE__)[:from])
       |> subject(subject)
       |> text_body(body)
 
@@ -22,7 +22,7 @@ defmodule JanPaintings.Accounts.UserNotifier do
   Deliver instructions to update a user email.
   """
   def deliver_update_email_instructions(user, url) do
-    deliver(user.email, "Update email instructions", """
+    deliver(user.email, "Confirm your new email address", """
 
     ==============================
 
@@ -49,7 +49,7 @@ defmodule JanPaintings.Accounts.UserNotifier do
   end
 
   defp deliver_magic_link_instructions(user, url) do
-    deliver(user.email, "Log in instructions", """
+    deliver(user.email, "Your Jan Johnson Prints log in link", """
 
     ==============================
 
@@ -66,7 +66,7 @@ defmodule JanPaintings.Accounts.UserNotifier do
   end
 
   defp deliver_confirmation_instructions(user, url) do
-    deliver(user.email, "Confirmation instructions", """
+    deliver(user.email, "Confirm your Jan Johnson Prints account", """
 
     ==============================
 

@@ -1,4 +1,4 @@
-<Layouts.app flash={@flash} banner={@category && @category.slug}>
+<Layouts.app flash={@flash} current_scope={@current_scope} banner={@category && @category.slug}>
   <header class="border-b border-base-300 pb-6">
     <h1 class="font-serif text-3xl sm:text-4xl">
       {(@category && @category.name) || "All Prints"}

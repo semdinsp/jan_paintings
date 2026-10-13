@@ -54,6 +54,10 @@ config :jan_paintings, JanPaintings.Inquiries.Notifier,
   to: {"Jan Johnson", "jan@janjohnsonprints.com"},
   from: {"Jan Johnson Prints website", "website@janjohnsonprints.com"}
 
+# Sender for account emails (log in links, confirmations).
+config :jan_paintings, JanPaintings.Accounts.UserNotifier,
+  from: {"Jan Johnson Prints", "website@janjohnsonprints.com"}
+
 # Configure esbuild (the version is required)
 config :esbuild,
   version: "0.25.4",
