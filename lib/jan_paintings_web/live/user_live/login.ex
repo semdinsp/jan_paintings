@@ -128,7 +128,9 @@ defmodule JanPaintingsWeb.UserLive.Login do
      |> push_navigate(to: ~p"/users/log-in")}
   end
 
+  # Only in development, where /dev/mailbox shows the emails the local adapter keeps.
   defp local_mail_adapter? do
-    Application.get_env(:jan_paintings, JanPaintings.Mailer)[:adapter] == Swoosh.Adapters.Local
+    Application.get_env(:jan_paintings, :dev_routes, false) and
+      Application.get_env(:jan_paintings, JanPaintings.Mailer)[:adapter] == Swoosh.Adapters.Local
   end
 end

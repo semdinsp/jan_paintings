@@ -109,13 +109,13 @@ defmodule JanPaintingsWeb.PageHTML do
           class="max-h-full max-w-full object-contain shadow-md"
         />
       </div>
-      <p class="mt-3 truncate text-[0.65rem] uppercase tracking-widest text-base-content/60 sm:text-xs">
+      <p class="mt-3 truncate text-xs uppercase tracking-wider text-base-content/60 sm:tracking-widest">
         {@print.artist}
       </p>
       <p class="line-clamp-3 font-serif text-base leading-snug group-hover:text-accent sm:text-lg">
         {@print.title}
       </p>
-      <p :if={@print.medium != ""} class="mt-0.5 text-xs text-base-content/60 sm:text-sm">
+      <p :if={@print.medium != ""} class="mt-0.5 text-[0.8125rem] text-base-content/60 sm:text-sm">
         {@print.medium}
       </p>
     </.link>
