@@ -64,7 +64,7 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Form do
             />
             <.input field={@form[:dates]} label="Dates" placeholder="1864–1955" />
           </div>
-          <.input field={@form[:title]} label="Title" phx-debounce="300" />
+          <.input field={@form[:title]} type="textarea" label="Title" rows="2" phx-debounce="300" />
           <div class="grid gap-x-4 sm:grid-cols-2">
             <.input field={@form[:medium]} label="Medium" placeholder="Etching" />
             <.input field={@form[:price]} label="Price" placeholder="$1,500 USD (blank = On request)" />
@@ -85,7 +85,8 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Form do
           </p>
         </div>
 
-        <div class="space-y-8">
+        <%!-- Images come first on phones, where prints are often photographed and added. --%>
+        <div class="order-first space-y-8 lg:order-none">
           <input type="hidden" name={@form[:image].name} value={@print.image} />
           <input type="hidden" name={@form[:large_image].name} value={@form[:large_image].value} />
           <.image_field
@@ -130,7 +131,7 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Form do
           </section>
         </div>
 
-        <div class="flex flex-wrap items-center gap-3 border-t border-base-300 pt-6 lg:col-span-2">
+        <div class="paper-sheet sticky bottom-0 z-10 -mx-4 flex flex-wrap items-center gap-3 border-t border-base-300 px-4 py-3 sm:-mx-8 sm:px-8 lg:col-span-2 lg:-mx-12 lg:px-12">
           <.button phx-disable-with="Saving…" class="btn btn-primary">Save print</.button>
           <.link navigate={~p"/admin/prints"} class="btn btn-ghost">Cancel</.link>
           <button

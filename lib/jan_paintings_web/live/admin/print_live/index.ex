@@ -58,7 +58,7 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Index do
         <li
           :for={print <- @prints}
           id={"admin-print-#{print.id}"}
-          class="grid grid-cols-[3.5rem_1fr] items-center gap-x-4 gap-y-2 py-3 sm:grid-cols-[3.5rem_1fr_9rem_8rem_auto]"
+          class="grid grid-cols-[3.5rem_1fr_auto] items-center gap-x-3 gap-y-2 py-3 sm:grid-cols-[3.5rem_1fr_9rem_8rem_auto] sm:gap-x-4"
         >
           <.link navigate={~p"/admin/prints/#{print.id}/edit"} class="print-mount block size-14 p-1">
             <img
@@ -69,7 +69,7 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Index do
               class="size-full object-contain"
             />
           </.link>
-          <div class="min-w-0">
+          <div class="col-span-2 min-w-0 sm:col-span-1">
             <.link
               navigate={~p"/admin/prints/#{print.id}/edit"}
               class="block truncate font-medium hover:text-accent"
@@ -86,7 +86,7 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Index do
           <form
             id={"status-#{print.id}"}
             phx-change="set_status"
-            class="col-start-2 sm:col-start-auto"
+            class="w-32 sm:w-auto"
           >
             <input type="hidden" name="print_id" value={print.id} />
             <select
@@ -100,7 +100,7 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Index do
               )}
             </select>
           </form>
-          <div class="col-start-2 flex gap-3 text-sm sm:col-start-auto">
+          <div class="col-span-2 col-start-2 flex gap-4 text-sm sm:col-span-1 sm:col-start-auto">
             <.link navigate={~p"/admin/prints/#{print.id}/edit"} class="text-accent hover:underline">
               Edit
             </.link>
