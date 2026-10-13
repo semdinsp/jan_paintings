@@ -43,12 +43,14 @@ defmodule JanPaintingsWeb.Layouts do
     ~H"""
     <div class="flex min-h-screen flex-col">
       <header>
-        <div class="relative overflow-hidden bg-primary text-primary-content">
-          <div
-            class="banner-art absolute inset-y-0 right-0 max-w-[65%] sm:max-w-[60%]"
-            style={"background-image: url('#{JanPaintings.Catalog.banner_url(@banner)}')"}
-            aria-hidden="true"
-          />
+        <div class="relative bg-primary text-primary-content">
+          <%!-- Only the art is clipped, so the mobile menu can drop below the header. --%>
+          <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+            <div
+              class="banner-art absolute inset-y-0 right-0 max-w-[65%] sm:max-w-[60%]"
+              style={"background-image: url('#{JanPaintings.Catalog.banner_url(@banner)}')"}
+            />
+          </div>
           <div class="relative mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6 sm:py-5 lg:px-8">
             <.link navigate={~p"/"} class="block min-w-0 shrink">
               <img
@@ -60,7 +62,7 @@ defmodule JanPaintingsWeb.Layouts do
               />
             </.link>
 
-            <details class="group relative lg:hidden">
+            <details id="mobile-menu" class="group relative lg:hidden">
               <summary
                 class="flex cursor-pointer list-none items-center rounded bg-primary/85 p-2 shadow hover:bg-primary [&::-webkit-details-marker]:hidden"
                 aria-label="Menu"
@@ -95,7 +97,7 @@ defmodule JanPaintingsWeb.Layouts do
                     Admin
                   </.link>
                   <.link href={~p"/users/settings"} class="block rounded px-3 py-2 hover:bg-base-200">
-                    Account
+                    Account settings
                   </.link>
                   <.link
                     href={~p"/users/log-out"}
@@ -112,7 +114,7 @@ defmodule JanPaintingsWeb.Layouts do
         </div>
 
         <div class="h-1 bg-secondary lg:h-auto">
-          <nav class="mx-auto hidden max-w-6xl items-center gap-7 px-8 py-2.5 text-sm uppercase tracking-wider text-secondary-content lg:flex">
+          <nav class="mx-auto hidden max-w-6xl items-center gap-6 whitespace-nowrap px-8 py-2.5 text-sm uppercase tracking-wider text-secondary-content lg:flex xl:gap-7">
             <.link navigate={~p"/prints"} class="nav-link">All Prints</.link>
             <.link :for={c <- @categories} navigate={~p"/prints/#{c.slug}"} class="nav-link">
               {c.short}
@@ -127,17 +129,31 @@ defmodule JanPaintingsWeb.Layouts do
               >
                 Admin
               </.link>
-              <.link
-                :if={@current_scope}
-                href={~p"/users/settings"}
-                class="nav-link max-w-48 truncate normal-case tracking-normal"
-                title={@current_scope.user.email}
-              >
-                {@current_scope.user.email}
-              </.link>
-              <.link :if={@current_scope} href={~p"/users/log-out"} method="delete" class="nav-link">
-                Log out
-              </.link>
+              <details :if={@current_scope} id="account-menu" class="relative">
+                <summary
+                  class="nav-link flex cursor-pointer list-none items-center gap-1 [&::-webkit-details-marker]:hidden"
+                  title={@current_scope.user.email}
+                >
+                  <.icon name="hero-user-circle" class="size-5" />
+                  <span class="sr-only">Account</span>
+                  <.icon name="hero-chevron-down-micro" class="size-4" />
+                </summary>
+                <div class="absolute right-0 z-20 mt-3 w-64 rounded-box bg-base-100 p-2 text-sm normal-case tracking-normal text-base-content shadow-xl">
+                  <p class="truncate px-3 py-1 text-xs text-base-content/60">
+                    {@current_scope.user.email}
+                  </p>
+                  <.link href={~p"/users/settings"} class="block rounded px-3 py-2 hover:bg-base-200">
+                    Account settings
+                  </.link>
+                  <.link
+                    href={~p"/users/log-out"}
+                    method="delete"
+                    class="block rounded px-3 py-2 hover:bg-base-200"
+                  >
+                    Log out
+                  </.link>
+                </div>
+              </details>
               <.theme_toggle />
             </div>
           </nav>
