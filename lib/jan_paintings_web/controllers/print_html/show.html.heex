@@ -75,7 +75,12 @@
 
       <dl class="mt-6 space-y-4 border-t border-base-300 pt-6 text-sm leading-relaxed">
         <.detail :if={@print.medium != ""} label="Medium">{@print.medium}</.detail>
+        <.detail :if={@print.catalogue_references != ""} label="References">
+          {@print.catalogue_references}
+        </.detail>
+        <.detail :if={@print.state != ""} label="State">{@print.state}</.detail>
         <.detail :if={@print.dimensions != ""} label="Size">{@print.dimensions}</.detail>
+        <.detail :if={@print.sheet_size != ""} label="Sheet">{@print.sheet_size}</.detail>
         <.detail :if={@print.condition != ""} label="Condition">{@print.condition}</.detail>
         <.detail :if={@print.provenance != ""} label="Provenance">{@print.provenance}</.detail>
         <.detail :if={@print.watermark != ""} label="Watermark">{@print.watermark}</.detail>
