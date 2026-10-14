@@ -18,76 +18,77 @@
   themes: false;
 }
 
-/* daisyUI theme plugin.
-  We ship with two themes, a light one inspired on Phoenix colors and a dark one inspired
-  on Elixir colors. Build your own at: https://daisyui.com/theme-generator/ */
-@plugin "daisyui/packages/bundle/daisyui-theme" {
-  name: "dark";
-  default: false;
-  prefersdark: true;
-  color-scheme: "dark";
-  --color-base-100: oklch(24% 0.012 60);
-  --color-base-200: oklch(28% 0.012 60);
-  --color-base-300: oklch(36% 0.015 60);
-  --color-base-content: oklch(92% 0.012 85);
-  --color-primary: oklch(34% 0.07 5);
-  --color-primary-content: oklch(95% 0.01 85);
-  --color-secondary: oklch(48% 0.03 125);
-  --color-secondary-content: oklch(95% 0.01 125);
-  --color-accent: oklch(78% 0.07 20);
-  --color-accent-content: oklch(20% 0.02 20);
-  --color-neutral: oklch(37% 0.044 257.287);
-  --color-neutral-content: oklch(98% 0.003 247.858);
-  --color-info: oklch(58% 0.158 241.966);
-  --color-info-content: oklch(97% 0.013 236.62);
-  --color-success: oklch(60% 0.118 184.704);
-  --color-success-content: oklch(98% 0.014 180.72);
-  --color-warning: oklch(66% 0.179 58.318);
-  --color-warning-content: oklch(98% 0.022 95.277);
-  --color-error: oklch(58% 0.253 17.585);
-  --color-error-content: oklch(96% 0.015 12.422);
-  --radius-selector: 0.25rem;
-  --radius-field: 0.25rem;
-  --radius-box: 0.5rem;
-  --size-selector: 0.21875rem;
-  --size-field: 0.21875rem;
-  --border: 1.5px;
-  --depth: 1;
-  --noise: 0;
-}
-
+/* daisyUI themes, mapped onto the design tokens below (see design.md) so
+   daisyUI components (forms, admin tables, flash) follow the same palette.
+   Flat: no depth, square boxes, 2px radius on fields and buttons, and
+   44px-tall fields and buttons. */
 @plugin "daisyui/packages/bundle/daisyui-theme" {
   name: "light";
   default: true;
   prefersdark: false;
   color-scheme: "light";
-  --color-base-100: oklch(98.5% 0.006 85);
-  --color-base-200: oklch(95.5% 0.01 120);
-  --color-base-300: oklch(88% 0.02 125);
-  --color-base-content: oklch(24% 0.01 30);
-  --color-primary: oklch(39% 0.07 5);
-  --color-primary-content: oklch(98% 0.006 85);
-  --color-secondary: oklch(76% 0.035 125);
-  --color-secondary-content: oklch(25% 0.02 125);
-  --color-accent: oklch(39% 0.07 5);
-  --color-accent-content: oklch(98% 0.006 85);
-  --color-neutral: oklch(44% 0.017 285.786);
-  --color-neutral-content: oklch(98% 0 0);
-  --color-info: oklch(62% 0.214 259.815);
-  --color-info-content: oklch(97% 0.014 254.604);
-  --color-success: oklch(70% 0.14 182.503);
-  --color-success-content: oklch(98% 0.014 180.72);
-  --color-warning: oklch(66% 0.179 58.318);
-  --color-warning-content: oklch(98% 0.022 95.277);
-  --color-error: oklch(58% 0.253 17.585);
-  --color-error-content: oklch(96% 0.015 12.422);
-  --radius-selector: 0.25rem;
-  --radius-field: 0.25rem;
-  --radius-box: 0.5rem;
-  --size-selector: 0.21875rem;
-  --size-field: 0.21875rem;
-  --border: 1.5px;
-  --depth: 1;
+  --color-base-100: #faf8f4;
+  --color-base-200: #f1ede6;
+  --color-base-300: #ddd6cb;
+  --color-base-content: #1f1d1a;
+  --color-primary: #a8436a;
+  --color-primary-content: #ffffff;
+  --color-secondary: #f1ede6;
+  --color-secondary-content: #1f1d1a;
+  --color-accent: #a8436a;
+  --color-accent-content: #ffffff;
+  --color-neutral: #1f1d1a;
+  --color-neutral-content: #faf8f4;
+  --color-info: #3f5f7a;
+  --color-info-content: #ffffff;
+  --color-success: #4d6b4f;
+  --color-success-content: #ffffff;
+  --color-warning: #8a5a14;
+  --color-warning-content: #ffffff;
+  --color-error: #a3352b;
+  --color-error-content: #ffffff;
+  --radius-selector: 2px;
+  --radius-field: 2px;
+  --radius-box: 0;
+  --size-selector: 0.25rem;
+  --size-field: 0.275rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+@plugin "daisyui/packages/bundle/daisyui-theme" {
+  name: "dark";
+  default: false;
+  prefersdark: true;
+  color-scheme: "dark";
+  --color-base-100: #1c1a17;
+  --color-base-200: #262320;
+  --color-base-300: #3d3832;
+  --color-base-content: #ede8e0;
+  --color-primary: #d9809f;
+  --color-primary-content: #1f1d1a;
+  --color-secondary: #262320;
+  --color-secondary-content: #ede8e0;
+  --color-accent: #d9809f;
+  --color-accent-content: #1f1d1a;
+  --color-neutral: #ede8e0;
+  --color-neutral-content: #1c1a17;
+  --color-info: #8fb0cc;
+  --color-info-content: #1f1d1a;
+  --color-success: #9cc39f;
+  --color-success-content: #1f1d1a;
+  --color-warning: #e0b26a;
+  --color-warning-content: #1f1d1a;
+  --color-error: #ec8f86;
+  --color-error-content: #1f1d1a;
+  --radius-selector: 2px;
+  --radius-field: 2px;
+  --radius-box: 0;
+  --size-selector: 0.25rem;
+  --size-field: 0.275rem;
+  --border: 1px;
+  --depth: 0;
   --noise: 0;
 }
 
@@ -102,94 +103,248 @@
 /* Make LiveView wrapper divs transparent for layout */
 [data-phx-session], [data-phx-teleported-src] { display: contents }
 
-/* This file is for your main application CSS */
 
-/* Tinos (Google Fonts) is metric-compatible with Times New Roman. */
+/* This file is for your main application CSS. The design guide is design.md:
+   a quiet print room with warm paper, dark ink, hairlines, and one rose
+   accent that only ever marks something clickable. */
+
+/* Colour tokens (design.md §2). Use only these. */
+:root,
+[data-theme="light"] {
+  --paper: #faf8f4;
+  --paper-2: #f1ede6;
+  --rule: #ddd6cb;
+  --ink: #1f1d1a;
+  --ink-2: #5c5650;
+  --rose: #a8436a;
+  --rose-2: #86324f;
+  --rose-tint: #f6e9ee;
+  --sold: #5c5650;
+}
+[data-theme="dark"] {
+  --paper: #1c1a17;
+  --paper-2: #262320;
+  --rule: #3d3832;
+  --ink: #ede8e0;
+  --ink-2: #b3aba1;
+  --rose: #d9809f;
+  --rose-2: #e8a3bb;
+  --rose-tint: #3a2630;
+  --sold: #b3aba1;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
+  --color-rule: var(--rule);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-rose: var(--rose);
+  --color-rose-2: var(--rose-2);
+  --color-rose-tint: var(--rose-tint);
+  --color-sold: var(--sold);
+}
+
+/* Type (design.md §3): EB Garamond for headings and titles, Source Sans 3
+   for everything else. Body text is 17px. */
 @theme {
-  --font-serif: "Tinos", "Times New Roman", Times, serif;
-  --font-sans: "Tinos", "Times New Roman", Times, serif;
-  --font-display: "Libre Baskerville", "Baskerville", "Tinos", "Times New Roman", serif;
+  --font-sans: "Source Sans 3", "Source Sans Pro", "Helvetica Neue", Arial, sans-serif;
+  --font-serif: "EB Garamond", Garamond, Georgia, "Times New Roman", serif;
+  --text-base: 1.0625rem;
+  --text-base--line-height: 1.6;
 }
-
-/* Large headings (page, print and section titles) use Libre Baskerville;
-   everything else stays in Tinos. */
-h1, h2 {
-  font-family: var(--font-display);
-  letter-spacing: -0.01em;
-}
-
-/* Page background: sage paper texture, echoing the original site. */
-:root {
-  --page-bg: #b2baa6;
-  --paper-noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.25 0 0 0 0 0.27 0 0 0 0 0.2 0 0 0 0.16 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-[data-theme="dark"] { --page-bg: #2b2f27; }
 
 body {
-  background-color: var(--page-bg);
-  background-image:
-    var(--paper-noise),
-    radial-gradient(ellipse at top, rgb(255 255 255 / 0.18), transparent 60%),
-    radial-gradient(ellipse at bottom, rgb(0 0 0 / 0.12), transparent 70%);
-  background-attachment: fixed;
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: 1.6;
 }
 
-/* The cream "sheet" content sits on. Edge to edge on phones. */
-.paper-sheet {
-  background-color: var(--color-base-100);
-  background-image: var(--paper-noise);
-  background-blend-mode: multiply;
+h1, h2, h3 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  text-wrap: balance;
 }
-@media (min-width: 640px) {
-  .paper-sheet {
-    border: 1px solid rgb(0 0 0 / 0.08);
-    box-shadow: 0 1px 2px rgb(0 0 0 / 0.08), 0 12px 40px -12px rgb(0 0 0 / 0.35);
-  }
+p { text-wrap: pretty; }
+
+/* Home H1: 44px, 32px on phones. */
+.type-display {
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  line-height: 1.15;
+  font-weight: 400;
+}
+/* Page and print titles: 36px, 28px on phones. */
+.type-h1 {
+  font-family: var(--font-serif);
+  font-size: 1.75rem;
+  line-height: 1.2;
+  font-weight: 400;
+}
+@media (min-width: 768px) {
+  .type-display { font-size: 2.75rem; }
+  .type-h1 { font-size: 2.25rem; }
+}
+/* Section heads. */
+.type-h2 {
+  font-family: var(--font-serif);
+  font-size: 1.625rem;
+  line-height: 1.25;
+  font-weight: 400;
+}
+/* "BEHAM, Hans Sebald (1500–1550)" */
+.type-artist {
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+/* "Fine prints since 1979", and definition-list labels. */
+.type-eyebrow {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ink-2);
+}
+/* Captions, dates, medium. */
+.type-meta {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--ink-2);
 }
 
-/* A print mount: off-white board with a soft bevel. */
-.print-mount {
-  background: color-mix(in oklab, var(--color-base-100) 70%, white);
-  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.06), 0 1px 3px rgb(0 0 0 / 0.08);
+/* Links (design.md §5). Inline links are underlined; "more" links
+   (back links, "More by this artist", "Browse →") only on hover. */
+.link {
+  color: var(--rose);
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
 }
-[data-theme="dark"] .print-mount { background: oklch(31% 0.01 60); }
-
-.nav-link { transition: opacity 150ms; }
-.nav-link:hover { opacity: 0.7; }
-
-/* Header art strip: the print detail from the original site's category
-   banners. The banner's left half is the old logo, so anchor right and
-   fade the left edge into the header colour. */
-.banner-art {
-  /* The art occupies the right 552px of each 1024x125 banner. */
-  aspect-ratio: 552 / 125;
-  background-size: auto 100%;
-  background-position: right center;
-  background-repeat: no-repeat;
-  -webkit-mask-image: linear-gradient(to right, transparent, black 40%);
-  mask-image: linear-gradient(to right, transparent, black 40%);
+.link:hover {
+  color: var(--rose-2);
+  text-decoration-thickness: 2px;
 }
-/* On desktop, widen the strip and scale the banner so its art half
-   spans the full strip width (cropping a little top and bottom). */
-@media (min-width: 1024px) {
-  .banner-art {
-    aspect-ratio: auto;
-    width: min(50vw, 48rem);
-    max-width: none;
-    /* Never shorter than the ~136px header: 136 * 1024 / 125 = 1114px. */
-    background-size: max(calc(100% * 1024 / 552), 1114px) auto;
-    -webkit-mask-image: linear-gradient(to right, transparent, black 30%);
-    mask-image: linear-gradient(to right, transparent, black 30%);
-  }
+.link-more {
+  color: var(--rose);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration-line: none;
+  text-underline-offset: 3px;
+}
+.link-more:hover {
+  color: var(--rose-2);
+  text-decoration-line: underline;
 }
 
-/* Form text. Labels at 14px rather than 12px; on phones every field is at
-   least 16px, otherwise iOS zooms the page when a field is tapped. */
-.fieldset .label { font-size: 0.875rem; }
+/* Buttons: rose primary, rose-outlined secondary, 15px/600, 44px tall. */
+.btn {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  padding-inline: 1.25rem;
+  text-shadow: none;
+}
+.btn-primary:hover {
+  --btn-bg: var(--rose-2);
+  --btn-border: var(--rose-2);
+}
+.btn-secondary-rose {
+  --btn-bg: transparent;
+  --btn-fg: var(--rose);
+  --btn-border: var(--rose);
+}
+.btn-secondary-rose:hover {
+  --btn-bg: var(--rose-tint);
+  --btn-fg: var(--rose-2);
+  --btn-border: var(--rose-2);
+}
+
+/* Every interactive element gets the same rose focus ring. */
+:where(a, button, summary, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--rose);
+  outline-offset: 2px;
+}
+
+/* Fields: rule border on paper, ink border when focused. */
+.input,
+.select,
+.textarea {
+  --input-color: var(--rule);
+  background-color: var(--paper);
+  border-color: var(--rule);
+  box-shadow: none;
+}
+.input:focus-within,
+.select:focus,
+.textarea:focus {
+  --input-color: var(--ink);
+  border-color: var(--ink);
+}
+.input input::placeholder,
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--ink-2);
+  opacity: 1;
+}
+.input,
+.select,
+.textarea,
+.input input { font-size: 1rem; }
+
+/* Labels at 14px rather than 12px; on phones every field is at least 16px,
+   otherwise iOS zooms the page when a field is tapped. */
+.fieldset .label { font-size: 0.875rem; color: var(--ink-2); }
 @media (max-width: 639px) {
   input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
   select,
   textarea {
     font-size: 16px;
   }
+}
+
+/* Menu bar: hairlines, ink items, rose for hover and the current page. */
+.menu-item {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color 150ms;
+}
+.menu-item:hover { color: var(--rose); }
+.menu-item[aria-current="page"] {
+  color: var(--rose);
+  font-weight: 600;
+  border-bottom-color: var(--rose);
+}
+.drawer-item {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  padding-inline: 4px;
+  border-top: 1px solid var(--rule);
+  color: var(--ink);
+  font-weight: 500;
+}
+.drawer-item:hover,
+.drawer-item[aria-current="page"] { color: var(--rose); }
+.drawer-item[aria-current="page"] { font-weight: 600; }
+
+/* A mat for prints: the image is never cropped. */
+.mat { background-color: var(--paper-2); }
+
+/* Print grid (design.md §5): 220px minimum columns, 32px / 48px gaps. */
+.print-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  column-gap: 2rem;
+  row-gap: 3rem;
 }
