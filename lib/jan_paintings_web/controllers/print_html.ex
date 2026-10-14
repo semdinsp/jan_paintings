@@ -11,9 +11,9 @@ defmodule JanPaintingsWeb.PrintHTML do
 
   def detail(assigns) do
     ~H"""
-    <div class="sm:grid sm:grid-cols-[7rem_1fr] sm:gap-4">
-      <dt class="text-xs uppercase tracking-widest text-base-content/60 sm:pt-0.5">{@label}</dt>
-      <dd class="mt-1 text-base-content/80 sm:mt-0">{render_slot(@inner_block)}</dd>
+    <div class="border-b border-rule py-3 sm:grid sm:grid-cols-[7rem_1fr] sm:gap-4">
+      <dt class="type-eyebrow sm:pt-1">{@label}</dt>
+      <dd class="mt-1 sm:mt-0">{render_slot(@inner_block)}</dd>
     </div>
     """
   end
@@ -49,10 +49,10 @@ defmodule JanPaintingsWeb.PrintHTML do
         patch={path}
         aria-current={active && "page"}
         class={[
-          "shrink-0 rounded-full border px-4 py-1.5 text-sm transition",
+          "flex min-h-11 shrink-0 items-center rounded-[2px] border px-4 text-[0.9375rem] transition",
           if(active,
-            do: "border-primary bg-primary text-primary-content",
-            else: "border-base-300 bg-base-100/60 hover:border-accent hover:text-accent"
+            do: "border-rose bg-rose-tint font-semibold text-rose",
+            else: "border-rule text-ink hover:border-rose hover:text-rose"
           )
         ]}
       >
