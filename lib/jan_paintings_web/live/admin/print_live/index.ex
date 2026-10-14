@@ -60,7 +60,7 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Index do
           id={"admin-print-#{print.id}"}
           class="grid grid-cols-[3.5rem_1fr_auto] items-center gap-x-3 gap-y-2 py-3 sm:grid-cols-[3.5rem_1fr_9rem_8rem_auto] sm:gap-x-4"
         >
-          <.link navigate={~p"/admin/prints/#{print.id}/edit"} class="print-mount block size-14 p-1">
+          <.link navigate={~p"/admin/prints/#{print.id}/edit"} class="mat block size-14 p-1">
             <img
               :if={print.image != ""}
               src={Catalog.image_url(print.image)}

@@ -1,9 +1,13 @@
-<Layouts.app flash={@flash} current_scope={@current_scope} banner={@category && @category.slug}>
-  <header class="border-b border-base-300 pb-6">
-    <h1 class="font-serif text-3xl sm:text-4xl">
+<Layouts.app
+  flash={@flash}
+  current_scope={@current_scope}
+  active={(@category && @category.slug) || "prints"}
+>
+  <header class="border-b border-rule pb-6">
+    <h1 class="type-h1">
       {(@category && @category.name) || "All Prints"}
     </h1>
-    <p class="mt-3 max-w-3xl text-base text-base-content/70 sm:text-lg">
+    <p class="mt-3 max-w-[68ch] text-ink-2">
       {(@category && @category.blurb) ||
         "A selection from the stock across Old Master, Modern and Canadian prints."}
     </p>
@@ -14,13 +18,13 @@
       phx-submit="search"
     />
     <div class="mt-4"><.category_filter current={@category} query={@query} /></div>
-    <p class="mt-4 text-sm text-base-content/60">
+    <p class="type-meta mt-4">
       <%= if @query != "" do %>
         {length(@prints)} {if length(@prints) == 1, do: "print", else: "prints"} matching
-        “<span class="font-medium text-base-content">{@query}</span>”.
+        “<span class="font-medium text-ink">{@query}</span>”.
         <.link
           patch={if @category, do: ~p"/prints/#{@category.slug}", else: ~p"/prints"}
-          class="ml-1 text-accent underline underline-offset-4"
+          class="link ml-1"
         >
           Clear search
         </.link>
@@ -32,19 +36,19 @@
 
   <div
     :if={@prints == []}
-    class="mx-auto mt-12 max-w-md text-center text-base-content/70"
+    class="mx-auto mt-12 max-w-md text-center text-ink-2"
   >
-    <p class="font-serif text-xl text-base-content">No prints found</p>
+    <p class="font-serif text-xl text-ink">No prints found</p>
     <p class="mt-2">
       Try a different spelling, just the artist's surname, or <.link
         patch={~p"/prints?#{[q: @query]}"}
-        class="text-accent underline underline-offset-4"
+        class="link"
       >
         search all categories</.link>.
       Only part of the stock is online, so
       <.link
         href={~p"/about" <> "#contact"}
-        class="text-accent underline underline-offset-4"
+        class="link"
       >ask us</.link>
       about anything you don't see.
     </p>
@@ -52,7 +56,7 @@
 
   <div
     id="print-results"
-    class="mt-10 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-8 md:grid-cols-3 lg:grid-cols-4"
+    class="print-grid mt-12"
   >
     <.print_card :for={print <- @prints} print={print} />
   </div>

@@ -1,13 +1,11 @@
 <Layouts.app flash={@flash} current_scope={@current_scope}>
-  <section class="grid items-center gap-10 md:grid-cols-[3fr_2fr] lg:gap-16">
-    <div>
-      <p class="text-xs uppercase tracking-[0.25em] text-base-content/60">
-        Fine prints since 1979
-      </p>
-      <h1 class="mt-3 font-serif text-3xl leading-tight sm:text-4xl lg:text-[2.6rem]">
+  <section class="grid items-center gap-12 md:grid-cols-12 md:gap-8 lg:gap-12">
+    <div class="md:col-span-5">
+      <p class="type-eyebrow">Fine prints since 1979</p>
+      <h1 class="type-display mt-3">
         Old Master, Modern and Canadian prints for collectors and museums.
       </h1>
-      <p class="mt-6 text-base text-base-content/70 sm:text-lg">
+      <p class="mt-6 max-w-[68ch] text-ink-2">
         A carefully researched stock with an emphasis on fine impressions and good condition.
         Browse a selection below, or get in touch to ask about holdings not shown here.
       </p>
@@ -15,84 +13,66 @@
         {live_render(@conn, JanPaintingsWeb.SearchLive, id: "home-search-live")}
       </div>
       <div class="mt-4 flex flex-wrap gap-3">
-        <.link navigate={~p"/prints"} class="btn btn-ghost border-base-300">Browse the stock</.link>
-        <.link href={~p"/about" <> "#contact"} class="btn btn-ghost border-base-300">
-          Get in touch
-        </.link>
+        <.link navigate={~p"/prints"} class="btn btn-primary">Browse the stock</.link>
+        <.link href={~p"/about" <> "#contact"} class="btn btn-secondary-rose">Get in touch</.link>
       </div>
     </div>
-    <.link
-      :if={@hero}
-      navigate={~p"/prints/#{@hero.category}/#{@hero.slug}"}
-      class="print-mount mx-auto block w-full max-w-sm p-6 sm:p-8"
-    >
-      <img
-        src={JanPaintings.Catalog.image_url(@hero.image)}
-        alt={"#{@hero.artist}, #{@hero.title}"}
-        class="mx-auto max-h-96 shadow-lg"
-      />
-      <p class="mt-4 text-center text-xs text-base-content/60">
-        {@hero.artist}, <span class="italic">{@hero.title}</span>
-      </p>
-    </.link>
+    <figure :if={@hero} class="md:col-span-7">
+      <.link
+        navigate={~p"/prints/#{@hero.category}/#{@hero.slug}"}
+        class="mat flex items-center justify-center p-8"
+      >
+        <img
+          src={JanPaintings.Catalog.image_url(@hero.image)}
+          alt={"#{@hero.artist}, #{@hero.title}"}
+          class="max-h-[28rem] max-w-full object-contain"
+        />
+      </.link>
+      <figcaption class="mt-3">
+        <span class="type-artist block">{@hero.artist}</span>
+        <span class="font-serif text-lg italic">{@hero.title}</span>
+      </figcaption>
+    </figure>
   </section>
 
-  <section class="mt-16 grid items-center gap-8 border-y border-base-300 py-10 sm:grid-cols-[10rem_1fr] sm:py-12 lg:gap-12">
+  <section class="mt-12 grid items-center gap-8 md:mt-16 md:grid-cols-12 md:gap-12">
     <img
       src={JanPaintings.Catalog.image_url("/images/catalogue/jan-green-jacket.jpg")}
       alt="Jan Johnson"
       loading="lazy"
-      class="print-mount mx-auto aspect-[4/5] w-36 object-cover p-2 sm:w-40"
+      class="aspect-[4/5] w-full max-w-60 object-cover md:col-span-4 md:max-w-none"
     />
-    <div class="max-w-2xl">
-      <p class="text-xs uppercase tracking-[0.25em] text-base-content/60">About the gallery</p>
-      <h2 class="mt-2 font-serif text-2xl sm:text-3xl">Jan Johnson</h2>
-      <p class="mt-4 text-base leading-relaxed text-base-content/80 sm:text-lg">
+    <div class="md:col-span-8">
+      <p class="type-eyebrow">About the gallery</p>
+      <h2 class="type-h2 mt-2">Jan Johnson</h2>
+      <p class="mt-4 max-w-[68ch]">
         Jan Johnson trained in the print department of P &amp; D Colnaghi in London and opened
         the gallery there in 1979, before moving it to Montreal in 1982. Over four decades the
         gallery has supplied collectors and many of the world's major museums, and helped found
         the International Fine Print Dealers Association. Visitors are welcome to view the stock
         by appointment in Chambly, just outside Montreal.
       </p>
-      <.link
-        navigate={~p"/about"}
-        class="mt-4 inline-block text-xs uppercase tracking-widest text-accent hover:opacity-70"
-      >
-        More about the gallery <span aria-hidden="true">&rarr;</span>
+      <.link navigate={~p"/about"} class="link-more mt-4 inline-block">
+        More about the gallery →
       </.link>
     </div>
   </section>
 
-  <section class="mt-12 grid gap-6 sm:grid-cols-3">
+  <section class="mt-12 grid gap-6 md:mt-16 md:grid-cols-3">
     <.link
-      :for={{category, cover} <- @categories}
+      :for={category <- @categories}
       navigate={~p"/prints/#{category.slug}"}
-      class="group flex flex-row items-center gap-4 border border-base-300 bg-base-100/60 p-4 transition hover:border-accent sm:flex-col sm:items-stretch sm:p-5"
+      class="group flex flex-col bg-paper-2 p-6"
     >
-      <div class="print-mount flex size-24 shrink-0 items-center justify-center p-2 sm:h-56 sm:w-auto sm:p-5">
-        <img
-          :if={cover}
-          src={JanPaintings.Catalog.image_url(cover.image)}
-          alt=""
-          loading="lazy"
-          class="max-h-full max-w-full object-contain shadow"
-        />
-      </div>
-      <div>
-        <h2 class="font-serif text-xl group-hover:text-accent sm:text-2xl">{category.name}</h2>
-        <p class="mt-1 text-sm text-base-content/70">{category.blurb}</p>
-        <p class="mt-3 hidden text-xs uppercase tracking-widest text-accent sm:block">
-          Browse <span aria-hidden="true">&rarr;</span>
-        </p>
-      </div>
+      <h2 class="font-serif text-[1.375rem] leading-snug text-ink">{category.name}</h2>
+      <p class="mt-2 flex-1 text-[0.9375rem] text-ink-2">{category.blurb}</p>
+      <p class="link-more mt-4 group-hover:text-rose-2 group-hover:underline">Browse →</p>
     </.link>
   </section>
 
-  <section class="mt-16 sm:mt-20">
-    <div class="flex items-baseline justify-between gap-4 border-b border-base-300 pb-3">
-      <h2 class="font-serif text-2xl">From the stock</h2>
-    </div>
-    <div class="mt-8 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-8 md:grid-cols-3">
+  <section class="mt-12 md:mt-16">
+    <h2 class="type-h2 border-b border-rule pb-3">From the stock</h2>
+    <div class="print-grid mt-8">
       <.print_card :for={print <- @featured} print={print} />
     </div>
   </section>

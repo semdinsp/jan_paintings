@@ -16,19 +16,15 @@ defmodule JanPaintingsWeb.PageHTML do
   def contact_details(assigns) do
     ~H"""
     <dl class={["grid gap-x-6 gap-y-3 sm:grid-cols-[6rem_1fr]", @class]}>
-      <dt class="text-xs uppercase tracking-widest text-base-content/60 sm:pt-1">Email</dt>
-      <dd>
-        <a href="mailto:jan@janjohnsonprints.com" class="text-accent underline underline-offset-4">
-          jan@janjohnsonprints.com
-        </a>
-      </dd>
-      <dt class="text-xs uppercase tracking-widest text-base-content/60 sm:pt-1">Phone</dt>
-      <dd><a href="tel:+14506582752" class="hover:text-accent">450.658.2752</a></dd>
-      <dt class="text-xs uppercase tracking-widest text-base-content/60 sm:pt-1">Cell</dt>
-      <dd><a href="tel:+15146086959" class="hover:text-accent">514.608.6959</a></dd>
-      <dt class="text-xs uppercase tracking-widest text-base-content/60 sm:pt-1">Address</dt>
+      <dt class="type-eyebrow sm:pt-0.5">Email</dt>
+      <dd><a href="mailto:jan@janjohnsonprints.com" class="link">jan@janjohnsonprints.com</a></dd>
+      <dt class="type-eyebrow sm:pt-0.5">Phone</dt>
+      <dd><a href="tel:+14506582752" class="link">450.658.2752</a></dd>
+      <dt class="type-eyebrow sm:pt-0.5">Cell</dt>
+      <dd><a href="tel:+15146086959" class="link">514.608.6959</a></dd>
+      <dt class="type-eyebrow sm:pt-0.5">Address</dt>
       <dd>189 rue Saint-Pierre<br />Chambly, QC, Canada J3L 1L8</dd>
-      <dt class="text-xs uppercase tracking-widest text-base-content/60 sm:pt-1">Visits</dt>
+      <dt class="type-eyebrow sm:pt-0.5">Visits</dt>
       <dd>By appointment</dd>
     </dl>
     """
@@ -47,11 +43,10 @@ defmodule JanPaintingsWeb.PageHTML do
       action={~p"/prints"}
       method="get"
       role="search"
-      class={["flex gap-2", @class]}
+      class={["flex", @class]}
       {@rest}
     >
-      <label class="input flex-1">
-        <.icon name="hero-magnifying-glass" class="size-5 shrink-0 opacity-60" />
+      <label class="input flex-1 rounded-r-none">
         <span class="sr-only">Search by artist or title</span>
         <input
           id={"#{@id}-input"}
@@ -64,12 +59,12 @@ defmodule JanPaintingsWeb.PageHTML do
           class="grow"
         />
       </label>
-      <button type="submit" class="btn btn-primary">Search</button>
+      <button type="submit" class="btn btn-primary rounded-l-none">Search</button>
     </form>
     """
   end
 
-  @doc "A Sold or Reserved badge; renders nothing for available prints."
+  @doc "A small Sold or Reserved label; renders nothing for available prints."
   attr :status, :string, required: true
   attr :class, :any, default: nil
 
@@ -77,21 +72,17 @@ defmodule JanPaintingsWeb.PageHTML do
     ~H"""
     <span
       :if={@status in ["sold", "reserved"]}
-      class={[
-        "inline-block rounded-sm px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-widest shadow-sm",
-        if(@status == "sold",
-          do: "bg-primary text-primary-content",
-          else: "bg-secondary text-secondary-content"
-        ),
-        @class
-      ]}
+      class={["block text-xs font-semibold uppercase tracking-[0.12em] text-sold", @class]}
     >
       {@status}
     </span>
     """
   end
 
-  @doc "A mounted print card linking to a print's detail page."
+  @doc """
+  A print in a grid: the print on a 4:5 mat (never cropped), then the artist,
+  title and medium. Links to the print's detail page.
+  """
   attr :print, :map, required: true
 
   def print_card(assigns) do
@@ -100,24 +91,28 @@ defmodule JanPaintingsWeb.PageHTML do
       navigate={~p"/prints/#{@print.category}/#{@print.slug}"}
       class="group flex min-w-0 flex-col"
     >
-      <div class="print-mount relative flex aspect-[4/5] items-center justify-center p-[10%] transition group-hover:-translate-y-0.5 group-hover:shadow-lg">
-        <.status_badge status={@print.status} class="absolute top-2 left-2 z-10" />
+      <div class="mat flex aspect-[4/5] items-center justify-center p-4">
         <img
           src={Catalog.image_url(@print.image)}
           alt={"#{@print.artist}, #{@print.title}"}
           loading="lazy"
-          class="max-h-full max-w-full object-contain shadow-md"
+          class={[
+            "max-h-full max-w-full object-contain",
+            @print.status == "sold" && "opacity-85"
+          ]}
         />
       </div>
-      <p class="mt-3 truncate text-xs uppercase tracking-wider text-base-content/60 sm:tracking-widest">
+      <.status_badge status={@print.status} class="mt-2" />
+      <p class={[
+        "type-artist truncate",
+        if(@print.status in ["sold", "reserved"], do: "mt-0.5", else: "mt-2")
+      ]}>
         {@print.artist}
       </p>
-      <p class="line-clamp-3 font-serif text-base leading-snug group-hover:text-accent sm:text-lg">
+      <p class="mt-1 line-clamp-3 font-serif text-lg leading-snug decoration-rose decoration-1 underline-offset-3 group-hover:underline">
         {@print.title}
       </p>
-      <p :if={@print.medium != ""} class="mt-0.5 text-[0.8125rem] text-base-content/60 sm:text-sm">
-        {@print.medium}
-      </p>
+      <p :if={@print.medium != ""} class="type-meta mt-1">{@print.medium}</p>
     </.link>
     """
   end

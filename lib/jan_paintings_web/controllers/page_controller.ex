@@ -8,12 +8,10 @@ defmodule JanPaintingsWeb.PageController do
   alias JanPaintingsWeb.SEO
 
   def home(conn, _params) do
-    categories = Enum.map(Catalog.categories(), &{&1, Catalog.cover_print(&1.slug)})
-
     render(conn, :home,
       canonical_path: "/",
       json_ld: SEO.gallery_json_ld(),
-      categories: categories,
+      categories: Catalog.categories(),
       hero: Catalog.get_print("pether-a-farriers-shop-after-joseph-wright-of-derby"),
       featured: Catalog.featured_prints()
     )

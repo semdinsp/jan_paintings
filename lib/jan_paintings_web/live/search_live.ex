@@ -46,28 +46,30 @@ defmodule JanPaintingsWeb.SearchLive do
       <div
         :if={@query != ""}
         id="home-search-results"
-        class="absolute inset-x-0 z-30 mt-2 overflow-hidden rounded-box border border-base-300 bg-base-100 shadow-xl"
+        class="absolute inset-x-0 z-30 mt-1 overflow-hidden border border-rule bg-paper"
       >
-        <p :if={@results == []} class="px-4 py-3 text-sm text-base-content/70">
+        <p :if={@results == []} class="type-meta px-4 py-3">
           No prints match “{@query}”.
         </p>
 
-        <ul :if={@results != []} class="divide-y divide-base-300">
+        <ul :if={@results != []} class="divide-y divide-rule">
           <li :for={print <- @results}>
             <a
               href={~p"/prints/#{print.category}/#{print.slug}"}
-              class="flex items-center gap-3 px-3 py-2 hover:bg-base-200"
+              class="group flex items-center gap-3 px-3 py-2 hover:bg-paper-2"
             >
               <img
                 src={Catalog.image_url(print.thumb)}
                 alt=""
-                class="size-12 shrink-0 bg-base-200 object-contain"
+                class="mat size-12 shrink-0 object-contain"
               />
               <span class="min-w-0">
-                <span class="block truncate text-[0.65rem] uppercase tracking-widest text-base-content/60">
+                <span class="type-artist block truncate text-[0.75rem]">
                   {print.artist}
                 </span>
-                <span class="block truncate font-serif">{print.title}</span>
+                <span class="block truncate font-serif text-lg group-hover:text-rose">
+                  {print.title}
+                </span>
               </span>
             </a>
           </li>
@@ -76,7 +78,7 @@ defmodule JanPaintingsWeb.SearchLive do
         <a
           :if={@total > 0}
           href={~p"/prints?#{[q: @query]}"}
-          class="block bg-base-200 px-4 py-2.5 text-sm font-medium text-accent hover:underline"
+          class="link-more block border-t border-rule bg-paper-2 px-4 py-3"
         >
           See all {@total} {if @total == 1, do: "result", else: "results"}
           <span aria-hidden="true">&rarr;</span>

@@ -125,7 +125,7 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Form do
                 <img
                   src={Catalog.image_url(path)}
                   alt=""
-                  class="print-mount aspect-square w-full object-contain p-1"
+                  class="mat aspect-square w-full object-contain p-1"
                 />
                 <button
                   type="button"
@@ -146,7 +146,7 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Form do
           </section>
         </div>
 
-        <div class="paper-sheet sticky bottom-0 z-10 -mx-4 flex flex-wrap items-center gap-3 border-t border-base-300 px-4 py-3 sm:-mx-8 sm:px-8 lg:col-span-2 lg:-mx-12 lg:px-12">
+        <div class="sticky bottom-0 z-10 -mx-4 flex flex-wrap items-center gap-3 border-t border-rule bg-paper px-4 py-3 md:-mx-6 md:px-6 lg:col-span-2">
           <.button phx-disable-with="Saving…" class="btn btn-primary">Save print</.button>
           <.link navigate={~p"/admin/prints"} class="btn btn-ghost">Cancel</.link>
           <button
@@ -181,7 +181,7 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Form do
         <img
           src={Catalog.image_url(@current)}
           alt=""
-          class="print-mount max-h-64 w-full object-contain p-2"
+          class="mat max-h-64 w-full object-contain p-2"
         />
         <button
           :if={@remove}
@@ -210,7 +210,7 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Form do
   defp upload_entries(assigns) do
     ~H"""
     <div :for={entry <- @upload.entries} class="mt-3 flex items-center gap-3">
-      <.live_img_preview entry={entry} class="print-mount size-16 object-contain p-1" />
+      <.live_img_preview entry={entry} class="mat size-16 object-contain p-1" />
       <div class="min-w-0 flex-1 text-xs">
         <p class="truncate">{entry.client_name}</p>
         <progress class="progress progress-primary w-full" value={entry.progress} max="100" />

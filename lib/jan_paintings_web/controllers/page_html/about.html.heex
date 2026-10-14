@@ -1,6 +1,6 @@
-<Layouts.app flash={@flash} current_scope={@current_scope}>
-  <article class="max-w-3xl space-y-6 text-base leading-relaxed text-base-content/80 sm:text-lg">
-    <h1 class="font-serif text-3xl text-base-content sm:text-4xl">About</h1>
+<Layouts.app flash={@flash} current_scope={@current_scope} active="about">
+  <article class="max-w-[68ch] space-y-6">
+    <h1 class="type-h1">About</h1>
     <p>
       Jan Johnson founded the business in London in 1979, after six years in the print
       department of P &amp; D Colnaghi and several years of print research in European museum
@@ -26,20 +26,20 @@
 
   <div
     id="contact"
-    class="mt-12 grid scroll-mt-6 gap-12 border-t border-base-300 pt-10 lg:grid-cols-[2fr_3fr] lg:gap-16"
+    class="mt-12 grid scroll-mt-16 gap-12 border-t border-rule pt-12 md:mt-16 lg:grid-cols-[2fr_3fr] lg:gap-16"
   >
     <section>
-      <h2 class="font-serif text-2xl sm:text-3xl">Contact</h2>
-      <p class="mt-4 text-base text-base-content/80 sm:text-lg">
+      <h2 class="type-h2">Contact</h2>
+      <p class="mt-4">
         To ask about a print, request a stock list or book a viewing, send a message or get in
         touch directly. Prices are in US dollars, and Canadian prints in Canadian dollars.
       </p>
       <.contact_details class="mt-8" />
     </section>
 
-    <section class="print-mount p-5 sm:p-8">
-      <h2 class="font-serif text-2xl">Send a message</h2>
-      <p class="mt-1 text-sm text-base-content/60">
+    <section class="bg-paper-2 p-6 sm:p-8">
+      <h2 class="type-h2">Send a message</h2>
+      <p class="type-meta mt-1">
         We'll reply by email, usually within a few days.
       </p>
 

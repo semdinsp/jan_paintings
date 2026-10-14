@@ -108,8 +108,7 @@ defmodule JanPaintingsWeb.SEOTest do
 
     test "show medium and date", %{conn: conn} do
       html = conn |> get("/prints/old-masters/beham-leda-and-the-swan") |> html_response(200)
-      assert html =~ "Medium"
-      assert html =~ "Engraving, 1548"
+      assert html =~ ~r{<h1[^>]*>\s*Leda and the Swan\s*</h1>\s*<p[^>]*>\s*Engraving, 1548\s*</p>}
     end
 
     test "escape </script> inside JSON-LD", %{conn: conn} do

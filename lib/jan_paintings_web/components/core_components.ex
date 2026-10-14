@@ -323,10 +323,10 @@ defmodule JanPaintingsWeb.CoreComponents do
     ~H"""
     <header class={[@actions != [] && "flex items-center justify-between gap-6", "pb-6"]}>
       <div>
-        <h1 class="font-serif text-3xl leading-tight sm:text-4xl">
+        <h1 class="type-h1">
           {render_slot(@inner_block)}
         </h1>
-        <p :if={@subtitle != []} class="mt-2 text-base text-base-content/70">
+        <p :if={@subtitle != []} class="mt-2 text-ink-2">
           {render_slot(@subtitle)}
         </p>
       </div>
