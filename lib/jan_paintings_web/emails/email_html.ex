@@ -1,22 +1,25 @@
 defmodule JanPaintingsWeb.EmailHTML do
   @moduledoc """
-  HTML for emails, styled like the website: oxblood header with the logo, a
-  cream sheet on the sage page colour, and serif type.
+  HTML for emails, styled like the website (see design.md): the ink logo on
+  warm paper, hairline rules, a warm-grey footer, and rose only for links
+  and the button.
 
   Email clients ignore stylesheets and web fonts, so everything is inline
-  and laid out with tables, and Georgia stands in for the site's fonts.
+  and laid out with tables. Georgia stands in for EB Garamond in headings,
+  and Helvetica/Arial for Source Sans 3 in the text.
   """
   use Phoenix.Component
 
-  @primary "#643440"
-  @page "#b2baa6"
-  @paper "#fcfaf6"
-  @ink "#241e1c"
-  @muted "#6b6461"
-  @rule "#d4dacc"
+  @primary "#a8436a"
+  @page "#f1ede6"
+  @paper "#faf8f4"
+  @ink "#1f1d1a"
+  @muted "#5c5650"
+  @rule "#ddd6cb"
   @serif "Georgia, 'Times New Roman', Times, serif"
+  @sans "'Helvetica Neue', Helvetica, Arial, sans-serif"
 
-  @colors %{primary: @primary, ink: @ink, muted: @muted, rule: @rule, serif: @serif}
+  @colors %{primary: @primary, ink: @ink, muted: @muted, rule: @rule, serif: @serif, sans: @sans}
 
   @doc """
   Renders an action email (a heading, some paragraphs and one button) to an
@@ -108,13 +111,13 @@ defmodule JanPaintingsWeb.EmailHTML do
           <td
             valign="top"
             width="90"
-            style={"padding:10px 12px 10px 0;border-bottom:1px solid #{@rule};font-family:#{@serif};font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#{@muted};"}
+            style={"padding:10px 12px 10px 0;border-bottom:1px solid #{@rule};font-family:#{@sans};font-size:11px;font-weight:bold;letter-spacing:1.5px;text-transform:uppercase;color:#{@muted};"}
           >
             {label}
           </td>
           <td
             valign="top"
-            style={"padding:8px 0;border-bottom:1px solid #{@rule};font-family:#{@serif};font-size:15px;line-height:1.5;color:#{@ink};"}
+            style={"padding:8px 0;border-bottom:1px solid #{@rule};font-family:#{@sans};font-size:15px;line-height:1.5;color:#{@ink};"}
           >
             <%= case value do %>
               <% {text, url} -> %>
@@ -125,10 +128,10 @@ defmodule JanPaintingsWeb.EmailHTML do
           </td>
         </tr>
       </table>
-      <p style={"margin:24px 0 8px;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#{@muted};"}>
+      <p style={"margin:24px 0 8px;font-size:11px;font-weight:bold;letter-spacing:1.5px;text-transform:uppercase;color:#{@muted};"}>
         Message
       </p>
-      <div style={"margin:0;padding:4px 0 4px 16px;border-left:3px solid #{@primary};"}>
+      <div style={"margin:0;padding:4px 0 4px 16px;border-left:3px solid #{@rule};"}>
         <p
           :for={lines <- message_paragraphs(@message)}
           style="margin:0 0 12px;font-size:16px;line-height:1.6;"
@@ -152,10 +155,10 @@ defmodule JanPaintingsWeb.EmailHTML do
     ~H"""
     <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:24px 0;">
       <tr>
-        <td style={"background-color:#{@primary};border-radius:4px;"}>
+        <td style={"background-color:#{@primary};border-radius:2px;"}>
           <a
             href={@url}
-            style={"display:inline-block;padding:12px 24px;font-family:#{@serif};font-size:16px;font-weight:bold;color:#ffffff;text-decoration:none;"}
+            style={"display:inline-block;padding:12px 20px;font-family:#{@sans};font-size:15px;font-weight:bold;color:#ffffff;text-decoration:none;"}
           >
             {@label}
           </a>
@@ -171,13 +174,15 @@ defmodule JanPaintingsWeb.EmailHTML do
   defp shell(assigns) do
     assigns =
       Map.merge(assigns, %{
-        logo_url: JanPaintingsWeb.Endpoint.url() <> "/images/jan-johnson-logo.png",
+        logo_url: JanPaintingsWeb.Endpoint.url() <> "/images/jan-johnson-logo-ink.png",
         site_url: JanPaintingsWeb.Endpoint.url(),
         primary: @primary,
         page: @page,
         paper: @paper,
         ink: @ink,
-        serif: @serif
+        rule: @rule,
+        serif: @serif,
+        sans: @sans
       })
 
     ~H"""
@@ -209,20 +214,20 @@ defmodule JanPaintingsWeb.EmailHTML do
                 style="max-width:560px;"
               >
                 <tr>
-                  <td style={"background-color:#{@primary};padding:20px 28px;"}>
+                  <td style={"background-color:#{@paper};padding:20px 28px;border-bottom:1px solid #{@ink};"}>
                     <a href={@site_url} style="text-decoration:none;">
                       <img
                         src={@logo_url}
                         width="158"
                         height="58"
                         alt="Jan Johnson, Old Master &amp; Modern Prints Inc."
-                        style={"display:block;border:0;color:#ffffff;font-family:#{@serif};font-size:20px;"}
+                        style={"display:block;border:0;color:#{@ink};font-family:#{@serif};font-size:20px;"}
                       />
                     </a>
                   </td>
                 </tr>
                 <tr>
-                  <td style={"background-color:#{@paper};padding:32px 28px;font-family:#{@serif};color:#{@ink};"}>
+                  <td style={"background-color:#{@paper};padding:32px 28px;font-family:#{@sans};color:#{@ink};"}>
                     <h1 style={"margin:0 0 16px;font-family:#{@serif};font-size:26px;line-height:1.25;font-weight:normal;color:#{@ink};"}>
                       {@heading}
                     </h1>
@@ -230,10 +235,10 @@ defmodule JanPaintingsWeb.EmailHTML do
                   </td>
                 </tr>
                 <tr>
-                  <td style={"background-color:#{@primary};padding:18px 28px;font-family:#{@serif};font-size:12px;line-height:1.6;color:#e9dfe1;"}>
+                  <td style={"background-color:#{@page};padding:18px 28px;border-top:1px solid #{@rule};font-family:#{@sans};font-size:13px;line-height:1.6;color:#{@ink};"}>
                     Jan Johnson, Old Master &amp; Modern Prints, Inc.<br />
                     189 rue Saint-Pierre, Chambly, QC, Canada J3L 1L8<br />
-                    <a href="mailto:jan@janjohnsonprints.com" style="color:#ffffff;">jan@janjohnsonprints.com</a><br />
+                    <a href="mailto:jan@janjohnsonprints.com" style={"color:#{@primary};"}>jan@janjohnsonprints.com</a><br />
                     Phone 450.658.2752 · Cell 514.608.6959
                   </td>
                 </tr>
