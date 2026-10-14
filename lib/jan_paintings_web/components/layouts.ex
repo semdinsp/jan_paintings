@@ -31,155 +31,147 @@ defmodule JanPaintingsWeb.Layouts do
     default: nil,
     doc: "the current [scope](https://phoenix.hexdocs.pm/scopes.html)"
 
-  attr :banner, :string,
+  attr :active, :string,
     default: nil,
-    doc: "category slug whose print detail is shown in the header art strip"
+    doc: ~s(menu item for the current page: "prints", a category slug, or "about")
 
   slot :inner_block, required: true
 
   def app(assigns) do
-    assigns = assign(assigns, :categories, JanPaintings.Catalog.categories())
+    assigns =
+      assign(assigns,
+        menu:
+          [{"prints", "All Prints", ~p"/prints"}] ++
+            Enum.map(
+              JanPaintings.Catalog.categories(),
+              &{&1.slug, &1.name, ~p"/prints/#{&1.slug}"}
+            ),
+        about_menu: [{"about", "About", ~p"/about"}, {nil, "Contact", ~p"/about" <> "#contact"}]
+      )
 
     ~H"""
     <div class="flex min-h-screen flex-col">
-      <header>
-        <div class="relative bg-primary text-primary-content">
-          <%!-- Only the art is clipped, so the mobile menu can drop below the header. --%>
-          <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-            <div
-              class="banner-art absolute inset-y-0 right-0 max-w-[65%] sm:max-w-[60%]"
-              style={"background-image: url('#{JanPaintings.Catalog.banner_url(@banner)}')"}
+      <header class="bg-paper">
+        <div class="mx-auto flex max-w-[1200px] items-center justify-between gap-4 px-4 py-5 md:px-6">
+          <.link navigate={~p"/"} class="block shrink-0">
+            <img
+              src={~p"/images/jan-johnson-logo-ink.png"}
+              alt="Jan Johnson, Old Master & Modern Prints Inc."
+              width="315"
+              height="115"
+              class="h-10 w-auto md:h-14 dark:invert"
             />
-          </div>
-          <div class="relative mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6 sm:py-5 lg:px-8">
-            <.link navigate={~p"/"} class="block min-w-0 shrink">
-              <img
-                src={~p"/images/jan-johnson-logo.png"}
-                alt="Jan Johnson, Old Master & Modern Prints Inc."
-                width="315"
-                height="115"
-                class="h-14 w-auto drop-shadow-[0_1px_2px_rgb(0_0_0_/_0.35)] sm:h-20 lg:h-24"
-              />
+          </.link>
+          <div class="flex min-w-0 items-center gap-5 text-sm text-ink-2">
+            <a href="tel:+14506582752" class="hidden hover:text-rose sm:inline">450.658.2752</a>
+            <.link
+              :if={JanPaintings.Accounts.Scope.admin?(@current_scope)}
+              navigate={~p"/admin/prints"}
+              class="hover:text-rose"
+            >
+              Admin
             </.link>
-
-            <details id="mobile-menu" class="group relative lg:hidden">
+            <details :if={@current_scope} id="account-menu" class="relative">
               <summary
-                class="flex cursor-pointer list-none items-center rounded bg-primary/85 p-2 shadow hover:bg-primary [&::-webkit-details-marker]:hidden"
-                aria-label="Menu"
+                class="flex min-h-11 cursor-pointer list-none items-center gap-1 hover:text-rose [&::-webkit-details-marker]:hidden"
+                title={@current_scope.user.email}
               >
-                <.icon name="hero-bars-3" class="size-6 group-open:hidden" />
-                <.icon name="hero-x-mark" class="hidden size-6 group-open:block" />
+                <.icon name="hero-user-circle" class="size-5" />
+                <span class="sr-only">Account</span>
+                <.icon name="hero-chevron-down-micro" class="size-4" />
               </summary>
-              <nav class="absolute right-0 z-20 mt-2 flex w-56 flex-col rounded-box bg-base-100 p-2 text-base-content shadow-xl">
-                <.link navigate={~p"/prints"} class="rounded px-3 py-2 hover:bg-base-200">
-                  All Prints
+              <div class="absolute right-0 z-40 mt-1 w-64 border border-rule bg-paper p-2 text-ink">
+                <p class="truncate px-3 py-1 text-xs text-ink-2">{@current_scope.user.email}</p>
+                <.link href={~p"/users/settings"} class="block px-3 py-2 hover:text-rose">
+                  Account settings
                 </.link>
                 <.link
-                  :for={c <- @categories}
-                  navigate={~p"/prints/#{c.slug}"}
-                  class="rounded px-3 py-2 hover:bg-base-200"
+                  href={~p"/users/log-out"}
+                  method="delete"
+                  class="block px-3 py-2 hover:text-rose"
                 >
-                  {c.name}
+                  Log out
                 </.link>
-                <.link navigate={~p"/about"} class="rounded px-3 py-2 hover:bg-base-200">About</.link>
-                <.link href={~p"/about" <> "#contact"} class="rounded px-3 py-2 hover:bg-base-200">
-                  Contact
-                </.link>
-                <div :if={@current_scope} class="mt-2 border-t border-base-300 pt-2">
-                  <p class="truncate px-3 py-1 text-xs text-base-content/60">
-                    {@current_scope.user.email}
-                  </p>
-                  <.link
-                    :if={JanPaintings.Accounts.Scope.admin?(@current_scope)}
-                    navigate={~p"/admin/prints"}
-                    class="block rounded px-3 py-2 hover:bg-base-200"
-                  >
-                    Admin
-                  </.link>
-                  <.link href={~p"/users/settings"} class="block rounded px-3 py-2 hover:bg-base-200">
-                    Account settings
-                  </.link>
-                  <.link
-                    href={~p"/users/log-out"}
-                    method="delete"
-                    class="block rounded px-3 py-2 hover:bg-base-200"
-                  >
-                    Log out
-                  </.link>
-                </div>
-                <div class="mt-2 border-t border-base-300 px-3 pt-3"><.theme_toggle /></div>
-              </nav>
+              </div>
             </details>
           </div>
         </div>
-
-        <div class="h-1 bg-secondary lg:h-auto">
-          <nav class="mx-auto hidden max-w-6xl items-center gap-6 whitespace-nowrap px-8 py-2.5 text-sm uppercase tracking-wider text-secondary-content lg:flex xl:gap-7">
-            <.link navigate={~p"/prints"} class="nav-link">All Prints</.link>
-            <.link :for={c <- @categories} navigate={~p"/prints/#{c.slug}"} class="nav-link">
-              {c.short}
-            </.link>
-            <.link navigate={~p"/about"} class="nav-link">About</.link>
-            <.link href={~p"/about" <> "#contact"} class="nav-link">Contact</.link>
-            <div class="ml-auto flex items-center gap-5">
-              <.link
-                :if={JanPaintings.Accounts.Scope.admin?(@current_scope)}
-                navigate={~p"/admin/prints"}
-                class="nav-link"
-              >
-                Admin
-              </.link>
-              <details :if={@current_scope} id="account-menu" class="relative">
-                <summary
-                  class="nav-link flex cursor-pointer list-none items-center gap-1 [&::-webkit-details-marker]:hidden"
-                  title={@current_scope.user.email}
-                >
-                  <.icon name="hero-user-circle" class="size-5" />
-                  <span class="sr-only">Account</span>
-                  <.icon name="hero-chevron-down-micro" class="size-4" />
-                </summary>
-                <div class="absolute right-0 z-20 mt-3 w-64 rounded-box bg-base-100 p-2 text-sm normal-case tracking-normal text-base-content shadow-xl">
-                  <p class="truncate px-3 py-1 text-xs text-base-content/60">
-                    {@current_scope.user.email}
-                  </p>
-                  <.link href={~p"/users/settings"} class="block rounded px-3 py-2 hover:bg-base-200">
-                    Account settings
-                  </.link>
-                  <.link
-                    href={~p"/users/log-out"}
-                    method="delete"
-                    class="block rounded px-3 py-2 hover:bg-base-200"
-                  >
-                    Log out
-                  </.link>
-                </div>
-              </details>
-              <.theme_toggle />
-            </div>
-          </nav>
-        </div>
       </header>
 
-      <main class="flex-1 px-0 py-0 sm:px-4 sm:py-8 lg:py-12">
-        <div class="paper-sheet mx-auto max-w-6xl px-4 py-10 sm:px-8 sm:py-12 lg:px-12">
+      <div class="sticky top-0 z-30 bg-paper">
+        <nav
+          aria-label="Main"
+          class="mx-auto max-w-[1200px] px-4 md:px-6"
+        >
+          <div class="hidden h-12 items-stretch gap-7 border-t border-b border-t-ink border-b-rule md:flex">
+            <.link
+              :for={{key, label, path} <- @menu}
+              navigate={path}
+              class="menu-item"
+              aria-current={key == @active && "page"}
+            >
+              {label}
+            </.link>
+            <span class="flex-1" />
+            <.link
+              :for={{key, label, path} <- @about_menu}
+              href={path}
+              class="menu-item"
+              aria-current={key && key == @active && "page"}
+            >
+              {label}
+            </.link>
+          </div>
+
+          <details
+            id="mobile-menu"
+            class="group border-t border-b border-t-ink border-b-rule md:hidden"
+          >
+            <summary class="flex h-12 cursor-pointer list-none items-center gap-2 font-medium [&::-webkit-details-marker]:hidden">
+              <.icon name="hero-bars-3" class="size-5 group-open:hidden" />
+              <.icon name="hero-x-mark" class="hidden size-5 group-open:block" /> Menu
+            </summary>
+            <div class="pb-2">
+              <.link
+                :for={{key, label, path} <- @menu ++ @about_menu}
+                href={path}
+                class="drawer-item"
+                aria-current={key && key == @active && "page"}
+              >
+                {label}
+              </.link>
+            </div>
+          </details>
+        </nav>
+      </div>
+
+      <main class="flex-1">
+        <div class="mx-auto max-w-[1200px] px-4 py-12 md:px-6 md:py-16">
           {render_slot(@inner_block)}
         </div>
       </main>
 
-      <footer class="border-t-4 border-secondary bg-primary text-sm text-primary-content/80">
-        <div class="mx-auto grid max-w-6xl gap-4 px-4 py-8 sm:grid-cols-2 sm:px-6 lg:px-8">
+      <footer class="border-t border-rule bg-paper-2 py-12 text-[0.9375rem] text-ink">
+        <div class="mx-auto grid max-w-[1200px] gap-6 px-4 md:grid-cols-3 md:px-6">
           <p>
             Jan Johnson, Old Master &amp; Modern Prints, Inc.<br />
             189 rue Saint-Pierre, Chambly, QC, Canada J3L 1L8
           </p>
-          <p class="sm:text-right">
-            <a href="mailto:jan@janjohnsonprints.com" class="nav-link">jan@janjohnsonprints.com</a>
-            <br /> Phone <a href="tel:+14506582752" class="nav-link">450.658.2752</a>
-            · Cell <a href="tel:+15146086959" class="nav-link">514.608.6959</a>
+          <p>
+            <a href="mailto:jan@janjohnsonprints.com" class="link">jan@janjohnsonprints.com</a>
+            <br /> Phone <a href="tel:+14506582752" class="link">450.658.2752</a>
+            · Cell <a href="tel:+15146086959" class="link">514.608.6959</a>
           </p>
-          <p :if={!@current_scope} class="text-xs sm:col-span-2 sm:text-right">
-            <.link navigate={~p"/users/log-in"} class="nav-link opacity-70">Log in</.link>
-          </p>
+          <div class="flex items-start gap-5 md:justify-end">
+            <.link
+              :if={!@current_scope}
+              navigate={~p"/users/log-in"}
+              class="text-sm text-ink-2 hover:text-rose"
+            >
+              Log in
+            </.link>
+            <.theme_toggle />
+          </div>
         </div>
       </footer>
     </div>
