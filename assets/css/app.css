@@ -119,6 +119,8 @@
   --rose: #a8436a;
   --rose-2: #86324f;
   --rose-tint: #f6e9ee;
+  --dusk: #c2918d;
+  --lemon: #f2dc1b;
   --sold: #5c5650;
 }
 [data-theme="dark"] {
@@ -130,6 +132,8 @@
   --rose: #d9809f;
   --rose-2: #e8a3bb;
   --rose-tint: #3a2630;
+  --dusk: #3b2b2d;
+  --lemon: #d9c43a;
   --sold: #b3aba1;
 }
 
@@ -142,6 +146,8 @@
   --color-rose: var(--rose);
   --color-rose-2: var(--rose-2);
   --color-rose-tint: var(--rose-tint);
+  --color-dusk: var(--dusk);
+  --color-lemon: var(--lemon);
   --color-sold: var(--sold);
 }
 
@@ -269,13 +275,14 @@ p { text-wrap: pretty; }
   outline-offset: 2px;
 }
 
-/* Fields: rule border on paper, ink border when focused. */
+/* Fields: lemon border on paper, ink border when focused. */
 .input,
 .select,
 .textarea {
-  --input-color: var(--rule);
+  --input-color: var(--lemon);
   background-color: var(--paper);
-  border-color: var(--rule);
+  border-color: var(--lemon);
+  border-width: 2px;
   box-shadow: none;
 }
 .input:focus-within,
