@@ -35,40 +35,27 @@
     </figure>
   </section>
 
-  <section class="mt-12 grid items-center gap-8 md:mt-16 md:grid-cols-12 md:gap-12">
-    <img
-      src={JanPaintings.Catalog.image_url("/images/catalogue/jan-green-jacket.jpg")}
-      alt="Jan Johnson"
-      loading="lazy"
-      class="aspect-[4/5] w-full max-w-60 object-cover md:col-span-4 md:max-w-none"
-    />
-    <div class="md:col-span-8">
-      <p class="type-eyebrow">About the gallery</p>
-      <h2 class="type-h2 mt-2">Jan Johnson</h2>
-      <p class="mt-4 max-w-[68ch]">
-        Jan Johnson trained in the print department of P &amp; D Colnaghi in London and opened
-        the gallery there in 1979, before moving it to Montreal in 1982. Over four decades the
-        gallery has supplied collectors and many of the world's major museums, and helped found
-        the International Fine Print Dealers Association. Visitors are welcome to view the stock
-        by appointment in Chambly, just outside Montreal.
-      </p>
-      <.link navigate={~p"/about"} class="link-more mt-4 inline-block">
-        More about the gallery →
-      </.link>
-    </div>
-  </section>
-
-  <section class="mt-12 grid gap-6 md:mt-16 md:grid-cols-3">
+  <nav aria-label="Browse the gallery" class="mt-12 flex flex-wrap justify-center gap-6 md:mt-16">
     <.link
-      :for={category <- @categories}
-      navigate={~p"/prints/#{category.slug}"}
-      class="group flex flex-col bg-paper-2 p-6"
+      :for={tile <- @tiles}
+      navigate={tile.path}
+      class="group relative block aspect-[3/2] w-full sm:aspect-[4/5] overflow-hidden bg-black sm:w-[calc((100%-1.5rem)/2)] md:w-[calc((100%-3rem)/3)]"
     >
-      <h2 class="font-serif text-[1.375rem] leading-snug text-ink">{category.name}</h2>
-      <p class="mt-2 flex-1 text-[0.9375rem] text-ink-2">{category.blurb}</p>
-      <p class="link-more mt-4 group-hover:text-rose-2 group-hover:underline">Browse →</p>
+      <img
+        src={JanPaintings.Catalog.image_url(tile.image)}
+        alt=""
+        loading="lazy"
+        class={[
+          "size-full object-cover transition duration-500 group-hover:scale-[1.03]",
+          tile.position
+        ]}
+      />
+      <span class="absolute inset-0 bg-black/35 transition group-hover:bg-black/20" />
+      <span class="absolute inset-0 flex items-center justify-center p-6 text-center font-serif text-[2rem] leading-tight text-white [text-shadow:0_1px_12px_rgb(0_0_0/0.5)]">
+        {tile.label}
+      </span>
     </.link>
-  </section>
+  </nav>
 
   <section class="mt-12 md:mt-16">
     <h2 class="type-h2 border-b border-rule pb-3">From the stock</h2>
