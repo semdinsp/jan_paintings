@@ -59,7 +59,7 @@ defmodule JanPaintingsWeb.Layouts do
               alt="Jan Johnson, Old Master & Modern Prints Inc."
               width="512"
               height="193"
-              class="h-10 w-auto md:h-14 dark:invert"
+              class="h-12 w-auto sm:h-16 md:h-24 dark:invert"
             />
           </.link>
           <div class="ml-auto flex min-w-0 items-center gap-5 text-sm text-ink-2">
@@ -99,7 +99,7 @@ defmodule JanPaintingsWeb.Layouts do
             alt="Ornament with a triton, engraving by Beham"
             width="798"
             height="275"
-            class="hidden h-28 w-auto sm:block md:h-42"
+            class="hidden h-22 w-auto sm:block md:h-34"
           />
         </div>
       </header>
