@@ -291,6 +291,16 @@ p { text-wrap: pretty; }
   --input-color: var(--ink);
   border-color: var(--ink);
 }
+/* An .input is a wrapper around the real <input>: draw the one rose focus
+   ring on the wrapper, not a clipped ring on the inner field. */
+.input:focus-within {
+  outline: 2px solid var(--rose);
+  outline-offset: 2px;
+}
+.input input:focus,
+.input input:focus-visible {
+  outline: none;
+}
 .input input::placeholder,
 .input::placeholder,
 .textarea::placeholder {
