@@ -49,10 +49,10 @@ defmodule JanPaintingsWeb.PrintHTML do
         patch={path}
         aria-current={active && "page"}
         class={[
-          "flex min-h-11 shrink-0 items-center rounded-[2px] border px-4 text-[0.9375rem] transition",
+          "flex min-h-11 shrink-0 items-center rounded-[2px] border-2 px-4 text-[0.9375rem] transition",
           if(active,
             do: "border-rose bg-rose-tint font-semibold text-rose",
-            else: "border-rule text-ink hover:border-rose hover:text-rose"
+            else: "border-lemon text-ink hover:border-rose hover:text-rose"
           )
         ]}
       >
