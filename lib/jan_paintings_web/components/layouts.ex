@@ -51,7 +51,7 @@ defmodule JanPaintingsWeb.Layouts do
 
     ~H"""
     <div class="flex min-h-screen flex-col">
-      <header class="bg-paper">
+      <header class="bg-dusk">
         <div class="mx-auto flex max-w-[1200px] items-center justify-between gap-4 px-4 py-5 md:px-6">
           <.link navigate={~p"/"} class="block shrink-0">
             <img
@@ -62,7 +62,7 @@ defmodule JanPaintingsWeb.Layouts do
               class="h-12 w-auto sm:h-20 md:h-30 dark:invert"
             />
           </.link>
-          <div class="ml-auto flex min-w-0 items-center gap-5 text-sm text-ink-2">
+          <div class="ml-auto flex min-w-0 items-center gap-5 text-sm text-ink">
             <.link
               :if={JanPaintings.Accounts.Scope.admin?(@current_scope)}
               navigate={~p"/admin/prints"}

@@ -119,6 +119,7 @@
   --rose: #a8436a;
   --rose-2: #86324f;
   --rose-tint: #f6e9ee;
+  --dusk: #d6b0aa;
   --sold: #5c5650;
 }
 [data-theme="dark"] {
@@ -130,6 +131,7 @@
   --rose: #d9809f;
   --rose-2: #e8a3bb;
   --rose-tint: #3a2630;
+  --dusk: #3b2b2d;
   --sold: #b3aba1;
 }
 
@@ -142,6 +144,7 @@
   --color-rose: var(--rose);
   --color-rose-2: var(--rose-2);
   --color-rose-tint: var(--rose-tint);
+  --color-dusk: var(--dusk);
   --color-sold: var(--sold);
 }
 
