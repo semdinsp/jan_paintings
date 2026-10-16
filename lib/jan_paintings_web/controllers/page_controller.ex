@@ -69,6 +69,7 @@ defmodule JanPaintingsWeb.PageController do
       meta_description:
         "Jan Johnson has dealt in fine prints since 1979, first in London and from 1982 in Montreal. Visit by appointment in Chambly, Quebec, or send an enquiry.",
       canonical_path: "/about",
+      about_print: Catalog.get_print("pether-a-farriers-shop-after-joseph-wright-of-derby"),
       json_ld: SEO.gallery_json_ld()
     ]
   end

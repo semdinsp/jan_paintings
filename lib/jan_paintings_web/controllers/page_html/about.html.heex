@@ -1,28 +1,47 @@
 <Layouts.app flash={@flash} current_scope={@current_scope} active="about">
-  <article class="max-w-[68ch] space-y-6">
-    <h1 class="type-h1">About</h1>
-    <p>
-      Jan Johnson founded the business in London in 1979, after six years in the print
-      department of P &amp; D Colnaghi and several years of print research in European museum
-      collections. It began with Old Master prints. After the move to Montreal in 1982 it took in
-      nineteenth- and early twentieth-century European prints and Canadian printmaking as well.
-    </p>
-    <p>
-      Major names are usually in stock, but so are many less familiar artists, which keeps the
-      price range wide. Collectors at every level are welcome. Only part of the stock appears
-      online, so if you have a particular interest, ask for a focused list.
-    </p>
-    <p>
-      Other services include bidding at auction on behalf of clients and appraisals. Stock can be
-      viewed by appointment at the gallery near Montreal.
-    </p>
-    <p>
-      Jan Johnson has taken part in international print fairs for many years and is a founding
-      member of the International Fine Print Dealers Association. Clients include museums such as
-      the British Museum, the Rijksmuseum, the Metropolitan Museum of Art, the National Gallery of
-      Art in Washington, the National Gallery of Canada and the Art Gallery of Ontario.
-    </p>
-  </article>
+  <div class="lg:grid lg:grid-cols-[minmax(0,68ch)_1fr] lg:gap-16">
+    <article class="max-w-[68ch] space-y-6">
+      <h1 class="type-h1">About</h1>
+      <p>
+        Jan Johnson founded the business in London in 1979, after six years in the print
+        department of P &amp; D Colnaghi and several years of print research in European museum
+        collections. It began with Old Master prints. After the move to Montreal in 1982 it took in
+        nineteenth- and early twentieth-century European prints and Canadian printmaking as well.
+      </p>
+      <p>
+        Major names are usually in stock, but so are many less familiar artists, which keeps the
+        price range wide. Collectors at every level are welcome. Only part of the stock appears
+        online, so if you have a particular interest, ask for a focused list.
+      </p>
+      <p>
+        Other services include bidding at auction on behalf of clients and appraisals. Stock can be
+        viewed by appointment at the gallery near Montreal.
+      </p>
+      <p>
+        Jan Johnson has taken part in international print fairs for many years and is a founding
+        member of the International Fine Print Dealers Association. Clients include museums such as
+        the British Museum, the Rijksmuseum, the Metropolitan Museum of Art, the National Gallery of
+        Art in Washington, the National Gallery of Canada and the Art Gallery of Ontario.
+      </p>
+    </article>
+
+    <figure :if={@about_print} class="hidden lg:block">
+      <.link
+        navigate={~p"/prints/#{@about_print.category}/#{@about_print.slug}"}
+        class="mat flex items-center justify-center p-8"
+      >
+        <img
+          src={JanPaintings.Catalog.image_url(@about_print.image)}
+          alt={"#{@about_print.artist}, #{@about_print.title}"}
+          class="max-h-[32rem] max-w-full object-contain"
+        />
+      </.link>
+      <figcaption class="mt-3">
+        <span class="type-artist block">{@about_print.artist}</span>
+        <span class="font-serif text-lg italic">{@about_print.title}</span>
+      </figcaption>
+    </figure>
+  </div>
 
   <div
     id="contact"
