@@ -275,13 +275,14 @@ p { text-wrap: pretty; }
   outline-offset: 2px;
 }
 
-/* Fields: rule border on paper, ink border when focused. */
+/* Fields: lemon border on paper, ink border when focused. */
 .input,
 .select,
 .textarea {
-  --input-color: var(--rule);
+  --input-color: var(--lemon);
   background-color: var(--paper);
-  border-color: var(--rule);
+  border-color: var(--lemon);
+  border-width: 2px;
   box-shadow: none;
 }
 .input:focus-within,
