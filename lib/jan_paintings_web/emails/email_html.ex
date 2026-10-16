@@ -219,7 +219,7 @@ defmodule JanPaintingsWeb.EmailHTML do
                       <img
                         src={@logo_url}
                         width="158"
-                        height="58"
+                        height="60"
                         alt="Jan Johnson, Old Master &amp; Modern Prints Inc."
                         style={"display:block;border:0;color:#{@ink};font-family:#{@serif};font-size:20px;"}
                       />
