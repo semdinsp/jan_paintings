@@ -11,10 +11,46 @@ defmodule JanPaintingsWeb.PageController do
     render(conn, :home,
       canonical_path: "/",
       json_ld: SEO.gallery_json_ld(),
-      categories: Catalog.categories(),
+      tiles: home_tiles(),
       hero: Catalog.get_print("pether-a-farriers-shop-after-joseph-wright-of-derby"),
       featured: Catalog.featured_prints()
     )
+  end
+
+  # Large image links on the homepage, one per section of the site.
+  defp home_tiles do
+    [
+      %{
+        label: "All Prints",
+        path: ~p"/prints",
+        image: "/images/catalogue/lepere-650.jpg",
+        position: "object-right-top"
+      },
+      %{
+        label: "Old Master Prints",
+        path: ~p"/prints/old-masters",
+        image: "/images/catalogue/durer-st-george-day-650.jpg",
+        position: "object-center"
+      },
+      %{
+        label: "Modern Prints",
+        path: ~p"/prints/modern",
+        image: "/images/catalogue/chahine-edgar-invitation-lg.jpg",
+        position: "object-top"
+      },
+      %{
+        label: "Canadian Prints",
+        path: ~p"/prints/canadian",
+        image: "/images/catalogue/hornyansky-anxiety-650.jpg",
+        position: "object-left"
+      },
+      %{
+        label: "About the Gallery",
+        path: ~p"/about",
+        image: "/images/catalogue/jan-green-jacket.jpg",
+        position: "object-top"
+      }
+    ]
   end
 
   def about(conn, params) do
