@@ -109,7 +109,7 @@ defmodule JanPaintingsWeb.Layouts do
           aria-label="Main"
           class="mx-auto max-w-[1200px] px-4 md:px-6"
         >
-          <div class="hidden h-12 items-stretch gap-7 border-t border-b border-t-ink border-b-rule md:flex">
+          <div class="hidden h-12 items-stretch gap-7 border-t-3 border-b-3 border-lemon md:flex">
             <.link
               :for={{key, label, path} <- @menu}
               navigate={path}
@@ -131,7 +131,7 @@ defmodule JanPaintingsWeb.Layouts do
 
           <details
             id="mobile-menu"
-            class="group border-t border-b border-t-ink border-b-rule md:hidden"
+            class="group border-t-3 border-b-3 border-lemon md:hidden"
           >
             <summary class="flex h-12 cursor-pointer list-none items-center gap-2 font-medium [&::-webkit-details-marker]:hidden">
               <.icon name="hero-bars-3" class="size-5 group-open:hidden" />
@@ -157,7 +157,7 @@ defmodule JanPaintingsWeb.Layouts do
         </div>
       </main>
 
-      <footer class="border-t border-rule bg-paper-2 py-12 text-[0.9375rem] text-ink">
+      <footer class="bg-dusk py-12 text-[0.9375rem] text-ink [--rose:var(--rose-2)]">
         <div class="mx-auto grid max-w-[1200px] gap-6 px-4 md:grid-cols-3 md:px-6">
           <p>
             Jan Johnson, Old Master &amp; Modern Prints, Inc.<br />
@@ -172,7 +172,7 @@ defmodule JanPaintingsWeb.Layouts do
             <.link
               :if={!@current_scope}
               navigate={~p"/users/log-in"}
-              class="text-sm text-ink-2 hover:text-rose"
+              class="text-sm text-ink hover:text-rose"
             >
               Log in
             </.link>
