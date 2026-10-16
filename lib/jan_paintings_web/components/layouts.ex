@@ -62,8 +62,14 @@ defmodule JanPaintingsWeb.Layouts do
               class="h-10 w-auto md:h-14 dark:invert"
             />
           </.link>
+          <img
+            src={~p"/images/beham-triton.jpg"}
+            alt="Ornament with a triton, engraving by Beham"
+            width="480"
+            height="165"
+            class="hidden h-10 w-auto sm:block md:h-14"
+          />
           <div class="flex min-w-0 items-center gap-5 text-sm text-ink-2">
-            <a href="tel:+14506582752" class="hidden hover:text-rose sm:inline">450.658.2752</a>
             <.link
               :if={JanPaintings.Accounts.Scope.admin?(@current_scope)}
               navigate={~p"/admin/prints"}
