@@ -57,8 +57,8 @@ defmodule JanPaintingsWeb.Layouts do
             <img
               src={~p"/images/jan-johnson-logo-ink.png"}
               alt="Jan Johnson, Old Master & Modern Prints Inc."
-              width="315"
-              height="115"
+              width="512"
+              height="193"
               class="h-10 w-auto md:h-14 dark:invert"
             />
           </.link>
