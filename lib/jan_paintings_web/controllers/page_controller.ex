@@ -11,9 +11,7 @@ defmodule JanPaintingsWeb.PageController do
     render(conn, :home,
       canonical_path: "/",
       json_ld: SEO.gallery_json_ld(),
-      tiles: home_tiles(),
-      hero: Catalog.get_print("pether-a-farriers-shop-after-joseph-wright-of-derby"),
-      featured: Catalog.featured_prints()
+      tiles: home_tiles()
     )
   end
 

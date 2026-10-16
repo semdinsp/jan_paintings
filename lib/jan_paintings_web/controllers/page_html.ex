@@ -80,6 +80,25 @@ defmodule JanPaintingsWeb.PageHTML do
   end
 
   @doc """
+  "From the stock": a grid of featured prints under a heading. No longer shown
+  on the homepage; to bring it back, add this to `home.html.heex`:
+
+      <.from_the_stock prints={JanPaintings.Catalog.featured_prints()} />
+  """
+  attr :prints, :list, required: true
+
+  def from_the_stock(assigns) do
+    ~H"""
+    <section class="mt-12 md:mt-16">
+      <h2 class="type-h2 border-b border-rule pb-3">From the stock</h2>
+      <div class="print-grid mt-8">
+        <.print_card :for={print <- @prints} print={print} />
+      </div>
+    </section>
+    """
+  end
+
+  @doc """
   A print in a grid: the print on a 4:5 mat (never cropped), then the artist,
   title and medium. Links to the print's detail page.
   """
