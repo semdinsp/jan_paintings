@@ -157,7 +157,7 @@ defmodule JanPaintingsWeb.Layouts do
         </div>
       </main>
 
-      <footer class="bg-dusk py-12 text-[0.9375rem] text-ink [--rose:var(--rose-2)]">
+      <footer class="bg-dusk py-12 text-[0.9375rem] text-ink [--rose:var(--ink)] [--rose-2:var(--ink)]">
         <div class="mx-auto grid max-w-[1200px] gap-6 px-4 md:grid-cols-3 md:px-6">
           <p>
             Jan Johnson, Old Master &amp; Modern Prints, Inc.<br />
