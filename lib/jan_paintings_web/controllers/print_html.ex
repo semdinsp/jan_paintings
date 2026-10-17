@@ -110,7 +110,7 @@ defmodule JanPaintingsWeb.PrintHTML do
       "flex min-h-11 shrink-0 items-center rounded-[2px] border-2 px-3 text-[0.9375rem] transition sm:px-4",
       if(active,
         do: "border-rose bg-rose-tint font-semibold text-rose",
-        else: "border-lemon text-ink hover:border-rose hover:text-rose"
+        else: "border-gold text-ink hover:border-rose hover:text-rose"
       )
     ]
   end

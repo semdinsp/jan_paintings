@@ -109,7 +109,7 @@ defmodule JanPaintingsWeb.Layouts do
           aria-label="Main"
           class="mx-auto max-w-[1200px] px-4 md:px-6"
         >
-          <div class="hidden h-12 items-stretch gap-7 border-t-3 border-b-3 border-lemon md:flex">
+          <div class="hidden h-12 items-stretch gap-7 border-t-3 border-b-3 border-gold md:flex">
             <.link
               :for={{key, label, path} <- @menu}
               navigate={path}
@@ -131,7 +131,7 @@ defmodule JanPaintingsWeb.Layouts do
 
           <details
             id="mobile-menu"
-            class="group border-t-3 border-b-3 border-lemon md:hidden"
+            class="group border-t-3 border-b-3 border-gold md:hidden"
           >
             <summary class="flex h-12 cursor-pointer list-none items-center gap-2 font-medium [&::-webkit-details-marker]:hidden">
               <.icon name="hero-bars-3" class="size-5 group-open:hidden" />
