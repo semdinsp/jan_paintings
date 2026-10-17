@@ -17,13 +17,16 @@
       phx-change="search"
       phx-submit="search"
     />
-    <div class="mt-4"><.category_filter current={@category} query={@query} /></div>
+    <div class="mt-4 flex flex-wrap items-center gap-x-6 gap-y-3">
+      <.category_filter current={@category} query={@query} sort={@sort} />
+      <.sort_toggles current={@category} query={@query} sort={@sort} />
+    </div>
     <p class="type-meta mt-4">
       <%= if @query != "" do %>
         {length(@prints)} {if length(@prints) == 1, do: "print", else: "prints"} matching
         “<span class="font-medium text-ink">{@query}</span>”.
         <.link
-          patch={if @category, do: ~p"/prints/#{@category.slug}", else: ~p"/prints"}
+          patch={@clear_search_path}
           class="link ml-1"
         >
           Clear search

@@ -3,7 +3,7 @@ defmodule JanPaintingsWeb.PrintLive.Index do
   use JanPaintingsWeb, :live_view
 
   import JanPaintingsWeb.PageHTML, only: [print_card: 1, search_form: 1]
-  import JanPaintingsWeb.PrintHTML, only: [category_filter: 1]
+  import JanPaintingsWeb.PrintHTML, only: [category_filter: 1, sort_toggles: 1]
 
   alias JanPaintings.Catalog
   alias JanPaintingsWeb.SEO
@@ -17,9 +17,10 @@ defmodule JanPaintingsWeb.PrintLive.Index do
       end
 
     query = params |> Map.get("q", "") |> to_string() |> String.trim()
+    sort = if params["sort"] in ~w(price size), do: params["sort"]
     prints = if category, do: Catalog.list_prints(category.slug), else: Catalog.list_prints()
 
-    shown = Catalog.search(prints, query)
+    shown = prints |> Catalog.search(query) |> Catalog.order_prints(sort)
     path = if category, do: "/prints/#{category.slug}", else: "/prints"
     description = description(category, length(prints))
 
@@ -38,6 +39,8 @@ defmodule JanPaintingsWeb.PrintLive.Index do
          ),
        category: category,
        query: query,
+       sort: sort,
+       clear_search_path: search_path(category, "", sort),
        prints: shown
      )}
   end
@@ -45,11 +48,15 @@ defmodule JanPaintingsWeb.PrintLive.Index do
   # Keep the URL in sync with the search box, without a history entry per keystroke.
   @impl true
   def handle_event("search", %{"q" => query}, socket) do
-    {:noreply, push_patch(socket, to: search_path(socket.assigns.category, query), replace: true)}
+    %{category: category, sort: sort} = socket.assigns
+    {:noreply, push_patch(socket, to: search_path(category, query, sort), replace: true)}
   end
 
-  defp search_path(category, query) do
-    params = if String.trim(query) != "", do: [q: String.trim(query)], else: []
+  defp search_path(category, query, sort) do
+    params =
+      [q: if(String.trim(query) != "", do: String.trim(query)), sort: sort]
+      |> Enum.reject(fn {_, v} -> is_nil(v) end)
+
     if category, do: ~p"/prints/#{category.slug}?#{params}", else: ~p"/prints?#{params}"
   end
 
