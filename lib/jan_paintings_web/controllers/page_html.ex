@@ -59,7 +59,12 @@ defmodule JanPaintingsWeb.PageHTML do
           class="grow"
         />
       </label>
-      <button type="submit" class="btn btn-primary rounded-l-none">Search</button>
+      <button
+        type="submit"
+        class="btn rounded-l-none border-2 border-rose bg-rose-tint font-semibold text-rose shadow-none hover:border-rose-2 hover:bg-rose-tint hover:text-rose-2"
+      >
+        Search
+      </button>
     </form>
     """
   end
