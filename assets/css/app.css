@@ -120,7 +120,7 @@
   --rose-2: #86324f;
   --rose-tint: #f6e9ee;
   --dusk: #c2918d;
-  --lemon: #f2dc1b;
+  --gold: #a9851f;
   --sold: #5c5650;
 }
 [data-theme="dark"] {
@@ -133,7 +133,7 @@
   --rose-2: #e8a3bb;
   --rose-tint: #3a2630;
   --dusk: #3b2b2d;
-  --lemon: #d9c43a;
+  --gold: #c9a84c;
   --sold: #b3aba1;
 }
 
@@ -147,7 +147,7 @@
   --color-rose-2: var(--rose-2);
   --color-rose-tint: var(--rose-tint);
   --color-dusk: var(--dusk);
-  --color-lemon: var(--lemon);
+  --color-gold: var(--gold);
   --color-sold: var(--sold);
 }
 
@@ -276,13 +276,13 @@ p { text-wrap: pretty; }
   outline-offset: 2px;
 }
 
-/* Fields: lemon border on paper, ink border when focused. */
+/* Fields: gold border on paper, ink border when focused. */
 .input,
 .select,
 .textarea {
-  --input-color: var(--lemon);
+  --input-color: var(--gold);
   background-color: var(--paper);
-  border-color: var(--lemon);
+  border-color: var(--gold);
   border-width: 2px;
   box-shadow: none;
 }

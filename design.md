@@ -9,14 +9,14 @@ Earlier versions: `design.oct13.md` (the site before the print-room redesign) an
 A museum-like print room where the prints carry the colour: warm paper, dark ink, generous margins. Colour comes from three places only:
 
 - **Dusky pink** frames the page: a full-width band behind the header and the footer.
-- **Lemon yellow** draws the lines: the two rules of the menu bar and the outlines of form fields and filter buttons.
+- **Antique gold** draws the lines: the two rules of the menu bar and the outlines of form fields and filter buttons.
 - **Rose** marks what you can click: links, buttons, the active menu item and focus rings.
 
 The homepage is a set of large picture tiles, one per section of the site, with search below them.
 
 ## 2. Colour tokens
 
-Defined as CSS custom properties in `assets/css/app.css` (light and dark), exposed to Tailwind as `bg-dusk`, `border-lemon`, etc. Use only these.
+Defined as CSS custom properties in `assets/css/app.css` (light and dark), exposed to Tailwind as `bg-dusk`, `border-gold`, etc. Use only these.
 
 | Token | Light | Dark | Use |
 |---|---|---|---|
@@ -29,14 +29,14 @@ Defined as CSS custom properties in `assets/css/app.css` (light and dark), expos
 | `--rose-2` | `#86324F` | `#E8A3BB` | Link/button hover and pressed |
 | `--rose-tint` | `#F6E9EE` | `#3A2630` | Selected filter button background |
 | `--dusk` | `#C2918D` | `#3B2B2D` | Header and footer background |
-| `--lemon` | `#F2DC1B` | `#D9C43A` | Menu bar rules, form field and filter button outlines |
+| `--gold` | `#A9851F` | `#C9A84C` | Menu bar rules, form field and filter button outlines |
 | `--sold` | `#5C5650` | `#B3ABA1` | "Sold" label (neutral, not red) |
 
 Contrast (WCAG AA): `--ink` on `--paper` ≈ 16:1, `--ink-2` on `--paper` ≈ 7:1, `--rose` on `--paper` ≈ 5.3:1, white on `--rose` ≈ 5.6:1, `--ink` on `--dusk` ≈ 6:1.
 
 Rules:
 - On `--dusk`, all text and links are `--ink` (links keep their underline). Rose and `--ink-2` are too faint on the pink.
-- Lemon is a line colour only, never text or a fill. On paper it is low contrast (about 1.3:1), so a lemon outline must never be the only cue: fields also have a visible label or placeholder, and turn ink with a rose ring when focused.
+- Gold is a line colour only, never text or a fill. It meets 3:1 on `--paper` (≈3.3:1), the minimum for outlines of fields and buttons; don't lighten it below that. Fields also have a visible label or placeholder, and turn ink with a rose ring when focused.
 - Rose appears only on interactive elements.
 - No gradients. No tinted backgrounds other than `--paper-2` and `--dusk`.
 
@@ -78,7 +78,7 @@ Use `text-wrap: pretty` on paragraphs and `text-wrap: balance` on headings.
 
 ### Menu bar
 - Sits inside the 1200px container (not full-bleed), background `--paper`, sticky at the top on scroll.
-- Top and bottom rules 3px `--lemon`. Height 48px.
+- Top and bottom rules 3px `--gold`. Height 48px.
 - Items: `--ink`, 15px/500, 28px gap; full bar height as hit area. Hover: text `--rose`.
 - Active page: text `--rose`, weight 600, 2px `--rose` bottom border.
 - Order: All Prints · Old Master Prints · Modern Prints · Canadian Prints on the left; About · Contact right-aligned.
@@ -90,18 +90,18 @@ Use `text-wrap: pretty` on paragraphs and `text-wrap: balance` on headings.
 - On `--dusk`, links are `--ink` with the same underline.
 
 ### Buttons
-- **Primary** ("Enquire about this print", "Search", "Send message"): background `--rose`, white text, 15px/600, padding 12px 20px, radius 2px. Hover `--rose-2`.
+- **Primary** ("Enquire about this print", "Send message"): background `--rose`, white text, 15px/600, padding 12px 20px, radius 2px. Hover `--rose-2`.
 - **Secondary**: transparent, 1px `--rose` border, `--rose` text. Hover: `--rose-tint` background.
 - Focus (all interactive): 2px `--rose` outline, 2px offset.
 - Minimum hit area 44px tall.
 
 ### Form fields and search
-- 2px `--lemon` border, `--paper` background, 16px text, 44px tall, placeholder in `--ink-2`.
+- 2px `--gold` border, `--paper` background, 16px text, 44px tall, placeholder in `--ink-2`.
 - Focus: border `--ink` plus the 2px rose ring. For a daisyUI `.input` wrapper (the search box), the ring is drawn on the wrapper and the inner `<input>` has no outline, so there is one complete ring.
-- Search: primary "Search" button attached on the right. As you type on the homepage, up to six matches drop down below the box; Enter opens the full results on /prints.
+- Search: "Search" button attached on the right, styled like a selected filter button (2px `--rose` border, `--rose-tint` background, `--rose` text, weight 600; hover `--rose-2`), so it matches the filters beneath it in both light and dark mode. As you type on the homepage, up to six matches drop down below the box; Enter opens the full results on /prints.
 
 ### Category filter buttons (listing pages)
-- All · Old Masters · Modern · Canadian, 44px tall, 2px `--lemon` border, `--ink` text; 12px side padding on phones (so all four fit at 375px), 16px from `sm`.
+- All · Old Masters · Modern · Canadian, 44px tall, 2px `--gold` border, `--ink` text; 12px side padding on phones (so all four fit at 375px), 16px from `sm`.
 - Hover: border and text `--rose`.
 - Selected: `--rose` border, `--rose-tint` background, `--rose` text, weight 600.
 
@@ -165,7 +165,7 @@ Use `text-wrap: pretty` on paragraphs and `text-wrap: balance` on headings.
 
 ## 7. Don'ts
 - No rose on non-interactive text or decoration, and no rose text on `--dusk`.
-- No lemon text or lemon fills.
+- No gold text or gold fills.
 - No shadows, gradients or rounded image corners.
 - No hover zoom except the homepage tiles.
 - No more than the two font families above.
