@@ -151,6 +151,29 @@ defmodule JanPaintingsWeb.Admin.PrintLiveTest do
       }
     end
 
+    test "shows what the price and size sort as, and warns when unreadable",
+         %{conn: conn, print: print} do
+      {:ok, view, _html} = live(conn, ~p"/admin/prints/#{print.id}/edit")
+
+      html = view |> form("#print-form", print: %{price: "The set $4,000 USD"}) |> render_change()
+      assert html =~ "Sorts as 4,000 USD."
+
+      html = view |> form("#print-form", print: %{dimensions: "260 x356mm"}) |> render_change()
+      assert html =~ "Sorts as 260 × 356 mm (926 cm²)."
+
+      html = view |> form("#print-form", print: %{price: "", dimensions: ""}) |> render_change()
+      assert html =~ "No price: listed last when sorting by price."
+      assert html =~ "No size: listed last when sorting by size."
+
+      html =
+        view
+        |> form("#print-form", print: %{price: "Ask", dimensions: "Folio"})
+        |> render_change()
+
+      assert html =~ "No amount found"
+      assert html =~ "No size found"
+    end
+
     test "updates the description and keeps the images", %{conn: conn, print: print} do
       {:ok, view, html} = live(conn, ~p"/admin/prints/#{print.id}/edit")
       assert html =~ print.title
