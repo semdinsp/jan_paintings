@@ -61,6 +61,24 @@ defmodule JanPaintings.Catalog do
   def get_print(slug), do: Repo.get_by(Print, slug: slug)
 
   # Sorted in Elixir so accented names ("DORÉ") sort with their plain letters.
+  @doc """
+  Reorders prints by `"price"` or `"size"` (plate area), smallest first, with
+  prints that have no price or size at the end in their current order. Any
+  other value leaves the order unchanged. Prices are compared as numbers
+  regardless of currency.
+  """
+  def order_prints(prints, "price"), do: order_present(prints, & &1.price_amount)
+
+  def order_prints(prints, "size"),
+    do: order_present(prints, &(&1.height_mm && &1.width_mm && &1.height_mm * &1.width_mm))
+
+  def order_prints(prints, _), do: prints
+
+  defp order_present(prints, key) do
+    {with_value, without} = Enum.split_with(prints, key)
+    Enum.sort_by(with_value, key) ++ without
+  end
+
   defp sort(prints) do
     order = @categories |> Enum.map(& &1.slug) |> Enum.with_index() |> Map.new()
     Enum.sort_by(prints, &{Map.get(order, &1.category, 99), fold(&1.artist), fold(&1.title)})

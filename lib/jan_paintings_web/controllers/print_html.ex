@@ -21,10 +21,11 @@ defmodule JanPaintingsWeb.PrintHTML do
   @doc "Filter tabs for switching between all prints and each category."
   attr :current, :map, default: nil
   attr :query, :string, default: ""
+  attr :sort, :string, default: nil
 
   def category_filter(assigns) do
-    # Switching category keeps the current search.
-    params = if assigns.query != "", do: [q: assigns.query], else: []
+    # Switching category keeps the current search and sort.
+    params = listing_params(assigns.query, assigns.sort)
 
     assigns =
       assign(assigns,
@@ -48,17 +49,69 @@ defmodule JanPaintingsWeb.PrintHTML do
         :for={{label, path, active} <- @options}
         patch={path}
         aria-current={active && "page"}
-        class={[
-          "flex min-h-11 shrink-0 items-center rounded-[2px] border-2 px-3 text-[0.9375rem] transition sm:px-4",
-          if(active,
-            do: "border-rose bg-rose-tint font-semibold text-rose",
-            else: "border-lemon text-ink hover:border-rose hover:text-rose"
-          )
-        ]}
+        class={chip_class(active)}
       >
         {label}
       </.link>
     </nav>
     """
+  end
+
+  @doc """
+  Price and Size buttons that reorder the listing, smallest first. Clicking
+  the active one again returns to the usual artist order.
+  """
+  attr :current, :map, default: nil
+  attr :query, :string, default: ""
+  attr :sort, :string, default: nil
+
+  def sort_toggles(assigns) do
+    assigns =
+      assign(assigns,
+        options:
+          for {key, label, order} <- [{"price", "Price", "lowest"}, {"size", "Size", "smallest"}] do
+            active = assigns.sort == key
+            params = listing_params(assigns.query, if(active, do: nil, else: key))
+
+            path =
+              if assigns.current,
+                do: ~p"/prints/#{assigns.current.slug}?#{params}",
+                else: ~p"/prints?#{params}"
+
+            {label, order, path, active}
+          end
+      )
+
+    ~H"""
+    <div role="group" aria-label="Sort prints" class="flex flex-wrap items-center gap-2 pb-1">
+      <span class="type-meta mr-1">Sort by</span>
+      <.link
+        :for={{label, order, path, active} <- @options}
+        patch={path}
+        aria-current={active && "true"}
+        class={chip_class(active)}
+      >
+        {label}
+        <span :if={active} aria-hidden="true" class="ml-1">↑</span>
+        <span class="sr-only">
+          {if active, do: "(#{order} first; select again to undo)", else: "(#{order} first)"}
+        </span>
+      </.link>
+    </div>
+    """
+  end
+
+  defp listing_params(query, sort) do
+    [q: if(query != "", do: query), sort: sort] |> Enum.reject(fn {_, v} -> is_nil(v) end)
+  end
+
+  defp chip_class(active) do
+    [
+      "flex min-h-11 shrink-0 items-center rounded-[2px] border-2 px-3 text-[0.9375rem] transition sm:px-4",
+      if(active,
+        do: "border-rose bg-rose-tint font-semibold text-rose",
+        else: "border-lemon text-ink hover:border-rose hover:text-rose"
+      )
+    ]
   end
 end

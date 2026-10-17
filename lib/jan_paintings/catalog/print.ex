@@ -4,12 +4,20 @@ defmodule JanPaintings.Catalog.Print do
 
   Text fields are never nil: an empty field is stored as "" so templates can
   test `field != ""`. `dimensions` is the plate or image size as catalogued;
-  `sheet_size` is recorded only when the sheet size is stated separately. Image fields hold site paths such as
+  `sheet_size` is recorded only when the sheet size is stated separately.
+
+  `price_amount`, `price_currency`, `height_mm` and `width_mm` are read from
+  the price and size text on every save (see `JanPaintings.Catalog.Measures`)
+  and are used only for sorting; they are nil when the text has no number.
+
+  Image fields hold site paths such as
   "/images/catalogue/abel-josef-portrait-of-melchior-lg.jpg" or
   "/uploads/prints/<file>".
   """
   use Ecto.Schema
   import Ecto.Changeset
+
+  alias JanPaintings.Catalog.Measures
 
   @statuses ~w(available sold reserved)
 
@@ -37,6 +45,10 @@ defmodule JanPaintings.Catalog.Print do
     field :image, :string, default: ""
     field :large_image, :string, default: ""
     field :gallery, {:array, :string}, default: []
+    field :price_amount, :integer
+    field :price_currency, :string
+    field :height_mm, :integer
+    field :width_mm, :integer
 
     timestamps(type: :utc_datetime)
   end
@@ -53,6 +65,8 @@ defmodule JanPaintings.Catalog.Print do
     |> update_change(:title, &String.trim/1)
     |> update_change(:slug, &String.trim/1)
     |> nil_to_empty()
+    |> update_change(:dimensions, &Measures.normalize_size/1)
+    |> put_measures()
     |> put_slug()
     |> validate_not_blank([:slug, :category, :artist, :title, :status])
     |> validate_not_blank([:image], "add an image")
@@ -63,6 +77,19 @@ defmodule JanPaintings.Catalog.Print do
     )
     |> validate_length(:slug, max: 120)
     |> unique_constraint(:slug)
+  end
+
+  # Sort fields always follow the text, so they can never disagree with it.
+  defp put_measures(changeset) do
+    {amount, currency} = Measures.parse_price(get_field(changeset, :price))
+    {height, width} = Measures.parse_size(get_field(changeset, :dimensions))
+
+    change(changeset,
+      price_amount: amount,
+      price_currency: currency,
+      height_mm: height,
+      width_mm: width
+    )
   end
 
   # validate_required/2 would accept "" because blanks are kept as "" here.

@@ -3,6 +3,7 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Form do
   use JanPaintingsWeb, :live_view
 
   alias JanPaintings.Catalog
+  alias JanPaintings.Catalog.Measures
   alias JanPaintings.Catalog.Print
   alias JanPaintings.Uploads
 
@@ -67,7 +68,14 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Form do
           <.input field={@form[:title]} type="textarea" label="Title" rows="2" phx-debounce="300" />
           <div class="grid gap-x-4 sm:grid-cols-2">
             <.input field={@form[:medium]} label="Medium" placeholder="Etching" />
-            <.input field={@form[:price]} label="Price" placeholder="$1,500 USD (blank = On request)" />
+            <div>
+              <.input
+                field={@form[:price]}
+                label="Price"
+                placeholder="$1,500 USD (blank = On request)"
+              />
+              <.sort_hint id="price-sort-hint" hint={price_hint(@form.source)} />
+            </div>
           </div>
           <.input field={@form[:details]} type="textarea" label="Details" rows="3" />
           <.input
@@ -79,11 +87,14 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Form do
           />
           <.input field={@form[:state]} label="State" placeholder="Second state of three" />
           <div class="grid gap-x-4 sm:grid-cols-2">
-            <.input
-              field={@form[:dimensions]}
-              label="Size (plate or image)"
-              placeholder="206 × 160mm"
-            />
+            <div>
+              <.input
+                field={@form[:dimensions]}
+                label="Size (plate or image)"
+                placeholder="206 × 160mm"
+              />
+              <.sort_hint id="size-sort-hint" hint={size_hint(@form.source)} />
+            </div>
             <.input field={@form[:sheet_size]} label="Sheet size" placeholder="If stated" />
           </div>
           <.input field={@form[:condition]} type="textarea" label="Condition" rows="3" />
@@ -162,6 +173,59 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Form do
       </.form>
     </Layouts.app>
     """
+  end
+
+  # Shows what the price or size text sorts as on the print listings, and
+  # warns when no number could be read from text that was filled in.
+  attr :id, :string, required: true
+  attr :hint, :any, required: true
+
+  defp sort_hint(assigns) do
+    ~H"""
+    <p
+      id={@id}
+      class={[
+        "-mt-1 mb-2 text-xs",
+        if(elem(@hint, 0) == :warn, do: "text-error", else: "text-base-content/60")
+      ]}
+    >
+      {elem(@hint, 1)}
+    </p>
+    """
+  end
+
+  defp price_hint(changeset) do
+    text = Ecto.Changeset.get_field(changeset, :price)
+
+    case Ecto.Changeset.get_field(changeset, :price_amount) do
+      nil when text in [nil, ""] ->
+        {:ok, "No price: listed last when sorting by price."}
+
+      nil ->
+        {:warn,
+         "No amount found, so this print is listed last when sorting by price. Write it as $1,500 USD."}
+
+      amount ->
+        currency = Ecto.Changeset.get_field(changeset, :price_currency)
+        {:ok, "Sorts as #{Measures.format_amount(amount)}#{currency && " " <> currency}."}
+    end
+  end
+
+  defp size_hint(changeset) do
+    text = Ecto.Changeset.get_field(changeset, :dimensions)
+
+    case {Ecto.Changeset.get_field(changeset, :height_mm),
+          Ecto.Changeset.get_field(changeset, :width_mm)} do
+      {nil, _} when text in [nil, ""] ->
+        {:ok, "No size: listed last when sorting by size."}
+
+      {nil, _} ->
+        {:warn,
+         "No size found, so this print is listed last when sorting by size. Write it as 206 × 160mm."}
+
+      {height, width} ->
+        {:ok, "Sorts as #{height} × #{width} mm (#{round(height * width / 100)} cm²)."}
+    end
   end
 
   attr :label, :string, required: true

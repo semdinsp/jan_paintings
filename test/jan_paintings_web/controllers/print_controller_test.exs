@@ -29,6 +29,37 @@ defmodule JanPaintingsWeb.PrintControllerTest do
              ~r/href="\/prints\/modern"[^>]*aria-current="page"|aria-current="page"[^>]*href="\/prints\/modern"/
   end
 
+  describe "sorting" do
+    test "Price and Size buttons follow the category filters", %{conn: conn} do
+      html = conn |> get(~p"/prints/modern") |> html_response(200)
+      assert html =~ ~s(aria-label="Sort prints")
+      assert html =~ ~s(href="/prints/modern?sort=price")
+      assert html =~ ~s(href="/prints/modern?sort=size")
+    end
+
+    test "sort=price lists the cheapest print first and marks the button", %{conn: conn} do
+      html = conn |> get(~p"/prints/old-masters?sort=price") |> html_response(200)
+      [cheapest | _] = Catalog.order_prints(Catalog.list_prints("old-masters"), "price")
+      [first_link | _] = Regex.scan(~r{href="/prints/old-masters/([a-z0-9-]+)"}, html)
+
+      assert List.last(first_link) == cheapest.slug
+      # The active button links back to the unsorted list.
+      assert html =~ ~r/href="\/prints\/old-masters"[^>]*aria-current="true"/
+    end
+
+    test "category links and search keep the sort", %{conn: conn} do
+      html = conn |> get(~p"/prints?sort=size&q=beham") |> html_response(200)
+      assert html =~ ~s(href="/prints/old-masters?q=beham&amp;sort=size")
+      assert html =~ ~s(href="/prints?sort=size")
+      assert html =~ "Clear search"
+    end
+
+    test "ignores an unknown sort", %{conn: conn} do
+      html = conn |> get(~p"/prints?sort=colour") |> html_response(200)
+      refute html =~ ~s(aria-current="true")
+    end
+  end
+
   test "shows a print", %{conn: conn} do
     print = hd(Catalog.list_prints("old-masters"))
     html = conn |> get(~p"/prints/old-masters/#{print.slug}") |> html_response(200)

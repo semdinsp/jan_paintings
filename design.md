@@ -105,6 +105,13 @@ Use `text-wrap: pretty` on paragraphs and `text-wrap: balance` on headings.
 - Hover: border and text `--rose`.
 - Selected: `--rose` border, `--rose-tint` background, `--rose` text, weight 600.
 
+### Sort toggles (listing pages)
+- After the category filters, on the same row on desktop (wrapping below on phones): a small "Sort by" label, then **Price** and **Size** buttons in the same style as the filter buttons.
+- Clicking one sorts smallest first (Size is plate area) and shows it selected with a "↑"; clicking it again returns to the usual artist order. Only one is active at a time.
+- Prints with no price ("On request", blank) or no size go last. Prices compare as numbers regardless of currency.
+- The sort is kept in the URL (`?sort=price`) and carried through category changes and searches.
+- The numbers come from `price_amount`, `price_currency`, `height_mm` and `width_mm`, worked out from the price and size text whenever a print is saved. The admin form shows what each sorts as, and warns when it can't read a number.
+
 ### Homepage
 - No hero. A visually hidden H1 ("Jan Johnson, Old Master, Modern and Canadian prints for collectors and museums") keeps the page heading for search engines and screen readers.
 - **Tiles**: five large picture links, in this order:
