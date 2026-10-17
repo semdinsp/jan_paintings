@@ -158,7 +158,7 @@ defmodule JanPaintingsWeb.Layouts do
       </main>
 
       <footer class="bg-dusk py-12 text-[0.9375rem] text-ink [--rose:var(--ink)] [--rose-2:var(--ink)]">
-        <div class="mx-auto grid max-w-[1200px] gap-6 px-4 md:grid-cols-3 md:px-6">
+        <div class="mx-auto grid max-w-[1200px] gap-6 px-4 md:grid-cols-2 md:px-6 lg:grid-cols-3">
           <p>
             Jan Johnson, Old Master &amp; Modern Prints, Inc.<br />
             189 rue Saint-Pierre, Chambly, QC, Canada J3L 1L8
@@ -168,7 +168,7 @@ defmodule JanPaintingsWeb.Layouts do
             <br /> Phone <a href="tel:+14506582752" class="link">450.658.2752</a>
             · Cell <a href="tel:+15146086959" class="link">514.608.6959</a>
           </p>
-          <div class="flex items-start gap-5 md:justify-end">
+          <div class="flex items-start gap-5 md:col-span-2 lg:col-span-1 lg:justify-end">
             <.link
               :if={!@current_scope}
               navigate={~p"/users/log-in"}
