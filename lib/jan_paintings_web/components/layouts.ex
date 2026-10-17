@@ -59,7 +59,7 @@ defmodule JanPaintingsWeb.Layouts do
               alt="Jan Johnson, Old Master & Modern Prints Inc."
               width="512"
               height="193"
-              class="h-12 w-auto sm:h-20 md:h-30 dark:invert"
+              class="h-16 w-auto sm:h-20 md:h-30 dark:invert"
             />
           </.link>
           <div class="ml-auto flex min-w-0 items-center gap-5 text-sm text-ink">
