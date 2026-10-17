@@ -210,6 +210,7 @@ p { text-wrap: pretty; }
 }
 /* "Fine prints since 1979", and definition-list labels. */
 .type-eyebrow {
+  font-family: var(--font-sans);
   font-size: 0.8125rem;
   font-weight: 600;
   text-transform: uppercase;
