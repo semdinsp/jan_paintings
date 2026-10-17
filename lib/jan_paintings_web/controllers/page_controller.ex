@@ -46,7 +46,7 @@ defmodule JanPaintingsWeb.PageController do
         label: "About the Gallery",
         path: ~p"/about",
         image: "/images/catalogue/jan-green-jacket.jpg",
-        position: "object-top"
+        position: "object-[50%_65%]"
       }
     ]
   end
