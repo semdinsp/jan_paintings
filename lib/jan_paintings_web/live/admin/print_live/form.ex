@@ -86,6 +86,15 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Form do
           </div>
           <.input field={@form[:details]} type="textarea" label="Details" rows="3" />
           <.input
+            field={@form[:catalogue_details]}
+            type="textarea"
+            label="Catalogue details"
+            rows="4"
+          />
+          <p class="-mt-1 text-xs text-base-content/60">
+            The full catalogue entry from the original site, for reference. Not shown on the site.
+          </p>
+          <.input
             field={@form[:catalogue_references]}
             type="textarea"
             label="Catalogue references"
