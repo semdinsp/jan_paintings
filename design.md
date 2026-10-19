@@ -127,7 +127,7 @@ Use `text-wrap: pretty` on paragraphs and `text-wrap: balance` on headings.
 
   - Layout: centred flex-wrap, 24px gap. Three per row from `md` (the last two centred), two per row on tablets, one per row on phones.
   - Shape: 4:5 portrait from `sm`; 3:2 landscape on phones so the stack stays short.
-  - Image fills the tile (`object-fit: cover`), with a per-tile `object-position` so faces and key details stay in frame. This is the one place a print may be cropped.
+  - Image fills the tile (`object-fit: cover`), with a per-tile `object-position` so faces and key details stay in frame. A tile can set a different position for the landscape phone crop (St George uses `object-[50%_10%] sm:object-center` so his head shows on phones). This is the one place a print may be cropped.
   - A 35% black wash over the image (20% on hover), with the label centred in white EB Garamond 32px and a soft text shadow.
   - Hover: the image scales to 1.03 over 500ms. This is the one hover zoom on the site.
   - Tile settings (label, path, image, position) live in `PageController.home_tiles/0`.
