@@ -71,8 +71,8 @@ Use `text-wrap: pretty` on paragraphs and `text-wrap: balance` on headings.
 
 ### Header
 - Full-width `--dusk` band, 20px vertical padding.
-- Logo left: `jan-johnson-logo-ink.png` (transparent ink, inverted in dark mode). Height 64px phone, 80px tablet, 120px from `md`.
-- Beham triton engraving (`beham-triton.jpg`) right-aligned, the same height as the logo (80px `sm`, 120px `md`). Hidden on phones.
+- Logo left: `jan-johnson-logo-ink.png` (transparent ink, inverted in dark mode). Height 64px phone, 80px tablet, 120px from `md`. A 2px `--ink` rule sits directly under it, inset to the width of the lettering (not the image's transparent margins).
+- Beham triton engraving (`beham-triton.jpg`) right-aligned, the same height as the logo (64px phone, 80px `sm`, 120px `md`). On phones it shrinks to fit the space beside the logo.
 - Admin and account links sit between logo and triton, in `--ink`.
 - No phone number in the header; it is in the contact section of the About page and in the footer.
 
