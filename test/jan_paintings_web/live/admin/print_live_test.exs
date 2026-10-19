@@ -33,6 +33,13 @@ defmodule JanPaintingsWeb.Admin.PrintLiveTest do
       assert {:error, {:redirect, %{to: "/"}}} = live(conn, ~p"/admin/prints/new")
     end
 
+    test "only admins can download the CSV", %{conn: conn} do
+      assert conn |> get(~p"/admin/prints/export.csv") |> redirected_to() == ~p"/users/log-in"
+
+      conn = log_in_user(conn, user_fixture())
+      assert conn |> get(~p"/admin/prints/export.csv") |> redirected_to() == ~p"/"
+    end
+
     test "shows the Admin link only to admins", %{conn: conn} do
       html = conn |> log_in_user(user_fixture()) |> get(~p"/") |> html_response(200)
       refute html =~ ~s(href="/admin/prints")
@@ -40,6 +47,73 @@ defmodule JanPaintingsWeb.Admin.PrintLiveTest do
       {:ok, admin} = Accounts.set_admin(user_fixture(), true)
       html = conn |> log_in_user(admin) |> get(~p"/") |> html_response(200)
       assert html =~ ~s(href="/admin/prints")
+    end
+  end
+
+  describe "csv" do
+    setup :log_in_admin
+
+    defp csv_upload(view, content) do
+      file_input(view, "#csv-import", :csv, [
+        %{name: "prints.csv", content: content, type: "text/csv"}
+      ])
+    end
+
+    test "downloads every print as CSV", %{conn: conn} do
+      {:ok, _view, html} = live(conn, ~p"/admin/prints")
+      assert html =~ ~s(href="/admin/prints/export.csv")
+
+      conn = get(conn, ~p"/admin/prints/export.csv")
+      assert response_content_type(conn, :csv) =~ "text/csv"
+      assert [disposition] = get_resp_header(conn, "content-disposition")
+      assert disposition =~ ~r/attachment; filename="jan-johnson-prints-\d{4}-\d{2}-\d{2}.csv"/
+
+      [header | rows] =
+        conn |> response(200) |> Catalog.CSV.Parser.parse_string(skip_headers: false)
+
+      assert header == Catalog.CSV.columns()
+      assert length(rows) == 180
+    end
+
+    test "adds the new prints in an uploaded CSV", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/admin/prints")
+
+      csv =
+        "slug,category,artist,title,image\r\n" <>
+          "neilson-dredging-the-st-charles-river,canadian,X,Y,/images/x.jpg\r\n" <>
+          "\"\",modern,\"DOE, Jane\",A New Etching,/images/catalogue/beham-nude-650.jpg\r\n"
+
+      render_upload(csv_upload(view, csv), "prints.csv")
+      html = view |> form("#csv-import") |> render_submit()
+
+      assert html =~ "Added 1 print. Skipped 1 already in the catalogue."
+      assert html =~ "181 of 181 prints"
+      assert Catalog.get_print("doe-a-new-etching").artist == "DOE, Jane"
+    end
+
+    test "lists the problem rows and adds nothing", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/admin/prints")
+
+      csv =
+        "category,artist,title,image\r\nmodern,\"DOE, Jane\",,/images/catalogue/beham-nude-650.jpg\r\n"
+
+      render_upload(csv_upload(view, csv), "prints.csv")
+      html = view |> form("#csv-import") |> render_submit()
+
+      assert html =~ "Nothing was imported"
+      assert html =~ "Row 2: title can&#39;t be blank"
+      assert html =~ "180 of 180 prints"
+    end
+
+    test "refuses files that are not CSV", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/admin/prints")
+
+      upload =
+        file_input(view, "#csv-import", :csv, [
+          %{name: "prints.xlsx", content: "x", type: "application/vnd.ms-excel"}
+        ])
+
+      assert {:error, [[_ref, :not_accepted]]} = render_upload(upload, "prints.xlsx")
     end
   end
 
