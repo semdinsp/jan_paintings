@@ -55,7 +55,7 @@ Rules:
 
 The `.type-eyebrow` class sets its own font family, so an eyebrow stays sans even when it is a heading element.
 
-Load from Google Fonts: `EB Garamond:ital,wght@0,400;0,500;1,400` and `Source Sans 3:wght@400;500;600`.
+Load from Google Fonts: `EB Garamond:ital,wght@0,400;0,500;1,400` and `Source Sans 3:ital,wght@0,400;0,500;0,600;1,400` (the italic is for additional notes).
 Use `text-wrap: pretty` on paragraphs and `text-wrap: balance` on headings.
 
 ## 4. Layout
@@ -146,6 +146,7 @@ Use `text-wrap: pretty` on paragraphs and `text-wrap: balance` on headings.
 - Back link ("← Old Master Prints") above, in rose "more" style.
 - Two columns desktop: image 7/12 on a `--paper-2` mat, details 5/12. Stacked on mobile.
 - Details: artist line, H1 title, medium/date, definition list (eyebrow labels, `--rule` hairlines between rows), price 20px/600, primary Enquire button.
+- Additional notes (commentary that was set in italics on the original site), when present: below the buttons, above a `--rule` hairline, "Additional notes" eyebrow, then each paragraph in Source Sans italic, `--ink-2`, 68ch.
 
 ### About page
 - Text column (68ch). From `lg` (1024px), Pether's *A Farrier's Shop* sits beside it on a `--paper-2` mat with artist and title below, linking to the print. Hidden below 1024px. If that print is removed from the catalogue, the figure is not rendered.

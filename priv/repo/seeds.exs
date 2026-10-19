@@ -19,3 +19,7 @@ JanPaintings.Catalog.Seed.load_catalogue_details() |> IO.inspect(label: "Catalog
 # Each artist's nationality (Dutch/Flemish, Italian, German, French, British,
 # Canadian or Other), drafted from research. Also fills blanks only.
 JanPaintings.Catalog.Seed.load_nationalities() |> IO.inspect(label: "Nationalities")
+
+# Each print's additional notes: the commentary set in italics on the original
+# site's print pages. Also fills blanks only.
+JanPaintings.Catalog.Seed.load_additional_notes() |> IO.inspect(label: "Additional notes")

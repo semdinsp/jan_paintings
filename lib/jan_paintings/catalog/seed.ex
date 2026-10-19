@@ -13,9 +13,10 @@ defmodule JanPaintings.Catalog.Seed do
     * a correction only applies while the field still holds the exact value
       it corrects.
 
-  `load_nationalities/1` fills in each artist's nationality the same way.
+  `load_nationalities/1` fills in each artist's nationality, and
+  `load_additional_notes/1` each print's additional notes, the same way.
 
-  Run both with `mix run priv/repo/seeds.exs` locally, or
+  Run them all with `mix run priv/repo/seeds.exs` locally, or
   `bin/jan_paintings eval "JanPaintings.Release.seed()"` in a release.
   """
   import Ecto.Changeset
@@ -31,6 +32,38 @@ defmodule JanPaintings.Catalog.Seed do
 
   def nationalities_path,
     do: Path.join(:code.priv_dir(:jan_paintings), "repo/seeds/print_nationalities.json")
+
+  def additional_notes_path,
+    do: Path.join(:code.priv_dir(:jan_paintings), "repo/seeds/print_additional_notes.json")
+
+  @doc """
+  Sets each print's additional notes from
+  `priv/repo/seeds/print_additional_notes.json`: the notes set in italics on
+  the original site's print pages. Only fills notes that are still blank, so
+  notes edited in the admin pages are kept and it is safe to run again.
+
+  Returns how many prints were updated and the slugs not found.
+  """
+  def load_additional_notes(path \\ additional_notes_path()) do
+    %{"prints" => entries} = path |> File.read!() |> Jason.decode!()
+
+    Enum.reduce(entries, %{updated: 0, missing: []}, fn %{"slug" => slug} = entry, summary ->
+      notes = Map.fetch!(entry, "additional_notes")
+
+      if Repo.exists?(from p in Print, where: p.slug == ^slug) do
+        {count, _} =
+          from(p in Print, where: p.slug == ^slug and p.additional_notes == "")
+          |> Repo.update_all(
+            set: [additional_notes: notes, updated_at: DateTime.utc_now(:second)]
+          )
+
+        Map.update!(summary, :updated, &(&1 + count))
+      else
+        Map.update!(summary, :missing, &[slug | &1])
+      end
+    end)
+    |> Map.update!(:missing, &Enum.reverse/1)
+  end
 
   @doc """
   Sets each artist's nationality from `priv/repo/seeds/print_nationalities.json`

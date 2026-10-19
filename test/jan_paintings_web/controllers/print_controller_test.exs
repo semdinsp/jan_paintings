@@ -107,6 +107,20 @@ defmodule JanPaintingsWeb.PrintControllerTest do
     assert html =~ "Arms of Amsterdam"
   end
 
+  test "shows additional notes, one paragraph each, only when there are some", %{conn: conn} do
+    print = Catalog.get_print("dusart-fiddler-in-an-inn")
+    html = conn |> get(~p"/prints/old-masters/#{print.slug}") |> html_response(200)
+    refute html =~ "Additional notes"
+
+    {:ok, _} =
+      Catalog.update_print(print, %{"additional_notes" => "First thought.\n\nSecond thought."})
+
+    html = conn |> get(~p"/prints/old-masters/#{print.slug}") |> html_response(200)
+    assert html =~ "Additional notes"
+    assert html =~ ~r/<p[^>]*italic[^>]*>\s*First thought.\s*<\/p>/
+    assert html =~ ~r/<p[^>]*italic[^>]*>\s*Second thought.\s*<\/p>/
+  end
+
   test "shows prices with their currency", %{conn: conn} do
     html = conn |> get(~p"/prints/old-masters/dusart-fiddler-in-an-inn") |> html_response(200)
     assert html =~ Catalog.get_print("dusart-fiddler-in-an-inn").price

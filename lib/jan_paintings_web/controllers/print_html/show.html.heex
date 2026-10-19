@@ -99,6 +99,16 @@
       >
         More by this artist
       </.link>
+
+      <section :if={@print.additional_notes != ""} class="mt-10 border-t border-rule pt-6">
+        <h2 class="type-eyebrow">Additional notes</h2>
+        <p
+          :for={paragraph <- String.split(@print.additional_notes, ~r/\n\s*\n/, trim: true)}
+          class="mt-3 max-w-[68ch] italic text-ink-2"
+        >
+          {paragraph}
+        </p>
+      </section>
     </div>
   </div>
 </Layouts.app>

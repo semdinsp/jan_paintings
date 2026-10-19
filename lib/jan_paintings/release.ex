@@ -14,7 +14,7 @@ defmodule JanPaintings.Release do
   end
 
   @doc """
-  Loads the catalogue details and artist nationality seeds (see
+  Loads the catalogue details, artist nationality and additional notes seeds (see
   `JanPaintings.Catalog.Seed`). Run on
   Fly with:
 
@@ -23,14 +23,16 @@ defmodule JanPaintings.Release do
   def seed do
     load_app()
 
-    {:ok, {details, nationalities}, _} =
+    {:ok, {details, nationalities, notes}, _} =
       Ecto.Migrator.with_repo(JanPaintings.Repo, fn _repo ->
         {JanPaintings.Catalog.Seed.load_catalogue_details(),
-         JanPaintings.Catalog.Seed.load_nationalities()}
+         JanPaintings.Catalog.Seed.load_nationalities(),
+         JanPaintings.Catalog.Seed.load_additional_notes()}
       end)
 
     IO.inspect(details, label: "Catalogue details")
     IO.inspect(nationalities, label: "Nationalities")
+    IO.inspect(notes, label: "Additional notes")
   end
 
   def rollback(repo, version) do
