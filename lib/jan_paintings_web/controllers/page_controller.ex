@@ -28,7 +28,7 @@ defmodule JanPaintingsWeb.PageController do
       %{
         label: "Modern Prints",
         path: ~p"/prints/modern",
-        image: "/images/catalogue/chahine-edgar-invitation-lg.jpg",
+        image: "/images/catalogue/chahine-edgar-invitation-tile.jpg",
         position: "object-top"
       },
       %{
