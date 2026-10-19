@@ -208,6 +208,13 @@ p { text-wrap: pretty; }
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
+/* On a print's own page the title is 2px smaller (34px, 26px on phones) and
+   the artist line 1px larger (14px) than elsewhere. */
+.print-detail-title { font-size: 1.625rem; }
+@media (min-width: 768px) {
+  .print-detail-title { font-size: 2.125rem; }
+}
+.print-detail-artist { font-size: 0.875rem; }
 /* "Fine prints since 1979", and definition-list labels. */
 .type-eyebrow {
   font-family: var(--font-sans);
