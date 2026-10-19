@@ -82,7 +82,8 @@ Use `text-wrap: pretty` on paragraphs and `text-wrap: balance` on headings.
 - Items: `--ink`, 15px/500, 28px gap; full bar height as hit area. Hover: text `--rose`.
 - Active page: text `--rose`, weight 600, 2px `--rose` bottom border.
 - Order: All Prints · Old Master Prints · Modern Prints · Canadian Prints on the left; About Us right-aligned (the contact details and form are on the About page, linked from print enquiry buttons and the "ask us" note on listings).
-- Mobile (< 768px): "Menu" + hamburger; opens a `--paper` drawer with stacked 48px rows separated by `--rule` hairlines, active row in rose.
+- Search: from `lg` (1024px), a 240px search box (36px tall, gold field border, "Artist or title" placeholder, magnifier submit button) sits right-aligned before About Us; Enter opens the matches on /prints. On tablets (768–1023px) there is no room for the box, so a magnifier icon links to /prints and its search box instead.
+- Mobile (< 768px): "Menu" + hamburger; opens a `--paper` drawer with the search box at the top, then stacked 48px rows separated by `--rule` hairlines, active row in rose.
 
 ### Links
 - Inline links: `--rose`, underline with `text-underline-offset: 3px`, `text-decoration-thickness: 1px`. Hover: `--rose-2`, thickness 2px.

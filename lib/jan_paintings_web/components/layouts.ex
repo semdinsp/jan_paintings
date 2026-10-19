@@ -119,6 +119,16 @@ defmodule JanPaintingsWeb.Layouts do
               {label}
             </.link>
             <span class="flex-1" />
+            <.menu_search id="menu-search" class="hidden w-60 self-center lg:block" />
+            <%!-- No room for the box beside the menu items on tablets. --%>
+            <.link
+              navigate={~p"/prints"}
+              class="flex items-center text-ink hover:text-rose lg:hidden"
+              title="Search by artist or title"
+            >
+              <.icon name="hero-magnifying-glass" class="size-5" />
+              <span class="sr-only">Search</span>
+            </.link>
             <.link
               :for={{key, label, path} <- @about_menu}
               href={path}
@@ -138,6 +148,7 @@ defmodule JanPaintingsWeb.Layouts do
               <.icon name="hero-x-mark" class="hidden size-5 group-open:block" /> Menu
             </summary>
             <div class="pb-2">
+              <.menu_search id="drawer-search" class="mb-2" />
               <.link
                 :for={{key, label, path} <- @menu ++ @about_menu}
                 href={path}
@@ -186,6 +197,37 @@ defmodule JanPaintingsWeb.Layouts do
     </div>
 
     <.flash_group flash={@flash} />
+    """
+  end
+
+  @doc """
+  Compact search box for the menu bar; Enter opens the matches on /prints.
+  """
+  attr :id, :string, required: true
+  attr :class, :any, default: nil
+
+  def menu_search(assigns) do
+    ~H"""
+    <form id={@id} action={~p"/prints"} method="get" role="search" class={@class}>
+      <label class="input input-sm h-9 w-full pr-1">
+        <span class="sr-only">Search by artist or title</span>
+        <input
+          id={"#{@id}-input"}
+          type="search"
+          name="q"
+          placeholder="Artist or title"
+          autocomplete="off"
+          class="grow"
+        />
+        <button
+          type="submit"
+          class="flex size-7 cursor-pointer items-center justify-center text-ink-2 hover:text-rose"
+        >
+          <.icon name="hero-magnifying-glass" class="size-4" />
+          <span class="sr-only">Search</span>
+        </button>
+      </label>
+    </form>
     """
   end
 
