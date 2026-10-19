@@ -24,13 +24,16 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Form do
       <div class="mt-4 flex flex-wrap items-end justify-between gap-4 border-b border-base-300 pb-6">
         <h1 class="font-serif text-3xl">{@page_title}</h1>
         <.link
-          :if={@print.id}
+          :if={@print.id && @print.status != "draft"}
           href={~p"/prints/#{@print.category}/#{@print.slug}"}
           target="_blank"
           class="text-sm text-accent underline underline-offset-4"
         >
           View on the site <span aria-hidden="true">&nearr;</span>
         </.link>
+        <p :if={@print.status == "draft"} class="text-sm text-base-content/60">
+          Draft: not on the site until you choose another status.
+        </p>
       </div>
 
       <.form

@@ -184,6 +184,10 @@ defmodule JanPaintingsWeb.Admin.PrintLiveTest do
 
       assert html =~ "Work in Progress needs an image before it can go on the site."
       assert Catalog.get_print(draft.slug).status == "draft"
+
+      {:ok, _view, html} = live(conn, ~p"/admin/prints/#{draft.id}/edit")
+      assert html =~ "Draft: not on the site"
+      refute html =~ "View on the site"
     end
   end
 
