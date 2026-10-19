@@ -13,8 +13,10 @@ defmodule JanPaintings.Catalog.Seed do
     * a correction only applies while the field still holds the exact value
       it corrects.
 
-  `load_nationalities/1` fills in each artist's nationality, and
-  `load_additional_notes/1` each print's additional notes, the same way.
+  `load_nationalities/1` fills in each artist's nationality,
+  `load_additional_notes/1` each print's additional notes, and
+  `load_catalogue_entries/1` each print's catalogue details and provenance,
+  the same way.
 
   Run them all with `mix run priv/repo/seeds.exs` locally, or
   `bin/jan_paintings eval "JanPaintings.Release.seed()"` in a release.
@@ -32,6 +34,46 @@ defmodule JanPaintings.Catalog.Seed do
 
   def nationalities_path,
     do: Path.join(:code.priv_dir(:jan_paintings), "repo/seeds/print_nationalities.json")
+
+  def catalogue_entries_path,
+    do: Path.join(:code.priv_dir(:jan_paintings), "repo/seeds/print_catalogue_entries.json")
+
+  @doc """
+  Sets each print's catalogue details and provenance from
+  `priv/repo/seeds/print_catalogue_entries.json`: the catalogue block of each
+  print page on the original site, and the provenance named in it. Each field
+  is only filled while it is blank, so edits made in the admin pages are kept
+  and it is safe to run again.
+
+  Returns how many prints were updated and the slugs not found.
+  """
+  def load_catalogue_entries(path \\ catalogue_entries_path()) do
+    %{"prints" => entries} = path |> File.read!() |> Jason.decode!()
+
+    Enum.reduce(entries, %{updated: 0, missing: []}, fn entry, summary ->
+      case Repo.get_by(Print, slug: entry["slug"]) do
+        nil ->
+          Map.update!(summary, :missing, &[entry["slug"] | &1])
+
+        print ->
+          changes =
+            for field <- [:catalogue_details, :provenance],
+                value = entry[Atom.to_string(field)],
+                value not in [nil, ""],
+                Map.fetch!(print, field) == "",
+                into: %{},
+                do: {field, value}
+
+          if changes == %{} do
+            summary
+          else
+            print |> change(changes) |> Repo.update!()
+            Map.update!(summary, :updated, &(&1 + 1))
+          end
+      end
+    end)
+    |> Map.update!(:missing, &Enum.reverse/1)
+  end
 
   def additional_notes_path,
     do: Path.join(:code.priv_dir(:jan_paintings), "repo/seeds/print_additional_notes.json")

@@ -187,7 +187,8 @@ defmodule JanPaintingsWeb.Admin.PrintLiveTest do
           state: "First state",
           sheet_size: "400 × 500mm",
           nationality: "french",
-          additional_notes: "A note on the print."
+          additional_notes: "A note on the print.",
+          catalogue_details: "Etching, 1900.\nWatermark: Crowned shield"
         }
       )
       |> render_submit()
@@ -201,6 +202,7 @@ defmodule JanPaintingsWeb.Admin.PrintLiveTest do
       assert updated.sheet_size == "400 × 500mm"
       assert updated.nationality == "french"
       assert updated.additional_notes == "A note on the print."
+      assert updated.catalogue_details == "Etching, 1900.\nWatermark: Crowned shield"
       assert updated.image == print.image
       assert updated.gallery == print.gallery
     end

@@ -9,6 +9,10 @@ defmodule JanPaintings.Catalog.Print do
   `nationality` is the artist's nationality, one of the keys in
   `nationalities/0`, or "" when it has not been set.
 
+  `catalogue_details` is the print's catalogue entry as written on the
+  original site: medium and date, references, watermark, provenance and so
+  on, one per line. It is kept for reference in the admin pages.
+
   `additional_notes` is commentary on the print, shown below its details;
   paragraphs are separated by a blank line.
 
@@ -39,7 +43,7 @@ defmodule JanPaintings.Catalog.Print do
 
   @text_fields ~w(dates medium details provenance watermark condition dimensions price
                   thumb large_image catalogue_references state sheet_size nationality
-                  additional_notes)a
+                  additional_notes catalogue_details)a
 
   schema "prints" do
     field :slug, :string
@@ -59,6 +63,7 @@ defmodule JanPaintings.Catalog.Print do
     field :status, :string, default: "available"
     field :nationality, :string, default: ""
     field :additional_notes, :string, default: ""
+    field :catalogue_details, :string, default: ""
     field :price, :string, default: ""
     field :thumb, :string, default: ""
     field :image, :string, default: ""

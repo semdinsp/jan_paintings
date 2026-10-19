@@ -167,4 +167,48 @@ defmodule JanPaintings.Catalog.SeedTest do
       assert Catalog.get_print(other.slug).additional_notes == "From the seed"
     end
   end
+
+  describe "load_catalogue_entries/1" do
+    test "the shipped file covers every print, once" do
+      first = Seed.load_catalogue_entries()
+      assert first.missing == []
+      assert first.updated > 150
+
+      assert %{updated: 0, missing: []} = Seed.load_catalogue_entries()
+
+      ghisi = Catalog.get_print("ghisi-the-visitation-after-francesco-salviati")
+
+      assert ghisi.catalogue_details ==
+               "Engraving, c. 1540-50. Lewis, Lewis and Boorsch 10, fourth state of six, " <>
+                 "with the name of Lafreri erased but before that of Rossi, or later Losi\n" <>
+                 "Watermark: Pilgrim in circle with star (L, L & B 55; Briquet 7578)\n" <>
+                 "Provenance: Unidentified (Lugt 896); Somerville & Simpson 1970’s; " <>
+                 "Dr.Eric Stanley (not in Lugt)"
+
+      assert ghisi.provenance ==
+               "Unidentified (Lugt 896); Somerville & Simpson 1970’s; Dr.Eric Stanley (not in Lugt)"
+    end
+
+    test "fills each field only while it is blank", %{tmp_dir: dir} do
+      print = Catalog.get_print("ghisi-the-visitation-after-francesco-salviati")
+      {:ok, _} = Catalog.update_print(print, %{"provenance" => "Jan's records"})
+
+      path = Path.join(dir, "entries.json")
+
+      File.write!(
+        path,
+        Jason.encode!(%{
+          "prints" => [
+            %{"slug" => print.slug, "catalogue_details" => "Engraving", "provenance" => "Seed"},
+            %{"slug" => "no-such-print", "catalogue_details" => "x", "provenance" => ""}
+          ]
+        })
+      )
+
+      assert %{updated: 1, missing: ["no-such-print"]} = Seed.load_catalogue_entries(path)
+      print = Catalog.get_print(print.slug)
+      assert print.catalogue_details == "Engraving"
+      assert print.provenance == "Jan's records"
+    end
+  end
 end
