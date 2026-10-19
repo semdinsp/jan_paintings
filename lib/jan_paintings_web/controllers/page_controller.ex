@@ -28,7 +28,8 @@ defmodule JanPaintingsWeb.PageController do
         label: "Old Master Prints",
         path: ~p"/prints/old-masters",
         image: "/images/catalogue/durer-st-george-day-650.jpg",
-        position: "object-center"
+        # Phone tiles are landscape: keep St George's head in frame.
+        position: "object-[50%_10%] sm:object-center"
       },
       %{
         label: "Modern Prints",
