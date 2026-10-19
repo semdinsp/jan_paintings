@@ -61,6 +61,8 @@ defmodule JanPaintingsWeb.Layouts do
               height="193"
               class="h-16 w-auto sm:h-20 md:h-30 dark:invert"
             />
+            <%!-- A rule under the logo, inset to the text's edges within the image. --%>
+            <span class="ml-[0.8%] block h-0.5 w-[96.3%] bg-ink" />
           </.link>
           <div class="ml-auto flex min-w-0 items-center gap-5 text-sm text-ink">
             <.link
