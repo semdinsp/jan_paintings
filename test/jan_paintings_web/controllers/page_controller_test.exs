@@ -7,6 +7,18 @@ defmodule JanPaintingsWeb.PageControllerTest do
     assert html =~ "Canadian Prints"
   end
 
+  test "the homepage has a tile for each print section and none for About", %{conn: conn} do
+    html = conn |> get(~p"/") |> html_response(200)
+    [tiles] = Regex.run(~r{<nav[^>]*aria-label="Browse the gallery".*?</nav>}s, html)
+
+    for path <- ["/prints", "/prints/old-masters", "/prints/modern", "/prints/canadian"] do
+      assert tiles =~ ~s(href="#{path}")
+    end
+
+    refute tiles =~ ~s(href="/about")
+    refute html =~ "About the Gallery"
+  end
+
   test "the menu bar has a home icon, marked current on the home page", %{conn: conn} do
     home = conn |> get(~p"/") |> html_response(200)
     about = conn |> get(~p"/about") |> html_response(200)

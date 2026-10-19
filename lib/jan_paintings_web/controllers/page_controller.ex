@@ -15,7 +15,7 @@ defmodule JanPaintingsWeb.PageController do
     )
   end
 
-  # Large image links on the homepage, one per section of the site.
+  # Large image links on the homepage, one per section of the print list.
   defp home_tiles do
     [
       %{
@@ -41,12 +41,6 @@ defmodule JanPaintingsWeb.PageController do
         path: ~p"/prints/canadian",
         image: "/images/catalogue/hornyansky-anxiety-650.jpg",
         position: "object-left"
-      },
-      %{
-        label: "About the Gallery",
-        path: ~p"/about",
-        image: "/images/catalogue/jan-green-jacket.jpg",
-        position: "object-[50%_65%]"
       }
     ]
   end
