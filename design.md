@@ -150,7 +150,7 @@ Use `text-wrap: pretty` on paragraphs and `text-wrap: balance` on headings.
 - Additional notes (commentary that was set in italics on the original site), when present: below the buttons, above a `--rule` hairline, "Additional notes" eyebrow, then each paragraph in Source Sans italic, `--ink-2`, 68ch.
 
 ### About page
-- Text column (68ch). From `lg` (1024px), Pether's *A Farrier's Shop* sits beside it on a `--paper-2` mat with artist and title below, linking to the print. Hidden below 1024px. If that print is removed from the catalogue, the figure is not rendered.
+- Text column (68ch). Jan's portrait (`images/jan-johnson.jpg`) on a `--paper-2` mat with "Jan Johnson" below: beside the text from `lg` (1024px); below the text on phones and tablets, at most 320px wide.
 - Contact section below: details on the left, the "Send a message" form on a `--paper-2` panel on the right (stacked on mobile).
 
 ### Footer
