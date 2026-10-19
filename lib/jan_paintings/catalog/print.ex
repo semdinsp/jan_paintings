@@ -6,6 +6,10 @@ defmodule JanPaintings.Catalog.Print do
   test `field != ""`. `dimensions` is the plate or image size as catalogued;
   `sheet_size` is recorded only when the sheet size is stated separately.
 
+  `status` is "available", "sold" or "reserved", or "draft" for a print
+  being prepared: drafts are hidden from the public site and are the only
+  prints allowed to have no image yet.
+
   `nationality` is the artist's nationality, one of the keys in
   `nationalities/0`, or "" when it has not been set.
 
@@ -29,7 +33,7 @@ defmodule JanPaintings.Catalog.Print do
 
   alias JanPaintings.Catalog.Measures
 
-  @statuses ~w(available sold reserved)
+  @statuses ~w(available sold reserved draft)
 
   @nationalities [
     {"dutch_flemish", "Dutch/Flemish"},
@@ -99,7 +103,7 @@ defmodule JanPaintings.Catalog.Print do
     |> put_measures()
     |> put_slug()
     |> validate_not_blank([:slug, :category, :artist, :title, :status])
-    |> validate_not_blank([:image], "add an image")
+    |> validate_image()
     |> validate_inclusion(:category, category_slugs)
     |> validate_inclusion(:status, @statuses)
     |> validate_inclusion(:nationality, ["" | Enum.map(@nationalities, &elem(&1, 0))])
@@ -121,6 +125,13 @@ defmodule JanPaintings.Catalog.Print do
       height_mm: height,
       width_mm: width
     )
+  end
+
+  # Only a draft may be saved without its image.
+  defp validate_image(changeset) do
+    if get_field(changeset, :status) == "draft",
+      do: changeset,
+      else: validate_not_blank(changeset, [:image], "add an image, or save the print as a draft")
   end
 
   # validate_required/2 would accept "" because blanks are kept as "" here.

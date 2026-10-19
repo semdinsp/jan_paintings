@@ -1,0 +1,196 @@
+<Layouts.app flash={@flash} current_scope={@current_scope}>
+  <.back />
+
+  <article class="mt-4 max-w-[68ch]">
+    <header class="flex items-center gap-5 border-b border-base-300 pb-6">
+      <.guide_icon guide={:adding} class="size-20 shrink-0" />
+      <div>
+        <p class="text-xs uppercase tracking-[0.2em] text-base-content/60">Guide</p>
+        <h1 class="mt-1 font-serif text-3xl">Adding prints</h1>
+      </div>
+    </header>
+
+    <p class="mt-6">
+      There are two ways to add prints: one at a time with <strong>Add a print</strong>, or
+      several at once from a CSV spreadsheet. Either way, a print with no image yet is kept as a <a
+        href="#drafts"
+        class="link"
+      >draft</a>, hidden from the site until it is ready.
+    </p>
+
+    <nav aria-label="On this page" class="mt-6 text-sm">
+      <ul class="flex flex-wrap gap-x-6 gap-y-1">
+        <li><a href="#one-print" class="link">Add one print</a></li>
+        <li><a href="#drafts" class="link">Drafts</a></li>
+        <li><a href="#csv" class="link">Add many from a CSV</a></li>
+      </ul>
+    </nav>
+
+    <section id="one-print" class="mt-10 scroll-mt-20">
+      <h2 class="type-h2">Add one print</h2>
+      <ol class="mt-4 space-y-6">
+        <.step n={1} title="Open the form">
+          <p>
+            On the <.link navigate={~p"/admin/prints"} class="link">Prints</.link>
+            page, choose <strong>Add a print</strong>.
+          </p>
+        </.step>
+        <.step n={2} title="Add the photos">
+          <p>
+            Under <strong>Main image</strong>, choose <strong>Choose image</strong>
+            and pick a photo (JPG, PNG or WebP, up to 20 MB). On a phone you can take the photo
+            there and then.
+          </p>
+          <p>
+            Optionally add a <strong>Larger image</strong>, which visitors can open to see more
+            detail, and <strong>Extra views</strong> such as other sheets, states or close-ups.
+          </p>
+          <p>No photo yet? Carry on: the print will be saved as a draft.</p>
+        </.step>
+        <.step n={3} title="Fill in the details">
+          <p>
+            <strong>Category</strong>, <strong>Artist</strong>
+            and <strong>Title</strong>
+            are required. Write the artist as on the rest of the site, surname first in capitals: <em>LEDUC, Ozias</em>. The other prints by the same artist are found this way.
+          </p>
+          <p>
+            Write the <strong>Price</strong>
+            with its currency, such as <em>$1,500 USD</em>, or leave it blank to show "On request".
+            Write the <strong>Size</strong>
+            as <em>206 × 160mm</em>. Set the <strong>Nationality</strong>
+            so the print appears under the nationality buttons.
+          </p>
+          <p>
+            <strong>Additional notes</strong>
+            are shown in italics below the details; leave a blank line between paragraphs.
+            <strong>Catalogue details</strong>
+            are kept for reference and not shown on the site.
+          </p>
+          <p>
+            Leave <strong>Web address</strong> blank: it is made from the artist and title.
+          </p>
+        </.step>
+        <.step n={4} title="Choose the status">
+          <p>
+            <strong>Available</strong>
+            puts the print on the site straight away. <strong>Sold</strong>
+            and <strong>Reserved</strong>
+            show it with a badge instead of a price. <strong>Draft</strong>
+            keeps it hidden.
+          </p>
+        </.step>
+        <.step n={5} title="Save">
+          <p>
+            Choose <strong>Save print</strong>. You are taken back to the list, with a message
+            saying the print was added, or added as a draft.
+          </p>
+        </.step>
+      </ol>
+    </section>
+
+    <section id="drafts" class="mt-12 scroll-mt-20">
+      <h2 class="type-h2">Drafts</h2>
+      <p class="mt-4">
+        A draft is a print that is still being prepared. It is saved with everything else, but
+        visitors cannot see it anywhere: not in the print lists, the search, the home page, or at
+        its own web address. In the admin list it shows <strong>Draft</strong>
+        and "Not on the site".
+      </p>
+
+      <div class="mt-6 space-y-4">
+        <.callout id="drafts-automatic" title="A print with no image is a draft" icon="hero-photo">
+          <p>
+            Every print on the site needs its main image. So a print you add without one is <strong>automatically saved as a draft</strong>:
+          </p>
+          <ul class="list-disc space-y-1 pl-5">
+            <li>with <strong>Add a print</strong>, when you save with no main image;</li>
+            <li>from a CSV, for each row with no image and no status.</li>
+          </ul>
+          <p>
+            If you choose Sold or Reserved for a print with no image, it is not saved; you are
+            asked to add an image or save it as a draft.
+          </p>
+        </.callout>
+
+        <.callout id="drafts-publish" title="Put a draft on the site" icon="hero-eye">
+          <p>A draft only appears on the site once it is out of draft:</p>
+          <ol class="list-decimal space-y-1 pl-5">
+            <li>
+              Open it from the list (filter <strong>Status</strong>
+              by <strong>Draft</strong>
+              to find it) and choose <strong>Edit</strong>.
+            </li>
+            <li>Add its <strong>Main image</strong> if it has none.</li>
+            <li>
+              Change <strong>Status</strong>
+              to <strong>Available</strong>
+              (or Sold or Reserved) and choose <strong>Save print</strong>.
+            </li>
+          </ol>
+          <p>
+            Once it has an image you can also change the status straight from the list. A draft
+            without an image cannot be made available: the list says it needs an image first.
+          </p>
+        </.callout>
+      </div>
+
+      <p class="mt-6">
+        You can also make any print a draft on purpose, to take it off the site for a while
+        without deleting it.
+      </p>
+    </section>
+
+    <section id="csv" class="mt-12 scroll-mt-20">
+      <h2 class="type-h2">Add many from a CSV</h2>
+      <ol class="mt-4 space-y-6">
+        <.step n={1} title="Download the current list">
+          <p>
+            On the Prints page choose <strong>Download CSV</strong>. Open the file in Excel,
+            Numbers or Google Sheets. Its columns are the fields of the form, and it is the
+            easiest template to follow.
+          </p>
+        </.step>
+        <.step n={2} title="Add a row for each new print">
+          <p>
+            Fill in at least <strong>category</strong>
+            (<em>old-masters</em>, <em>modern</em>
+            or <em>canadian</em>), <strong>artist</strong>
+            and <strong>title</strong>. Leave <strong>slug</strong>
+            blank to have the web address made for you.
+          </p>
+          <p>
+            <strong>status</strong>
+            can be available, sold, reserved or draft. Left blank, the print is available, or a
+            draft if it has no image. <strong>nationality</strong>
+            uses the keys dutch_flemish, italian, german, french, british, canadian or other.
+          </p>
+          <p>
+            The <strong>image</strong>
+            column can only name a photo already on the site. For new photos, leave it blank: the
+            print comes in as a draft, and you add the photo afterwards with <strong>Edit</strong>.
+          </p>
+        </.step>
+        <.step n={3} title="Upload it">
+          <p>
+            Save as CSV (UTF-8 if asked). Under <strong>Add prints from a CSV</strong>, choose the
+            file, then <strong>Import</strong>.
+          </p>
+          <p>
+            Rows already in the catalogue (the same slug) are skipped, so you can upload the whole
+            downloaded file with your new rows added. Nothing already there is changed.
+          </p>
+        </.step>
+        <.step n={4} title="Fix any problems">
+          <p>
+            If any row has a problem, <strong>nothing is added</strong>, and the rows to fix are
+            listed by row number (the header is row 1). Correct them and upload again.
+          </p>
+        </.step>
+      </ol>
+    </section>
+
+    <p class="mt-12 border-t border-base-300 pt-6 text-sm">
+      Next: <.link navigate={~p"/admin/guides/editing-prints"} class="link">Editing prints</.link>
+    </p>
+  </article>
+</Layouts.app>

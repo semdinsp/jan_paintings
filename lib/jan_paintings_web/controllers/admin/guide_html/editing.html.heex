@@ -1,0 +1,148 @@
+<Layouts.app flash={@flash} current_scope={@current_scope}>
+  <.back />
+
+  <article class="mt-4 max-w-[68ch]">
+    <header class="flex items-center gap-5 border-b border-base-300 pb-6">
+      <.guide_icon guide={:editing} class="size-20 shrink-0" />
+      <div>
+        <p class="text-xs uppercase tracking-[0.2em] text-base-content/60">Guide</p>
+        <h1 class="mt-1 font-serif text-3xl">Editing prints</h1>
+      </div>
+    </header>
+
+    <nav aria-label="On this page" class="mt-6 text-sm">
+      <ul class="flex flex-wrap gap-x-6 gap-y-1">
+        <li><a href="#find" class="link">Find a print</a></li>
+        <li><a href="#status" class="link">Sold, reserved and drafts</a></li>
+        <li><a href="#details" class="link">Change the details</a></li>
+        <li><a href="#photos" class="link">Change the photos</a></li>
+        <li><a href="#delete" class="link">Delete a print</a></li>
+      </ul>
+    </nav>
+
+    <section id="find" class="mt-10 scroll-mt-20">
+      <h2 class="type-h2">Find a print</h2>
+      <p class="mt-4">
+        The <.link navigate={~p"/admin/prints"} class="link">Prints</.link>
+        page lists every print, drafts included. Type part of the artist or title in the search
+        box, or narrow the list by <strong>category</strong>
+        and <strong>status</strong>. Choose the print's title or <strong>Edit</strong>
+        to open it; <strong>View</strong>
+        opens its page on the site in a new tab.
+      </p>
+    </section>
+
+    <section id="status" class="mt-12 scroll-mt-20">
+      <h2 class="type-h2">Sold, reserved and drafts</h2>
+      <p class="mt-4">
+        Change a print's status from the menu beside it in the list. It saves at once; no need to
+        open the print.
+      </p>
+      <dl class="mt-4 space-y-3">
+        <div>
+          <dt class="font-semibold">Available</dt>
+          <dd class="text-ink-2">On the site with its price and an enquiry button.</dd>
+        </div>
+        <div>
+          <dt class="font-semibold">Sold</dt>
+          <dd class="text-ink-2">
+            Still on the site, marked Sold instead of a price, and the button asks about similar
+            prints.
+          </dd>
+        </div>
+        <div>
+          <dt class="font-semibold">Reserved</dt>
+          <dd class="text-ink-2">On the site, marked Reserved instead of a price.</dd>
+        </div>
+        <div>
+          <dt class="font-semibold">Draft</dt>
+          <dd class="text-ink-2">
+            Hidden from the site. A draft needs its main image before it can go back on; see <.link
+              navigate={~p"/admin/guides/adding-prints#drafts"}
+              class="link"
+            >Drafts</.link>.
+          </dd>
+        </div>
+      </dl>
+    </section>
+
+    <section id="details" class="mt-12 scroll-mt-20">
+      <h2 class="type-h2">Change the details</h2>
+      <ol class="mt-4 space-y-6">
+        <.step n={1} title="Open the print">
+          <p>Choose <strong>Edit</strong> beside it in the list.</p>
+        </.step>
+        <.step n={2} title="Make your changes">
+          <p>
+            Every field can be changed. The hints under <strong>Price</strong>
+            and <strong>Size</strong>
+            show how the site has read them; if one turns red, write it like the example
+            (<em>$1,500 USD</em>, <em>206 × 160mm</em>).
+          </p>
+          <p>
+            In <strong>Additional notes</strong>, leave a blank line between paragraphs.
+          </p>
+        </.step>
+        <.step n={3} title="Save">
+          <p>
+            Choose <strong>Save print</strong>. <strong>Cancel</strong>
+            leaves without saving. Use <strong>View on the site</strong>
+            at the top to check the result.
+          </p>
+        </.step>
+      </ol>
+
+      <div class="mt-6">
+        <.callout title="Leave the web address alone" icon="hero-link">
+          <p>
+            Changing <strong>Web address</strong>
+            breaks links to the print from Google, emails and bookmarks. Change it only to fix a
+            mistake in a print added recently.
+          </p>
+        </.callout>
+      </div>
+    </section>
+
+    <section id="photos" class="mt-12 scroll-mt-20">
+      <h2 class="type-h2">Change the photos</h2>
+      <ul class="mt-4 list-disc space-y-2 pl-5 text-ink-2">
+        <li>
+          <strong class="text-ink">Main image:</strong>
+          choose <strong>Replace image</strong>
+          and pick the new photo. Every print on the site must keep a main image.
+        </li>
+        <li>
+          <strong class="text-ink">Larger image:</strong>
+          replace it the same way, or remove it with the × on its corner.
+        </li>
+        <li>
+          <strong class="text-ink">Extra views:</strong>
+          <strong>Add views</strong> adds more; the × on a view removes it.
+        </li>
+      </ul>
+      <p class="mt-4">Photo changes are kept only when you choose <strong>Save print</strong>.</p>
+    </section>
+
+    <section id="delete" class="mt-12 scroll-mt-20">
+      <h2 class="type-h2">Delete a print</h2>
+      <p class="mt-4">
+        Open the print and choose <strong>Delete print</strong>
+        at the bottom, then confirm. This cannot be undone.
+      </p>
+      <div class="mt-6">
+        <.callout title="Usually better: Sold or Draft" icon="hero-light-bulb">
+          <p>
+            A sold print still brings visitors to the site and shows the kind of stock you carry,
+            so marking it <strong>Sold</strong>
+            is usually better than deleting it. To hide a print but keep its record, make it a <strong>Draft</strong>.
+          </p>
+        </.callout>
+      </div>
+    </section>
+
+    <p class="mt-12 border-t border-base-300 pt-6 text-sm">
+      See also:
+      <.link navigate={~p"/admin/guides/adding-prints"} class="link">Adding prints</.link>
+    </p>
+  </article>
+</Layouts.app>

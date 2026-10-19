@@ -50,15 +50,27 @@ defmodule JanPaintings.Catalog do
     image_url(category.banner)
   end
 
-  @doc "All prints, grouped by category in menu order, then by artist and title."
-  def list_prints, do: Print |> Repo.all() |> sort()
+  @doc """
+  The prints on the public site, grouped by category in menu order, then by
+  artist and title. Drafts are left out; `list_all_prints/0` includes them.
+  """
+  def list_prints, do: published() |> Repo.all() |> sort()
 
-  @doc "Prints in one category, by artist and title."
+  @doc "Prints on the public site in one category, by artist and title."
   def list_prints(category_slug) do
-    from(p in Print, where: p.category == ^category_slug) |> Repo.all() |> sort()
+    from(p in published(), where: p.category == ^category_slug) |> Repo.all() |> sort()
   end
 
+  @doc "Every print, drafts included, for the admin pages."
+  def list_all_prints, do: Print |> Repo.all() |> sort()
+
+  @doc "A print by slug, whatever its status."
   def get_print(slug), do: Repo.get_by(Print, slug: slug)
+
+  @doc "A print by slug, or nil when there is none or it is a draft."
+  def get_public_print(slug), do: Repo.get_by(published(), slug: slug)
+
+  defp published, do: from(p in Print, where: p.status != "draft")
 
   @doc """
   Keeps the prints whose artist has the given nationality key, such as
@@ -91,7 +103,7 @@ defmodule JanPaintings.Catalog do
     print |> change_print(attrs) |> Repo.update()
   end
 
-  @doc "Sets a print's status: \"available\", \"sold\" or \"reserved\"."
+  @doc "Sets a print's status: \"available\", \"sold\", \"reserved\" or \"draft\"."
   def set_status(%Print{} = print, status) do
     update_print(print, %{"status" => status})
   end

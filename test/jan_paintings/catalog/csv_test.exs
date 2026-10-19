@@ -105,6 +105,16 @@ defmodule JanPaintings.Catalog.CSVTest do
     refute Catalog.get_print("doe-a-new-etching")
   end
 
+  test "a row with no image becomes a draft unless it gives a status" do
+    no_image = new_print(%{"image" => ""})
+
+    assert {:error, [{2, message}]} = CSV.import(csv([row(Map.put(no_image, "status", "sold"))]))
+    assert message =~ "add an image"
+
+    assert {:ok, %{created: [draft]}} = CSV.import(csv([row(no_image)]))
+    assert {draft.status, draft.image} == {"draft", ""}
+  end
+
   test "refuses unknown columns" do
     assert {:error, [{1, message}]} = CSV.import("title,colour\r\nX,red\r\n")
     assert message =~ "colour"
