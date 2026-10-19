@@ -77,10 +77,10 @@
 
     <div class="min-w-0 md:col-span-5">
       <.status_badge status={@print.status} class="mb-1" />
-      <p class="type-artist">
+      <p class="type-artist print-detail-artist">
         {@print.artist}<span :if={@print.dates != ""}> ({@print.dates})</span>
       </p>
-      <h1 class="type-h1 mt-2">{@print.title}</h1>
+      <h1 class="type-h1 print-detail-title mt-2">{@print.title}</h1>
       <p :if={@print.medium != ""} class="mt-2 text-ink-2">{@print.medium}</p>
       <p :if={@print.details != ""} class="mt-6 max-w-[68ch]">{@print.details}</p>
 

@@ -95,6 +95,9 @@ defmodule JanPaintingsWeb.PrintControllerTest do
     print = hd(Catalog.list_prints("old-masters"))
     html = conn |> get(~p"/prints/old-masters/#{print.slug}") |> html_response(200)
     assert html =~ Phoenix.HTML.html_escape(print.title) |> Phoenix.HTML.safe_to_string()
+    # A slightly smaller title and larger artist line than on other pages.
+    assert html =~ ~r/<h1[^>]*class="type-h1 print-detail-title/
+    assert html =~ ~r/<p[^>]*class="type-artist print-detail-artist"/
   end
 
   test "shows the print description", %{conn: conn} do
