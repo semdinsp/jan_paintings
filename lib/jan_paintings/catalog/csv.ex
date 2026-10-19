@@ -10,6 +10,8 @@ defmodule JanPaintings.Catalog.CSV do
 
   An import only adds prints. A row whose slug is already in the catalogue is
   skipped, so an exported file with new rows added can be uploaded as it is.
+  A row with no status is added as available, or as a draft (hidden from the
+  site) when it has no image.
   Either every new row is created or, if any row has a problem, none is.
   """
   alias JanPaintings.Catalog
@@ -44,7 +46,7 @@ defmodule JanPaintings.Catalog.CSV do
   """
   def import(csv) when is_binary(csv) do
     with {:ok, rows} <- parse(csv) do
-      existing = MapSet.new(Catalog.list_prints(), & &1.slug)
+      existing = MapSet.new(Catalog.list_all_prints(), & &1.slug)
       {skipped, new} = Enum.split_with(rows, fn {_n, attrs} -> attrs["slug"] in existing end)
 
       case create_all(new) do
@@ -91,7 +93,20 @@ defmodule JanPaintings.Catalog.CSV do
     |> Enum.zip(row)
     |> Map.new(fn {column, value} -> {column, String.trim(value)} end)
     |> Map.update("gallery", [], &split_gallery/1)
-    |> Map.update("status", "available", &if(&1 == "", do: "available", else: &1))
+    |> default_status()
+  end
+
+  # A row with no status is available, or a draft while it has no image.
+  defp default_status(attrs) do
+    if Map.get(attrs, "status", "") == "" do
+      Map.put(
+        attrs,
+        "status",
+        if(Map.get(attrs, "image", "") == "", do: "draft", else: "available")
+      )
+    else
+      attrs
+    end
   end
 
   defp split_gallery(value),
@@ -101,7 +116,8 @@ defmodule JanPaintings.Catalog.CSV do
   # by another row of the file, so a problem never leaves a half-done import.
   defp create_all(rows) do
     {checked, _slugs} =
-      Enum.map_reduce(rows, MapSet.new(Catalog.list_prints(), & &1.slug), fn {n, attrs}, slugs ->
+      Enum.map_reduce(rows, MapSet.new(Catalog.list_all_prints(), & &1.slug), fn {n, attrs},
+                                                                                 slugs ->
         changeset = Catalog.change_print(%Print{}, attrs)
         slug = Ecto.Changeset.get_field(changeset, :slug)
 

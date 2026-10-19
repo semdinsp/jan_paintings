@@ -48,8 +48,10 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Index do
         </button>
         <p class="basis-full text-xs text-base-content/60">
           Use the columns of the downloaded CSV. Rows whose slug is already in the catalogue are
-          skipped, so you can add rows to a download and upload it. Images must already be on the
-          site (an /images/… or /uploads/… path). If any row has a problem, nothing is added.
+          skipped, so you can add rows to a download and upload it. A row with no image is added
+          as a draft, hidden from the site until you add its image and change its status. Images
+          given must already be on the site (an /images/… or /uploads/… path). If any row has a
+          problem, nothing is added.
         </p>
         <p :for={err <- upload_errors(@uploads.csv)} class="basis-full text-error">
           {upload_error_message(err)}
@@ -152,12 +154,14 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Index do
               Edit
             </.link>
             <.link
+              :if={print.status != "draft"}
               href={~p"/prints/#{print.category}/#{print.slug}"}
               target="_blank"
               class="text-base-content/60 hover:underline"
             >
               View
             </.link>
+            <span :if={print.status == "draft"} class="text-base-content/60">Not on the site</span>
           </div>
         </li>
       </ul>
@@ -223,14 +227,19 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Index do
          |> put_flash(:info, "#{print.title} is now #{print.status}.")
          |> load_prints()}
 
-      {:error, _changeset} ->
-        {:noreply, put_flash(socket, :error, "Could not change the status.")}
+      {:error, changeset} ->
+        message =
+          if Keyword.has_key?(changeset.errors, :image),
+            do: "#{print.title} needs an image before it can go on the site.",
+            else: "Could not change the status."
+
+        {:noreply, socket |> put_flash(:error, message) |> load_prints()}
     end
   end
 
   defp load_prints(socket) do
     %{filters: filters} = socket.assigns
-    all = Catalog.list_prints()
+    all = Catalog.list_all_prints()
 
     prints =
       all
@@ -263,5 +272,6 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Index do
 
   defp status_class("sold"), do: "select-primary"
   defp status_class("reserved"), do: "select-secondary"
+  defp status_class("draft"), do: "select-warning"
   defp status_class(_), do: nil
 end

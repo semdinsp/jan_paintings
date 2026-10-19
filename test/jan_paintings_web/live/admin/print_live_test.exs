@@ -105,6 +105,17 @@ defmodule JanPaintingsWeb.Admin.PrintLiveTest do
       assert html =~ "180 of 180 prints"
     end
 
+    test "adds rows without an image as drafts", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/admin/prints")
+      csv = "category,artist,title\r\nmodern,\"DOE, Jane\",Coming Soon\r\n"
+
+      render_upload(csv_upload(view, csv), "prints.csv")
+      assert view |> form("#csv-import") |> render_submit() =~ "Added 1 print."
+
+      draft = Catalog.get_print("doe-coming-soon")
+      assert {draft.status, draft.image} == {"draft", ""}
+    end
+
     test "refuses files that are not CSV", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/admin/prints")
 
@@ -149,6 +160,30 @@ defmodule JanPaintingsWeb.Admin.PrintLiveTest do
 
       public = conn |> get(~p"/prints/canadian/#{print.slug}") |> html_response(200)
       assert public =~ "Sold"
+    end
+
+    test "lists drafts, and asks for an image before one goes on the site", %{conn: conn} do
+      {:ok, draft} =
+        Catalog.create_print(%{
+          "category" => "modern",
+          "artist" => "DOE, Jane",
+          "title" => "Work in Progress",
+          "status" => "draft"
+        })
+
+      {:ok, view, html} = live(conn, ~p"/admin/prints?status=draft")
+      assert html =~ "Work in Progress"
+      assert html =~ "1 of 181 prints"
+      assert has_element?(view, "#admin-print-#{draft.id}", "Not on the site")
+      refute has_element?(view, "#admin-print-#{draft.id} a", "View")
+
+      html =
+        view
+        |> element("#status-#{draft.id}")
+        |> render_change(%{"print_id" => draft.id, "status" => "available"})
+
+      assert html =~ "Work in Progress needs an image before it can go on the site."
+      assert Catalog.get_print(draft.slug).status == "draft"
     end
   end
 
