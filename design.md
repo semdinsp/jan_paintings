@@ -121,7 +121,7 @@ Use `text-wrap: pretty` on paragraphs and `text-wrap: balance` on headings.
   | Tile | Links to | Image |
   |---|---|---|
   | Old Master Prints | /prints/old-masters | Dürer, *St George Slaying the Dragon* |
-  | Modern Prints | /prints/modern | Chahine, *Invitation après la parade* |
+  | Modern Prints | /prints/modern | Chahine, *Invitation après la parade* (`chahine-edgar-invitation-tile.jpg`, a copy with the paper margin cropped off the top and sides) |
   | Canadian Prints | /prints/canadian | Hornyansky, *Anxiety, People on the Shore* |
 
   - Layout: centred flex-wrap, 24px gap. Three in a row from `sm`, one per row on phones.
