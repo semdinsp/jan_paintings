@@ -41,7 +41,7 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Form do
         class="mt-8 grid gap-10 lg:grid-cols-[1fr_20rem]"
       >
         <div class="space-y-2">
-          <div class="grid gap-x-4 sm:grid-cols-2">
+          <div class="grid gap-x-4 sm:grid-cols-3">
             <.input
               field={@form[:category]}
               type="select"
@@ -54,6 +54,13 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Form do
               type="select"
               label="Status"
               options={Enum.map(Print.statuses(), &{String.capitalize(&1), &1})}
+            />
+            <.input
+              field={@form[:nationality]}
+              type="select"
+              label="Nationality"
+              prompt="Not set"
+              options={Enum.map(Print.nationalities(), fn {key, label} -> {label, key} end)}
             />
           </div>
           <div class="grid gap-x-4 sm:grid-cols-[2fr_1fr]">

@@ -2,6 +2,7 @@ defmodule JanPaintings.CatalogTest do
   use JanPaintings.DataCase, async: true
 
   alias JanPaintings.Catalog
+  alias JanPaintings.Catalog.Print
 
   # Distinct prints on the original janjohnsonprints.com site, including those
   # reachable only through its "more by this artist" pages.
@@ -191,6 +192,27 @@ defmodule JanPaintings.CatalogTest do
 
       assert {print.price_amount, print.price_currency, print.height_mm, print.width_mm} ==
                {nil, nil, nil, nil}
+    end
+
+    test "nationality starts unset and takes only the listed values" do
+      assert {:ok, print} = Catalog.create_print(@valid)
+      assert print.nationality == ""
+      assert Print.nationality_label(print.nationality) == ""
+
+      assert {:ok, print} = Catalog.update_print(print, %{"nationality" => "dutch_flemish"})
+      assert Catalog.get_print(print.slug).nationality == "dutch_flemish"
+      assert Print.nationality_label("dutch_flemish") == "Dutch/Flemish"
+
+      assert {:ok, print} = Catalog.update_print(print, %{"nationality" => ""})
+      assert print.nationality == ""
+
+      assert {:error, changeset} = Catalog.update_print(print, %{"nationality" => "martian"})
+      assert %{nationality: ["is invalid"]} = errors_on(changeset)
+    end
+
+    test "nationalities/0 lists the seven choices in order" do
+      assert Enum.map(Print.nationalities(), &elem(&1, 1)) ==
+               ~w(Dutch/Flemish Italian German French British Canadian Other)
     end
 
     test "create_print/1 validates the required fields, category and status" do
