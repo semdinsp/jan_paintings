@@ -92,13 +92,13 @@
           do: "Enquire about this print",
           else: "Ask about similar prints"}
       </.link>
-      <a
+      <.link
         :if={@more_by_artist != []}
-        href="#more-by-artist"
-        class="link-more mt-6 block"
+        navigate={~p"/prints?#{[q: JanPaintings.Catalog.artist_query(@print)]}"}
+        class="btn btn-secondary-rose mt-3 flex w-full sm:w-fit"
       >
-        More by this artist ({length(@more_by_artist)})
-      </a>
+        More by this artist
+      </.link>
     </div>
   </div>
 

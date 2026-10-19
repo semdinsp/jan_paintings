@@ -137,9 +137,23 @@ defmodule JanPaintingsWeb.PrintControllerTest do
       |> get(~p"/prints/canadian/neilson-dredging-the-st-charles-river")
       |> html_response(200)
 
-    assert html =~ "More by this artist (3)"
     assert html =~ ~s(id="more-by-artist")
+    assert html =~ ~r{href="/prints\?q=NEILSON[^"]*"[^>]*>\s*More by this artist}
     assert html =~ ~s(href="/prints/canadian/neilson-timber-ship-quebec")
+  end
+
+  test "the More by this artist button opens a search listing the artist's prints", %{conn: conn} do
+    html =
+      conn
+      |> get(~p"/prints/canadian/neilson-dredging-the-st-charles-river")
+      |> html_response(200)
+
+    [_, href] = Regex.run(~r{href="(/prints\?q=[^"]*)"[^>]*>\s*More by this artist}, html)
+    results = conn |> get(href) |> html_response(200)
+
+    assert results =~ ~s(href="/prints/canadian/neilson-dredging-the-st-charles-river")
+    assert results =~ ~s(href="/prints/canadian/neilson-timber-ship-quebec")
+    assert results =~ "4 prints matching"
   end
 
   test "omits the section when the artist has no other prints", %{conn: conn} do

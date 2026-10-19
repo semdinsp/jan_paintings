@@ -86,12 +86,12 @@ Use `text-wrap: pretty` on paragraphs and `text-wrap: balance` on headings.
 
 ### Links
 - Inline links: `--rose`, underline with `text-underline-offset: 3px`, `text-decoration-thickness: 1px`. Hover: `--rose-2`, thickness 2px.
-- "More" links ("← Old Master Prints", "More by this artist"): `--rose`, 15px/600, no underline by default, underline on hover. Arrow is a text character.
+- "More" links ("← Old Master Prints"): `--rose`, 15px/600, no underline by default, underline on hover. Arrow is a text character.
 - On `--dusk`, links are `--ink` with the same underline.
 
 ### Buttons
 - **Primary** ("Enquire about this print", "Send message"): background `--rose`, white text, 15px/600, padding 12px 20px, radius 2px. Hover `--rose-2`.
-- **Secondary**: transparent, 1px `--rose` border, `--rose` text. Hover: `--rose-tint` background.
+- **Secondary** ("More by this artist" on a print page, under the enquiry button; opens /prints searched by the artist's surname and first given name): transparent, 1px `--rose` border, `--rose` text. Hover: `--rose-tint` background.
 - Focus (all interactive): 2px `--rose` outline, 2px offset.
 - Minimum hit area 44px tall.
 
