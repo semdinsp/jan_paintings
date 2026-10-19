@@ -74,14 +74,14 @@ Use `text-wrap: pretty` on paragraphs and `text-wrap: balance` on headings.
 - Logo left: `jan-johnson-logo-ink.png` (transparent ink, inverted in dark mode). Height 64px phone, 80px tablet, 120px from `md`.
 - Beham triton engraving (`beham-triton.jpg`) right-aligned, the same height as the logo (80px `sm`, 120px `md`). Hidden on phones.
 - Admin and account links sit between logo and triton, in `--ink`.
-- No phone number in the header; it is on the Contact page and in the footer.
+- No phone number in the header; it is in the contact section of the About page and in the footer.
 
 ### Menu bar
 - Sits inside the 1200px container (not full-bleed), background `--paper`, sticky at the top on scroll.
 - A 3px `--gold` rule along the bottom only (no top rule). Height 48px.
 - Items: `--ink`, 15px/500, 28px gap; full bar height as hit area. Hover: text `--rose`.
 - Active page: text `--rose`, weight 600, 2px `--rose` bottom border.
-- Order: All Prints · Old Master Prints · Modern Prints · Canadian Prints on the left; About · Contact right-aligned.
+- Order: All Prints · Old Master Prints · Modern Prints · Canadian Prints on the left; About Us right-aligned (the contact details and form are on the About page, linked from print enquiry buttons and the "ask us" note on listings).
 - Mobile (< 768px): "Menu" + hamburger; opens a `--paper` drawer with stacked 48px rows separated by `--rule` hairlines, active row in rose.
 
 ### Links
@@ -152,7 +152,7 @@ Use `text-wrap: pretty` on paragraphs and `text-wrap: balance` on headings.
 
 ### Footer
 - Full-width `--dusk` band, 48px vertical padding, `--ink` text, 15px.
-- Columns: business name + address; email and phone links; a log-in icon (`hero-arrow-right-end-on-rectangle`, arrow pointing in, "Log in" as its title and screen-reader text) and the theme toggle. One column on phones, two on tablets (the third group wraps below), three from `lg` with the third right-aligned.
+- Columns: business name + address; email and phone links, then a "Contact us" link to the form on the About page; a log-in icon (`hero-arrow-right-end-on-rectangle`, arrow pointing in, "Log in" as its title and screen-reader text) and the theme toggle. One column on phones, two on tablets (the third group wraps below), three from `lg` with the third right-aligned.
 
 ### Favicon
 - The triton's head from the header engraving in a round medallion on a `--dusk` square.
