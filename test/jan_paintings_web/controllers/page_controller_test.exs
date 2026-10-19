@@ -61,6 +61,13 @@ defmodule JanPaintingsWeb.PageControllerTest do
     assert html =~ "International Fine Print Dealers"
     assert html =~ ~s(href="/about#contact")
     assert html =~ ~s(src="/images/jan-johnson.jpg")
+    # Shown at every screen size, not only beside the text on wide screens.
+    [figure_class] =
+      Regex.run(~r/<figure[^>]*id="about-portrait"[^>]*class="([^"]*)"/, html,
+        capture: :all_but_first
+      )
+
+    refute figure_class =~ ~r/(^|\s)hidden(\s|$)/
     assert html =~ ~r{property="og:image" content="[^"]*/images/jan-johnson.jpg"}
   end
 end
