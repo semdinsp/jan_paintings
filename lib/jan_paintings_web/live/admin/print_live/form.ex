@@ -146,6 +146,12 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Form do
             current={@print.image}
             errors={@form[:image].errors}
           />
+          <p
+            :if={@live_action == :new and @uploads.image.entries == []}
+            class="-mt-6 text-xs text-base-content/60"
+          >
+            No image yet? Save anyway: the print is kept as a draft, hidden from the site.
+          </p>
           <.image_field
             label="Larger image (optional)"
             upload={@uploads.large_image}
@@ -363,10 +369,13 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Form do
 
   @impl true
   def handle_event("validate", %{"print" => params}, socket) do
+    params = with_pending_image(params, socket)
+
     changeset =
       socket.assigns.print
-      |> Catalog.change_print(with_pending_image(params, socket))
+      |> Catalog.change_print(params)
       |> Map.put(:action, :validate)
+      |> allow_draft_without_image(socket.assigns.live_action, params)
 
     {:noreply, assign_form(socket, changeset)}
   end
@@ -399,9 +408,19 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Form do
   end
 
   defp save(socket, :new, params) do
-    case Catalog.create_print(params) do
-      {:ok, print} -> saved(socket, print, "Added #{print.title}.")
-      {:error, changeset} -> {:noreply, assign_form(socket, changeset)}
+    case params |> draft_if_no_image() |> Catalog.create_print() do
+      {:ok, %{status: "draft", image: ""} = print} ->
+        saved(
+          socket,
+          print,
+          "Added #{print.title} as a draft. Add an image and choose a status to put it on the site."
+        )
+
+      {:ok, print} ->
+        saved(socket, print, "Added #{print.title}.")
+
+      {:error, changeset} ->
+        {:noreply, assign_form(socket, changeset)}
     end
   end
 
@@ -418,6 +437,27 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Form do
      |> put_flash(:info, message)
      |> push_navigate(to: ~p"/admin/prints")}
   end
+
+  # A new print saved without an image and left as Available is kept as a
+  # draft, hidden from the site until it has an image.
+  defp draft_if_no_image(params) do
+    if params["image"] in [nil, ""] and params["status"] in [nil, "", "available"],
+      do: Map.put(params, "status", "draft"),
+      else: params
+  end
+
+  # So while adding a print, a missing image is not shown as an error unless
+  # another status was chosen.
+  defp allow_draft_without_image(changeset, :new, params) do
+    if draft_if_no_image(params) != params do
+      errors = Keyword.delete(changeset.errors, :image)
+      %{changeset | errors: errors, valid?: errors == []}
+    else
+      changeset
+    end
+  end
+
+  defp allow_draft_without_image(changeset, _action, _params), do: changeset
 
   # While a new image is uploading the print has no image path yet; use a
   # placeholder so validation doesn't complain that the image is missing.

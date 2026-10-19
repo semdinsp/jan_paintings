@@ -237,17 +237,31 @@ defmodule JanPaintingsWeb.Admin.PrintLiveTest do
       assert html =~ print.image
     end
 
-    test "requires an image", %{conn: conn} do
+    test "keeps a print saved without an image as a draft", %{conn: conn} do
+      {:ok, view, html} = live(conn, ~p"/admin/prints/new")
+      assert html =~ "No image yet? Save anyway"
+
+      fields = %{category: "canadian", artist: "LEDUC, Ozias", title: "Neige"}
+      refute view |> form("#print-form", print: fields) |> render_change() =~ "add an image"
+
+      {:ok, _view, html} =
+        view |> form("#print-form", print: fields) |> render_submit() |> follow_redirect(conn)
+
+      assert html =~ "Added Neige as a draft."
+      assert %{status: "draft", image: ""} = Catalog.get_print("leduc-neige")
+    end
+
+    test "needs an image for a new print given another status", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/admin/prints/new")
 
       html =
         view
         |> form("#print-form",
-          print: %{category: "canadian", artist: "LEDUC, Ozias", title: "Neige"}
+          print: %{category: "canadian", artist: "LEDUC, Ozias", title: "Neige", status: "sold"}
         )
         |> render_submit()
 
-      assert html =~ "add an image"
+      assert html =~ "add an image, or save the print as a draft"
       refute Catalog.get_print("leduc-neige")
     end
   end
