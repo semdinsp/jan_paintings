@@ -75,6 +75,8 @@ defmodule JanPaintingsWeb.Router do
   scope "/admin", JanPaintingsWeb.Admin do
     pipe_through [:browser, :require_authenticated_user, :require_admin_user]
 
+    get "/prints/export.csv", PrintCSVController, :export
+
     live_session :admin, on_mount: [{JanPaintingsWeb.UserAuth, :require_admin}] do
       live "/prints", PrintLive.Index, :index
       live "/prints/new", PrintLive.Form, :new

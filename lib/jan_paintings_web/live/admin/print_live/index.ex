@@ -1,5 +1,8 @@
 defmodule JanPaintingsWeb.Admin.PrintLive.Index do
-  @moduledoc "Admin list of all prints, with filters and a quick status change."
+  @moduledoc """
+  Admin list of all prints, with filters, a quick status change, and CSV
+  download and import (see `JanPaintings.Catalog.CSV`).
+  """
   use JanPaintingsWeb, :live_view
 
   alias JanPaintings.Catalog
@@ -17,9 +20,53 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Index do
             {length(@prints)} of {@total} prints
           </p>
         </div>
-        <.link navigate={~p"/admin/prints/new"} class="btn btn-primary">
-          <.icon name="hero-plus" class="size-4" /> Add a print
-        </.link>
+        <div class="flex flex-wrap gap-2">
+          <.link href={~p"/admin/prints/export.csv"} class="btn btn-ghost" download>
+            <.icon name="hero-arrow-down-tray" class="size-4" /> Download CSV
+          </.link>
+          <.link navigate={~p"/admin/prints/new"} class="btn btn-primary">
+            <.icon name="hero-plus" class="size-4" /> Add a print
+          </.link>
+        </div>
+      </div>
+
+      <form
+        id="csv-import"
+        phx-change="validate_csv"
+        phx-submit="import_csv"
+        class="mt-6 flex flex-wrap items-center gap-3 rounded-box border border-base-300 p-4 text-sm"
+      >
+        <label class="font-medium" for={@uploads.csv.ref}>Add prints from a CSV</label>
+        <.live_file_input upload={@uploads.csv} class="file-input file-input-sm max-w-xs" />
+        <button
+          type="submit"
+          class="btn btn-sm btn-primary"
+          disabled={@uploads.csv.entries == []}
+          phx-disable-with="Importing…"
+        >
+          Import
+        </button>
+        <p class="basis-full text-xs text-base-content/60">
+          Use the columns of the downloaded CSV. Rows whose slug is already in the catalogue are
+          skipped, so you can add rows to a download and upload it. Images must already be on the
+          site (an /images/… or /uploads/… path). If any row has a problem, nothing is added.
+        </p>
+        <p :for={err <- upload_errors(@uploads.csv)} class="basis-full text-error">
+          {upload_error_message(err)}
+        </p>
+      </form>
+
+      <div
+        :if={@import_problems != []}
+        id="csv-import-problems"
+        class="alert alert-error mt-4 block text-sm"
+      >
+        <p class="font-medium">Nothing was imported. Fix these rows and upload again:</p>
+        <ul class="mt-2 list-disc pl-5">
+          <li :for={{row, message} <- @import_problems}>
+            {if row > 0, do: "Row #{row}: "}{message}
+          </li>
+        </ul>
       </div>
 
       <.form
@@ -120,7 +167,14 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, page_title: "Admin · Prints", categories: Catalog.categories())}
+    {:ok,
+     socket
+     |> assign(
+       page_title: "Admin · Prints",
+       categories: Catalog.categories(),
+       import_problems: []
+     )
+     |> allow_upload(:csv, accept: ~w(.csv), max_entries: 1, max_file_size: 5_000_000)}
   end
 
   @impl true
@@ -133,6 +187,30 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Index do
   def handle_event("filter", params, socket) do
     filters = params |> Map.take(~w(q category status)) |> Map.reject(fn {_k, v} -> v == "" end)
     {:noreply, push_patch(socket, to: ~p"/admin/prints?#{filters}", replace: true)}
+  end
+
+  def handle_event("validate_csv", _params, socket), do: {:noreply, socket}
+
+  def handle_event("import_csv", _params, socket) do
+    results =
+      consume_uploaded_entries(socket, :csv, fn %{path: path}, _entry ->
+        {:ok, path |> File.read!() |> Catalog.CSV.import()}
+      end)
+
+    case results do
+      [] ->
+        {:noreply, socket}
+
+      [{:ok, %{created: created, skipped: skipped}}] ->
+        {:noreply,
+         socket
+         |> assign(import_problems: [])
+         |> put_flash(:info, import_summary(length(created), length(skipped)))
+         |> load_prints()}
+
+      [{:error, problems}] ->
+        {:noreply, socket |> clear_flash() |> assign(import_problems: problems)}
+    end
   end
 
   def handle_event("set_status", %{"print_id" => id, "status" => status}, socket) do
@@ -162,6 +240,19 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Index do
 
     assign(socket, prints: prints, total: length(all))
   end
+
+  defp import_summary(created, skipped) do
+    added = "Added #{created} #{if created == 1, do: "print", else: "prints"}."
+
+    if skipped == 0,
+      do: added,
+      else: "#{added} Skipped #{skipped} already in the catalogue."
+  end
+
+  defp upload_error_message(:not_accepted), do: "Choose a .csv file."
+  defp upload_error_message(:too_large), do: "That file is too large (5 MB at most)."
+  defp upload_error_message(:too_many_files), do: "Choose one file."
+  defp upload_error_message(_), do: "That file could not be uploaded."
 
   defp filter_by(prints, _field, value) when value in [nil, ""], do: prints
   defp filter_by(prints, field, value), do: Enum.filter(prints, &(Map.get(&1, field) == value))
