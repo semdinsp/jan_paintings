@@ -41,7 +41,7 @@ defmodule JanPaintingsWeb.PageController do
   end
 
   def about(conn, params) do
-    print = params["print"] && Catalog.get_print(params["print"])
+    print = params["print"] && Catalog.get_public_print(params["print"])
 
     attrs =
       if print,

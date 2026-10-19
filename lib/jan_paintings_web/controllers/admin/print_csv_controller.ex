@@ -10,6 +10,6 @@ defmodule JanPaintingsWeb.Admin.PrintCSVController do
     conn
     |> put_resp_content_type("text/csv")
     |> put_resp_header("content-disposition", ~s(attachment; filename="#{filename}"))
-    |> send_resp(200, Catalog.CSV.export(Catalog.list_prints()))
+    |> send_resp(200, Catalog.CSV.export(Catalog.list_all_prints()))
   end
 end

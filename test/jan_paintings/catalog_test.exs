@@ -209,9 +209,37 @@ defmodule JanPaintings.CatalogTest do
       errors = errors_on(changeset)
       assert errors.artist == ["can't be blank"]
       assert errors.title == ["can't be blank"]
-      assert errors.image == ["add an image"]
+      assert errors.image == ["add an image, or save the print as a draft"]
       assert errors.category == ["is invalid"]
       assert errors.status == ["is invalid"]
+    end
+
+    test "a draft can be saved without an image, but not published without one" do
+      attrs = @valid |> Map.put("image", "") |> Map.put("status", "draft")
+      assert {:ok, draft} = Catalog.create_print(attrs)
+
+      assert {:error, changeset} = Catalog.set_status(draft, "available")
+      assert errors_on(changeset).image == ["add an image, or save the print as a draft"]
+
+      image = "/images/catalogue/beham-nude-650.jpg"
+
+      assert {:ok, %{status: "available"}} =
+               Catalog.update_print(draft, %{"image" => image, "status" => "available"})
+    end
+
+    test "drafts are left out of everything on the public site" do
+      print = Catalog.get_print("neilson-dredging-the-st-charles-river")
+      {:ok, draft} = Catalog.set_status(print, "draft")
+
+      refute draft in Catalog.list_prints()
+      refute Enum.any?(Catalog.list_prints("canadian"), &(&1.id == draft.id))
+      refute Enum.any?(Catalog.featured_prints(), &(&1.id == draft.id))
+      neilson = Catalog.get_print("neilson-timber-ship-quebec")
+      refute Enum.any?(Catalog.more_by_artist(neilson), &(&1.id == draft.id))
+      assert Catalog.get_public_print(draft.slug) == nil
+
+      assert Enum.any?(Catalog.list_all_prints(), &(&1.id == draft.id))
+      assert Catalog.get_print(draft.slug).id == draft.id
     end
 
     test "create_print/1 rejects a duplicate or malformed slug" do

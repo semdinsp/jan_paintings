@@ -241,4 +241,20 @@ defmodule JanPaintingsWeb.PrintControllerTest do
     assert_error_sent 404, fn -> get(conn, ~p"/prints/nope") end
     assert_error_sent 404, fn -> get(conn, ~p"/prints/modern/#{print.slug}") end
   end
+
+  test "drafts are not on the site", %{conn: conn} do
+    {:ok, draft} =
+      "neilson-dredging-the-st-charles-river"
+      |> Catalog.get_print()
+      |> Catalog.set_status("draft")
+
+    assert_error_sent 404, fn -> get(conn, ~p"/prints/canadian/#{draft.slug}") end
+
+    for path <- [~p"/prints", ~p"/prints/canadian", ~p"/prints?q=neilson", ~p"/sitemap.xml"] do
+      refute conn |> get(path) |> response(200) =~ draft.slug
+    end
+
+    enquiry = conn |> get(~p"/about?#{[print: draft.slug]}") |> html_response(200)
+    refute enquiry =~ draft.title
+  end
 end

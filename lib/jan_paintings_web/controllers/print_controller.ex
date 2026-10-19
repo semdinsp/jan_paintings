@@ -6,7 +6,7 @@ defmodule JanPaintingsWeb.PrintController do
 
   def show(conn, %{"category" => category_slug, "slug" => slug}) do
     category = Catalog.get_category(category_slug) || raise_not_found()
-    print = Catalog.get_print(slug)
+    print = Catalog.get_public_print(slug)
 
     if is_nil(print) or print.category != category.slug, do: raise_not_found()
 
