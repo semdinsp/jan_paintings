@@ -20,6 +20,13 @@ defmodule JanPaintingsWeb.PageControllerTest do
     refute Enum.any?(home_links.(about), current?)
   end
 
+  test "the menu bar has a search box that opens the matches on /prints", %{conn: conn} do
+    html = conn |> get(~p"/about") |> html_response(200)
+    assert html =~ ~r{<form[^>]* id="menu-search" action="/prints" method="get"}
+    assert html =~ ~s(id="menu-search-input")
+    assert html =~ ~s(id="drawer-search-input")
+  end
+
   test "GET /about", %{conn: conn} do
     html = conn |> get(~p"/about") |> html_response(200)
     assert html =~ "International Fine Print Dealers"

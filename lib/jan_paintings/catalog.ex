@@ -136,11 +136,28 @@ defmodule JanPaintings.Catalog do
     Enum.filter(list_prints(), &(&1.slug != print.slug && artist_key(&1.artist) == key))
   end
 
+  @doc """
+  Search terms that find every print by `print`'s artist on the print list.
+
+  Uses the same surname plus first given name as `more_by_artist/1`, so
+  "BONNET, Louis-Marin direxit" gives "BONNET Louis", which also finds
+  "BONNET, Louis-Marin".
+  """
+  def artist_query(print) do
+    {surname, first_given} = artist_name(print.artist)
+    Enum.join([surname | List.wrap(first_given)], " ")
+  end
+
   defp artist_key(artist) do
-    folded = artist |> String.replace(~r/\(.*?\)/, " ") |> fold()
+    {surname, first_given} = artist_name(artist)
+    {fold(surname), first_given && fold(first_given)}
+  end
+
+  defp artist_name(artist) do
+    cleaned = String.replace(artist, ~r/\(.*?\)/, " ")
 
     {surname, given} =
-      case String.split(folded, ",", parts: 2) do
+      case String.split(cleaned, ",", parts: 2) do
         [surname, given] -> {surname, given}
         [single] -> single |> String.split(" ", parts: 2, trim: true) |> List.to_tuple() |> pad()
       end
