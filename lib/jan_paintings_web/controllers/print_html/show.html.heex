@@ -92,6 +92,14 @@
         <.detail :if={@print.dimensions != ""} label="Size">{@print.dimensions}</.detail>
         <.detail :if={@print.sheet_size != ""} label="Sheet">{@print.sheet_size}</.detail>
         <.detail :if={@print.condition != ""} label="Condition">{@print.condition}</.detail>
+        <.detail :if={@print.additional_notes != ""} label="Additional notes">
+          <p
+            :for={paragraph <- String.split(@print.additional_notes, ~r/\n\s*\n/, trim: true)}
+            class="italic text-ink-2 [&+&]:mt-3"
+          >
+            {paragraph}
+          </p>
+        </.detail>
         <.detail :if={@print.provenance != ""} label="Provenance">{@print.provenance}</.detail>
         <.detail :if={@print.watermark != ""} label="Watermark">{@print.watermark}</.detail>
         <.detail label="Price">
@@ -118,16 +126,6 @@
       >
         More by this artist
       </.link>
-
-      <section :if={@print.additional_notes != ""} class="mt-10 border-t border-rule pt-6">
-        <h2 class="type-eyebrow">Additional notes</h2>
-        <p
-          :for={paragraph <- String.split(@print.additional_notes, ~r/\n\s*\n/, trim: true)}
-          class="mt-3 max-w-[68ch] italic text-ink-2"
-        >
-          {paragraph}
-        </p>
-      </section>
     </div>
   </div>
 </Layouts.app>
