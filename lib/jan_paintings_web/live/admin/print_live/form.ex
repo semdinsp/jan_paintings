@@ -108,6 +108,12 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Form do
           <.input field={@form[:provenance]} type="textarea" label="Provenance" rows="2" />
           <.input field={@form[:watermark]} label="Watermark" />
           <.input
+            field={@form[:additional_notes]}
+            type="textarea"
+            label="Additional notes"
+            rows="5"
+          />
+          <.input
             field={@form[:slug]}
             label="Web address"
             phx-debounce="300"
