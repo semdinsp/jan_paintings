@@ -25,20 +25,18 @@
       </p>
     </article>
 
-    <figure :if={@about_print} class="hidden lg:block">
-      <.link
-        navigate={~p"/prints/#{@about_print.category}/#{@about_print.slug}"}
-        class="mat flex items-center justify-center p-8"
-      >
+    <figure class="hidden lg:block">
+      <div class="mat flex items-center justify-center p-8">
         <img
-          src={JanPaintings.Catalog.image_url(@about_print.image)}
-          alt={"#{@about_print.artist}, #{@about_print.title}"}
-          class="max-h-[32rem] max-w-full object-contain"
+          src={~p"/images/jan-johnson.jpg"}
+          alt="Portrait of Jan Johnson"
+          width="875"
+          height="1200"
+          class="max-h-[32rem] w-auto max-w-full object-contain"
         />
-      </.link>
+      </div>
       <figcaption class="mt-3">
-        <span class="type-artist block">{@about_print.artist}</span>
-        <span class="font-serif text-lg italic">{@about_print.title}</span>
+        <span class="type-artist block">Jan Johnson</span>
       </figcaption>
     </figure>
   </div>

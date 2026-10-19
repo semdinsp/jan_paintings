@@ -11,5 +11,7 @@ defmodule JanPaintingsWeb.PageControllerTest do
     html = conn |> get(~p"/about") |> html_response(200)
     assert html =~ "International Fine Print Dealers"
     assert html =~ ~s(href="/about#contact")
+    assert html =~ ~s(src="/images/jan-johnson.jpg")
+    assert html =~ ~r{property="og:image" content="[^"]*/images/jan-johnson.jpg"}
   end
 end

@@ -9,7 +9,7 @@ Earlier versions: `design.oct13.md` (the site before the print-room redesign) an
 A museum-like print room where the prints carry the colour: warm paper, dark ink, generous margins. Colour comes from three places only:
 
 - **Dusky pink** frames the page: a full-width band behind the header and the footer.
-- **Antique gold** draws the lines: the two rules of the menu bar and the outlines of form fields and filter buttons.
+- **Antique gold** draws the lines: the rule under the menu bar and the outlines of form fields and filter buttons.
 - **Rose** marks what you can click: links, buttons, the active menu item and focus rings.
 
 The homepage is a set of large picture tiles, one per section of the site, with search below them.
@@ -29,7 +29,7 @@ Defined as CSS custom properties in `assets/css/app.css` (light and dark), expos
 | `--rose-2` | `#86324F` | `#E8A3BB` | Link/button hover and pressed |
 | `--rose-tint` | `#F6E9EE` | `#3A2630` | Selected filter button background |
 | `--dusk` | `#C2918D` | `#3B2B2D` | Header and footer background |
-| `--gold` | `#A9851F` | `#C9A84C` | Menu bar rules, form field and filter button outlines |
+| `--gold` | `#A9851F` | `#C9A84C` | Menu bar bottom rule, form field and filter button outlines |
 | `--sold` | `#5C5650` | `#B3ABA1` | "Sold" label (neutral, not red) |
 
 Contrast (WCAG AA): `--ink` on `--paper` ≈ 16:1, `--ink-2` on `--paper` ≈ 7:1, `--rose` on `--paper` ≈ 5.3:1, white on `--rose` ≈ 5.6:1, `--ink` on `--dusk` ≈ 6:1.
@@ -78,7 +78,7 @@ Use `text-wrap: pretty` on paragraphs and `text-wrap: balance` on headings.
 
 ### Menu bar
 - Sits inside the 1200px container (not full-bleed), background `--paper`, sticky at the top on scroll.
-- Top and bottom rules 3px `--gold`. Height 48px.
+- A 3px `--gold` rule along the bottom only (no top rule). Height 48px.
 - Items: `--ink`, 15px/500, 28px gap; full bar height as hit area. Hover: text `--rose`.
 - Active page: text `--rose`, weight 600, 2px `--rose` bottom border.
 - Order: All Prints · Old Master Prints · Modern Prints · Canadian Prints on the left; About Us right-aligned (the contact details and form are on the About page, linked from print enquiry buttons and the "ask us" note on listings).
@@ -152,7 +152,7 @@ Use `text-wrap: pretty` on paragraphs and `text-wrap: balance` on headings.
 
 ### Footer
 - Full-width `--dusk` band, 48px vertical padding, `--ink` text, 15px.
-- Columns: business name + address; email and phone links, then a "Contact us" link to the form on the About page; "Log in" and the theme toggle. One column on phones, two on tablets (the third group wraps below), three from `lg` with the third right-aligned.
+- Columns: business name + address; email and phone links, then a "Contact us" link to the form on the About page; a log-in icon (`hero-arrow-right-end-on-rectangle`, arrow pointing in, "Log in" as its title and screen-reader text) and the theme toggle. One column on phones, two on tablets (the third group wraps below), three from `lg` with the third right-aligned.
 
 ### Favicon
 - The triton's head from the header engraving in a round medallion on a `--dusk` square.

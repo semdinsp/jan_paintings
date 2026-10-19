@@ -99,7 +99,7 @@ defmodule JanPaintingsWeb.Layouts do
             alt="Ornament with a triton, engraving by Beham"
             width="798"
             height="275"
-            class="hidden h-20 w-auto sm:block md:h-30"
+            class="h-16 w-auto min-w-0 object-contain object-right sm:h-20 md:h-30"
           />
         </div>
       </header>
@@ -109,7 +109,7 @@ defmodule JanPaintingsWeb.Layouts do
           aria-label="Main"
           class="mx-auto max-w-[1200px] px-4 md:px-6"
         >
-          <div class="hidden h-12 items-stretch gap-7 border-t-3 border-b-3 border-gold md:flex">
+          <div class="hidden h-12 items-stretch gap-7 border-b-3 border-gold md:flex">
             <.link
               :for={{key, label, path} <- @menu}
               navigate={path}
@@ -131,7 +131,7 @@ defmodule JanPaintingsWeb.Layouts do
 
           <details
             id="mobile-menu"
-            class="group border-t-3 border-b-3 border-gold md:hidden"
+            class="group border-b-3 border-gold md:hidden"
           >
             <summary class="flex h-12 cursor-pointer list-none items-center gap-2 font-medium [&::-webkit-details-marker]:hidden">
               <.icon name="hero-bars-3" class="size-5 group-open:hidden" />
@@ -173,9 +173,11 @@ defmodule JanPaintingsWeb.Layouts do
             <.link
               :if={!@current_scope}
               navigate={~p"/users/log-in"}
-              class="text-sm text-ink hover:text-rose"
+              class="flex size-9 items-center justify-center text-ink hover:text-rose"
+              title="Log in"
             >
-              Log in
+              <.icon name="hero-arrow-right-end-on-rectangle" class="size-5" />
+              <span class="sr-only">Log in</span>
             </.link>
             <.theme_toggle />
           </div>
