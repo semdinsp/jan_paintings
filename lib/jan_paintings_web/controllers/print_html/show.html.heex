@@ -93,7 +93,7 @@
           else: "Ask about similar prints"}
       </.link>
       <.link
-        :if={@more_by_artist != []}
+        :if={@more_by_artist?}
         navigate={~p"/prints?#{[q: JanPaintings.Catalog.artist_query(@print)]}"}
         class="btn btn-secondary-rose mt-3 flex w-full sm:w-fit"
       >
@@ -101,15 +101,4 @@
       </.link>
     </div>
   </div>
-
-  <section
-    :if={@more_by_artist != []}
-    id="more-by-artist"
-    class="mt-12 scroll-mt-16 border-t border-rule pt-12 md:mt-16"
-  >
-    <h2 class="type-h2">More by this artist</h2>
-    <div class="print-grid mt-8">
-      <.print_card :for={print <- @more_by_artist} print={print} />
-    </div>
-  </section>
 </Layouts.app>

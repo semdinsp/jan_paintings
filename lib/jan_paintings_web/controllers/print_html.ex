@@ -1,7 +1,7 @@
 defmodule JanPaintingsWeb.PrintHTML do
   use JanPaintingsWeb, :html
 
-  import JanPaintingsWeb.PageHTML, only: [print_card: 1, status_badge: 1]
+  import JanPaintingsWeb.PageHTML, only: [status_badge: 1]
 
   embed_templates "print_html/*"
 

@@ -133,7 +133,7 @@ Use `text-wrap: pretty` on paragraphs and `text-wrap: balance` on headings.
 - **Search**: below the tiles, centred, max-width 512px, under a "Search the stock" eyebrow.
 - "From the stock" is not shown, but is kept as the `from_the_stock/1` component in `PageHTML`; its doc has the one line needed to restore it.
 
-### Print grid (listing pages, "More by this artist")
+### Print grid (listing pages)
 - CSS grid `repeat(auto-fill, minmax(220px, 1fr))`, gap 32px horizontal / 48px vertical.
 - Phones (< 640px): exactly two columns, gap 16px / 32px.
 - Image on a `--paper-2` mat, fixed 4:5 box, `object-fit: contain`, 16px padding, so prints of different shapes align.

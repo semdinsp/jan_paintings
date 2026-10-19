@@ -131,15 +131,15 @@ defmodule JanPaintingsWeb.PrintControllerTest do
     assert html =~ "No prints found"
   end
 
-  test "links to more prints by the same artist", %{conn: conn} do
+  test "links to more prints by the same artist with a button, not a section", %{conn: conn} do
     html =
       conn
       |> get(~p"/prints/canadian/neilson-dredging-the-st-charles-river")
       |> html_response(200)
 
-    assert html =~ ~s(id="more-by-artist")
     assert html =~ ~r{href="/prints\?q=NEILSON[^"]*"[^>]*>\s*More by this artist}
-    assert html =~ ~s(href="/prints/canadian/neilson-timber-ship-quebec")
+    refute html =~ ~s(id="more-by-artist")
+    refute html =~ ~s(href="/prints/canadian/neilson-timber-ship-quebec")
   end
 
   test "the More by this artist button opens a search listing the artist's prints", %{conn: conn} do
@@ -156,7 +156,7 @@ defmodule JanPaintingsWeb.PrintControllerTest do
     assert results =~ "4 prints matching"
   end
 
-  test "omits the section when the artist has no other prints", %{conn: conn} do
+  test "omits the button when the artist has no other prints", %{conn: conn} do
     html = conn |> get(~p"/prints/old-masters/dusart-fiddler-in-an-inn") |> html_response(200)
     refute html =~ "More by this artist"
   end
