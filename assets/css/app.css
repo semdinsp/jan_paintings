@@ -343,6 +343,9 @@ p { text-wrap: pretty; }
   font-weight: 600;
   border-bottom-color: var(--rose);
 }
+/* Icon items (Home, All Prints) are always rose; the underline marks the current page. */
+.menu-item.menu-icon { color: var(--rose); }
+.menu-item.menu-icon:hover { color: var(--rose-2); }
 .drawer-item {
   display: flex;
   align-items: center;
