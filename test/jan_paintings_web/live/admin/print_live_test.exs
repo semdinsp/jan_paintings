@@ -62,6 +62,7 @@ defmodule JanPaintingsWeb.Admin.PrintLiveTest do
     test "downloads every print as CSV", %{conn: conn} do
       {:ok, _view, html} = live(conn, ~p"/admin/prints")
       assert html =~ ~s(href="/admin/prints/export.csv")
+      assert html =~ ~s(href="/admin/guides")
 
       conn = get(conn, ~p"/admin/prints/export.csv")
       assert response_content_type(conn, :csv) =~ "text/csv"
