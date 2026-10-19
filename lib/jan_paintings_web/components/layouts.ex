@@ -111,8 +111,14 @@ defmodule JanPaintingsWeb.Layouts do
         >
           <div class="hidden h-12 items-stretch gap-7 border-b-3 border-gold md:flex">
             <.home_link active={@active} />
+            <.icon_link
+              navigate={~p"/prints"}
+              icon="hero-squares-2x2"
+              label="All Prints"
+              current={@active == "prints"}
+            />
             <.link
-              :for={{key, label, path} <- @menu}
+              :for={{key, label, path} <- Enum.reject(@menu, &(elem(&1, 0) == "prints"))}
               navigate={path}
               class="menu-item"
               aria-current={key == @active && "page"}
@@ -211,14 +217,33 @@ defmodule JanPaintingsWeb.Layouts do
 
   def home_link(assigns) do
     ~H"""
-    <.link
+    <.icon_link
       navigate={~p"/"}
-      class={["menu-item", @class]}
-      aria-current={@active == "home" && "page"}
-      title="Home"
+      icon="hero-home"
+      label="Home"
+      current={@active == "home"}
+      class={@class}
+    />
+    """
+  end
+
+  @doc "A rose icon in the menu bar, with `label` as its tooltip and screen-reader text."
+  attr :navigate, :string, required: true
+  attr :icon, :string, required: true
+  attr :label, :string, required: true
+  attr :current, :boolean, default: false
+  attr :class, :any, default: nil
+
+  def icon_link(assigns) do
+    ~H"""
+    <.link
+      navigate={@navigate}
+      class={["menu-item menu-icon", @class]}
+      aria-current={@current && "page"}
+      title={@label}
     >
-      <.icon name="hero-home" class="size-5" />
-      <span class="sr-only">Home</span>
+      <.icon name={@icon} class="size-5" />
+      <span class="sr-only">{@label}</span>
     </.link>
     """
   end

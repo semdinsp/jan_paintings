@@ -32,6 +32,23 @@ defmodule JanPaintingsWeb.PageControllerTest do
     refute Enum.any?(home_links.(about), current?)
   end
 
+  test "the menu bar shows All Prints as a grid icon, marked current on /prints", %{conn: conn} do
+    icon = ~r{<a[^>]*href="/prints"[^>]*title="All Prints"[^>]*>\s*<span[^>]*class="hero-squares-2x2}
+
+    about = conn |> get(~p"/about") |> html_response(200)
+    assert [[tag]] = Regex.scan(~r{<a[^>]*href="/prints"[^>]*title="All Prints"[^>]*>}, about)
+    assert about =~ icon
+    assert tag =~ "menu-icon"
+    refute tag =~ ~s(aria-current="page")
+
+    prints = conn |> get(~p"/prints") |> html_response(200)
+
+    assert [[current]] =
+             Regex.scan(~r{<a[^>]*href="/prints"[^>]*title="All Prints"[^>]*>}, prints)
+
+    assert current =~ ~s(aria-current="page")
+  end
+
   test "the menu bar has a search box that opens the matches on /prints", %{conn: conn} do
     html = conn |> get(~p"/about") |> html_response(200)
     assert html =~ ~r{<form[^>]* id="menu-search" action="/prints" method="get"}
