@@ -46,7 +46,7 @@ defmodule JanPaintingsWeb.Layouts do
               JanPaintings.Catalog.categories(),
               &{&1.slug, &1.name, ~p"/prints/#{&1.slug}"}
             ),
-        about_menu: [{"about", "About", ~p"/about"}, {nil, "Contact", ~p"/about" <> "#contact"}]
+        about_menu: [{"about", "About Us", ~p"/about"}]
       )
 
     ~H"""
@@ -123,7 +123,7 @@ defmodule JanPaintingsWeb.Layouts do
               :for={{key, label, path} <- @about_menu}
               href={path}
               class="menu-item"
-              aria-current={key && key == @active && "page"}
+              aria-current={key == @active && "page"}
             >
               {label}
             </.link>
@@ -142,7 +142,7 @@ defmodule JanPaintingsWeb.Layouts do
                 :for={{key, label, path} <- @menu ++ @about_menu}
                 href={path}
                 class="drawer-item"
-                aria-current={key && key == @active && "page"}
+                aria-current={key == @active && "page"}
               >
                 {label}
               </.link>
