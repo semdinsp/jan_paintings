@@ -8,6 +8,8 @@ defmodule JanPaintingsWeb.PageControllerTest do
   end
 
   test "GET /about", %{conn: conn} do
-    assert conn |> get(~p"/about") |> html_response(200) =~ "International Fine Print Dealers"
+    html = conn |> get(~p"/about") |> html_response(200)
+    assert html =~ "International Fine Print Dealers"
+    assert html =~ ~s(href="/about#contact")
   end
 end

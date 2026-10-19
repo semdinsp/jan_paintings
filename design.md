@@ -74,7 +74,7 @@ Use `text-wrap: pretty` on paragraphs and `text-wrap: balance` on headings.
 - Logo left: `jan-johnson-logo-ink.png` (transparent ink, inverted in dark mode). Height 64px phone, 80px tablet, 120px from `md`.
 - Beham triton engraving (`beham-triton.jpg`) right-aligned, the same height as the logo (80px `sm`, 120px `md`). Hidden on phones.
 - Admin and account links sit between logo and triton, in `--ink`.
-- No phone number in the header; it is on the Contact page and in the footer.
+- No phone number in the header; it is in the contact section of the About page and in the footer.
 
 ### Menu bar
 - Sits inside the 1200px container (not full-bleed), background `--paper`, sticky at the top on scroll.
@@ -152,7 +152,7 @@ Use `text-wrap: pretty` on paragraphs and `text-wrap: balance` on headings.
 
 ### Footer
 - Full-width `--dusk` band, 48px vertical padding, `--ink` text, 15px.
-- Columns: business name + address; email and phone links; "Log in" and the theme toggle. One column on phones, two on tablets (the third group wraps below), three from `lg` with the third right-aligned.
+- Columns: business name + address; email and phone links, then a "Contact us" link to the form on the About page; "Log in" and the theme toggle. One column on phones, two on tablets (the third group wraps below), three from `lg` with the third right-aligned.
 
 ### Favicon
 - The triton's head from the header engraving in a round medallion on a `--dusk` square.
