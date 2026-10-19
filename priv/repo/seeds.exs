@@ -23,3 +23,7 @@ JanPaintings.Catalog.Seed.load_nationalities() |> IO.inspect(label: "Nationaliti
 # Each print's additional notes: the commentary set in italics on the original
 # site's print pages. Also fills blanks only.
 JanPaintings.Catalog.Seed.load_additional_notes() |> IO.inspect(label: "Additional notes")
+
+# Each print's catalogue details (the catalogue block of its page on the
+# original site) and provenance. Also fills blanks only.
+JanPaintings.Catalog.Seed.load_catalogue_entries() |> IO.inspect(label: "Catalogue entries")
