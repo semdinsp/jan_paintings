@@ -3,7 +3,7 @@ defmodule JanPaintingsWeb.PrintLive.Index do
   use JanPaintingsWeb, :live_view
 
   import JanPaintingsWeb.PageHTML, only: [print_card: 1, search_form: 1]
-  import JanPaintingsWeb.PrintHTML, only: [category_filter: 1, nationality_filter: 1]
+  import JanPaintingsWeb.PrintHTML, only: [nationality_filter: 1]
 
   alias JanPaintings.Catalog
   alias JanPaintings.Catalog.Print

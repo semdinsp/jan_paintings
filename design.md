@@ -102,15 +102,16 @@ Use `text-wrap: pretty` on paragraphs and `text-wrap: balance` on headings.
 - Focus: border `--ink` plus the 2px rose ring. For a daisyUI `.input` wrapper (the search box), the ring is drawn on the wrapper and the inner `<input>` has no outline, so there is one complete ring.
 - Search: "Search" button attached on the right, styled like a selected filter button (2px `--rose` border, `--rose-tint` background, `--rose` text, weight 600; hover `--rose-2`), so it matches the filters beneath it in both light and dark mode. As you type on the homepage, up to six matches drop down below the box; Enter opens the full results on /prints.
 
-### Category filter buttons (listing pages)
-- All · Old Masters · Modern · Canadian, 44px tall, 2px `--gold` border, `--ink` text; 12px side padding on phones (so all four fit at 375px), 16px from `sm`.
+### Filter buttons (listing pages)
+- There are no category buttons on the listing pages; the menu bar links to All Prints and each category.
+- Filter buttons (the nationality filter below) are 44px tall, 2px `--gold` border, `--ink` text; 12px side padding on phones, 16px from `sm`.
 - Hover: border and text `--rose`.
 - Selected: `--rose` border, `--rose-tint` background, `--rose` text, weight 600.
 
 ### Nationality filter (listing pages)
-- On its own row under the category filters: a small "Nationality" label, then one button per nationality (Dutch/Flemish · Italian · German · French · British · Canadian · Other) in the same style as the category buttons. On phones the row scrolls sideways like the category row.
+- Under the search box: a small "Nationality" label, then one button per nationality (Dutch/Flemish · Italian · German · French · British · Canadian · Other) in the filter button style. On phones the row scrolls sideways.
 - Only nationalities that have prints in the current category and search are offered; the row is hidden when there would be just one (e.g. Canadian Prints). A selected nationality always stays visible so it can be cleared.
-- Clicking one shows only that nationality, selected in rose; clicking it again shows all. The choice is kept in the URL (`?nationality=french`) and carried through category changes and searches.
+- Clicking one shows only that nationality, selected in rose; clicking it again shows all. The choice is kept in the URL (`?nationality=french`) and through searches; the menu bar's category links start fresh.
 - Nationality is set per print in the admin form; `priv/repo/seeds/print_nationalities.json` holds the drafted value for each artist, loaded by `JanPaintings.Catalog.Seed.load_nationalities/1`.
 - There is no sort control. `price_amount`, `price_currency`, `height_mm` and `width_mm` are still worked out from the price and size text on save, and the admin form shows what each reads as.
 

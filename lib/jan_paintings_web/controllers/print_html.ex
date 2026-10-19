@@ -18,45 +18,6 @@ defmodule JanPaintingsWeb.PrintHTML do
     """
   end
 
-  @doc "Filter tabs for switching between all prints and each category."
-  attr :current, :map, default: nil
-  attr :query, :string, default: ""
-  attr :nationality, :string, default: nil
-
-  def category_filter(assigns) do
-    # Switching category keeps the current search and nationality.
-    params = listing_params(assigns.query, assigns.nationality)
-
-    assigns =
-      assign(assigns,
-        options: [
-          {"All", ~p"/prints?#{params}", is_nil(assigns.current)}
-          | for(
-              c <- JanPaintings.Catalog.categories(),
-              do:
-                {c.short, ~p"/prints/#{c.slug}?#{params}",
-                 assigns.current && assigns.current.slug == c.slug}
-            )
-        ]
-      )
-
-    ~H"""
-    <nav
-      aria-label="Filter by category"
-      class="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0"
-    >
-      <.link
-        :for={{label, path, active} <- @options}
-        patch={path}
-        aria-current={active && "page"}
-        class={chip_class(active)}
-      >
-        {label}
-      </.link>
-    </nav>
-    """
-  end
-
   @doc """
   Buttons that narrow the listing to one artist nationality. Clicking the
   active one again shows every nationality.
@@ -65,6 +26,7 @@ defmodule JanPaintingsWeb.PrintHTML do
   attr :query, :string, default: ""
   attr :nationality, :string, default: nil
   attr :options, :list, required: true, doc: "`{key, label}` pairs to offer"
+  attr :class, :any, default: nil
 
   def nationality_filter(assigns) do
     assigns =
@@ -88,7 +50,10 @@ defmodule JanPaintingsWeb.PrintHTML do
       :if={@buttons != []}
       role="group"
       aria-label="Filter by nationality"
-      class="-mx-4 flex items-center gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0"
+      class={[
+        "-mx-4 flex items-center gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0",
+        @class
+      ]}
     >
       <span class="type-meta mr-1 shrink-0">Nationality</span>
       <.link

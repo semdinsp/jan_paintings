@@ -12,17 +12,19 @@ defmodule JanPaintingsWeb.PrintControllerTest do
     end
   end
 
-  test "lists all prints with category filter", %{conn: conn} do
+  test "lists all prints, with no category buttons (the menu bar has them)", %{conn: conn} do
     html = conn |> get(~p"/prints") |> html_response(200)
     assert html =~ "All Prints"
     assert html =~ "#{length(Catalog.list_prints())} prints shown"
+
+    refute html =~ ~s(aria-label="Filter by category")
 
     for category <- Catalog.categories() do
       assert html =~ ~s(href="/prints/#{category.slug}")
     end
   end
 
-  test "marks the active filter", %{conn: conn} do
+  test "marks the category in the menu bar", %{conn: conn} do
     html = conn |> get(~p"/prints/modern") |> html_response(200)
 
     assert html =~
@@ -71,11 +73,13 @@ defmodule JanPaintingsWeb.PrintControllerTest do
       assert html =~ ~r/href="\/prints"[^>]*aria-current="true"/
     end
 
-    test "category links and search keep the nationality", %{conn: conn, german: german} do
+    test "the search and the nationality keep each other", %{conn: conn, german: german} do
       q = german.artist |> String.split(",") |> hd() |> String.downcase()
       html = conn |> get(~p"/prints?#{[nationality: "german", q: q]}") |> html_response(200)
       assert html =~ ~s(href="/prints/#{german.category}/#{german.slug}")
-      assert html =~ ~s(href="/prints/old-masters?nationality=german&amp;q=#{q}")
+      # Unselecting the nationality keeps the search...
+      assert html =~ ~r/href="\/prints\?q=#{q}"[^>]*aria-current="true"/
+      # ...and clearing the search keeps the nationality.
       assert html =~ "Clear search"
       assert html =~ ~s(href="/prints?nationality=german")
     end
@@ -147,11 +151,10 @@ defmodule JanPaintingsWeb.PrintControllerTest do
     assert html =~ ~s(name="q")
   end
 
-  test "searches by artist or title and keeps the search when filtering", %{conn: conn} do
+  test "searches by artist or title within a category", %{conn: conn} do
     html = conn |> get(~p"/prints?q=neilson") |> html_response(200)
     assert html =~ "4 prints matching"
     assert html =~ "Dredging the St. Charles River"
-    assert html =~ ~s(href="/prints/canadian?q=neilson")
 
     html = conn |> get(~p"/prints/modern?q=neilson") |> html_response(200)
     assert html =~ "0 prints matching"
