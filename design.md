@@ -81,8 +81,8 @@ Use `text-wrap: pretty` on paragraphs and `text-wrap: balance` on headings.
 - A 3px `--gold` rule along the bottom only (no top rule). Height 48px.
 - Items: `--ink`, 15px/500, 28px gap; full bar height as hit area. Hover: text `--rose`.
 - Active page: text `--rose`, weight 600, 2px `--rose` bottom border.
-- Order: All Prints · Old Master Prints · Modern Prints · Canadian Prints on the left; About Us right-aligned (the contact details and form are on the About page, linked from print enquiry buttons and the "ask us" note on listings).
-- Mobile (< 768px): "Menu" + hamburger; opens a `--paper` drawer with stacked 48px rows separated by `--rule` hairlines, active row in rose.
+- Order: a home icon (`hero-home`, "Home" as its title and screen-reader text, rose on the homepage) then All Prints · Old Master Prints · Modern Prints · Canadian Prints on the left; About Us right-aligned (the contact details and form are on the About page, linked from print enquiry buttons and the "ask us" note on listings).
+- Mobile (< 768px): "Menu" + hamburger on the left, the home icon at the right end of the bar; the menu opens a `--paper` drawer with stacked 48px rows separated by `--rule` hairlines, active row in rose.
 
 ### Links
 - Inline links: `--rose`, underline with `text-underline-offset: 3px`, `text-decoration-thickness: 1px`. Hover: `--rose-2`, thickness 2px.
