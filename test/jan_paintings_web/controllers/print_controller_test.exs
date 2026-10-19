@@ -224,9 +224,21 @@ defmodule JanPaintingsWeb.PrintControllerTest do
       |> get(~p"/prints/old-masters/tiepolo-venice-receiving-neptunes-homage-after-g-b-tiepolo")
       |> html_response(200)
 
-    assert html =~ "View larger"
-    assert html =~ "/images/prints/tiepolo-venice-receiving-neptunes-homage-large.jpg"
+    large = "/images/prints/tiepolo-venice-receiving-neptunes-homage-large.jpg"
+
+    # A button with a magnifier, and the image itself, both open the larger view.
+    assert html =~
+             ~r/<a[^>]*id="print-view-larger"[^>]*href="#{large}"[^>]*class="btn[^"]*"[^>]*>\s*<span[^>]*hero-magnifying-glass-plus/
+
+    assert html =~ ~r/<a[^>]*id="print-main-link"[^>]*href="#{large}"/
     refute html =~ ~s(id="print-gallery")
+  end
+
+  test "has no larger view or image link when there is no larger image", %{conn: conn} do
+    html = conn |> get(~p"/prints/old-masters/dusart-fiddler-in-an-inn") |> html_response(200)
+    refute html =~ "View larger"
+    refute html =~ ~s(id="print-main-link")
+    assert html =~ ~s(id="print-main-image")
   end
 
   test "prints without extra views have no gallery", %{conn: conn} do

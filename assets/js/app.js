@@ -41,7 +41,7 @@ window.addEventListener("phx:page-loading-stop", _info => topbar.hide())
 liveSocket.connect()
 
 // Print detail gallery: clicking a thumbnail shows it as the main image and
-// points "View larger" at it. Without JS, thumbnails link to the image itself.
+// points "View larger" and the main image's link at it. Without JS, thumbnails link to the image itself.
 document.addEventListener("click", event => {
   const thumb = event.target.closest("[data-gallery-src]")
   if (!thumb) return
@@ -50,6 +50,8 @@ document.addEventListener("click", event => {
   document.getElementById("print-main-image").src = thumb.dataset.gallerySrc
   const larger = document.getElementById("print-view-larger")
   if (larger) larger.href = thumb.dataset.galleryLarge
+  const mainLink = document.getElementById("print-main-link")
+  if (mainLink) mainLink.href = thumb.dataset.galleryLarge
 
   document.querySelectorAll("[data-gallery-src]").forEach(t => {
     t.setAttribute("aria-current", t === thumb ? "true" : "false")
