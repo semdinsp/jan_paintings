@@ -32,7 +32,8 @@ defmodule JanPaintingsWeb.PageControllerTest do
   end
 
   test "the menu bar shows All Prints as a grid icon, marked current on /prints", %{conn: conn} do
-    icon = ~r{<a[^>]*href="/prints"[^>]*title="All Prints"[^>]*>\s*<span[^>]*class="hero-squares-2x2}
+    icon =
+      ~r{<a[^>]*href="/prints"[^>]*title="All Prints"[^>]*>\s*<span[^>]*class="hero-squares-2x2}
 
     about = conn |> get(~p"/about") |> html_response(200)
     assert [[tag]] = Regex.scan(~r{<a[^>]*href="/prints"[^>]*title="All Prints"[^>]*>}, about)

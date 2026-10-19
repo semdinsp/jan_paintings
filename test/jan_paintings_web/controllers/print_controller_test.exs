@@ -29,34 +29,61 @@ defmodule JanPaintingsWeb.PrintControllerTest do
              ~r/href="\/prints\/modern"[^>]*aria-current="page"|aria-current="page"[^>]*href="\/prints\/modern"/
   end
 
-  describe "sorting" do
-    test "Price and Size buttons follow the category filters", %{conn: conn} do
+  describe "nationality filter" do
+    setup do
+      [durer | _] = Catalog.list_prints("old-masters")
+      [modern | _] = Catalog.list_prints("modern")
+      {:ok, durer} = Catalog.update_print(durer, %{"nationality" => "german"})
+      {:ok, modern} = Catalog.update_print(modern, %{"nationality" => "french"})
+      %{german: durer, french: modern}
+    end
+
+    test "offers only nationalities that have prints, and no sort buttons", %{conn: conn} do
+      html = conn |> get(~p"/prints") |> html_response(200)
+      assert html =~ ~s(aria-label="Filter by nationality")
+      assert html =~ ~s(href="/prints?nationality=german")
+      assert html =~ ~s(href="/prints?nationality=french")
+      refute html =~ "nationality=italian"
+      refute html =~ ~s(aria-label="Sort prints")
+      refute html =~ "sort="
+    end
+
+    test "hides the filter when only one nationality would be offered", %{conn: conn} do
+      # Only the one Modern print has a nationality, so there is nothing to choose.
       html = conn |> get(~p"/prints/modern") |> html_response(200)
-      assert html =~ ~s(aria-label="Sort prints")
-      assert html =~ ~s(href="/prints/modern?sort=price")
-      assert html =~ ~s(href="/prints/modern?sort=size")
+      refute html =~ ~s(aria-label="Filter by nationality")
+
+      # Once it is selected, it stays so it can be cleared.
+      html = conn |> get(~p"/prints/modern?nationality=french") |> html_response(200)
+      assert html =~ ~s(aria-label="Filter by nationality")
     end
 
-    test "sort=price lists the cheapest print first and marks the button", %{conn: conn} do
-      html = conn |> get(~p"/prints/old-masters?sort=price") |> html_response(200)
-      [cheapest | _] = Catalog.order_prints(Catalog.list_prints("old-masters"), "price")
-      [first_link | _] = Regex.scan(~r{href="/prints/old-masters/([a-z0-9-]+)"}, html)
-
-      assert List.last(first_link) == cheapest.slug
-      # The active button links back to the unsorted list.
-      assert html =~ ~r/href="\/prints\/old-masters"[^>]*aria-current="true"/
+    test "shows only that nationality and marks the button", %{
+      conn: conn,
+      german: german,
+      french: french
+    } do
+      html = conn |> get(~p"/prints?nationality=german") |> html_response(200)
+      assert html =~ ~s(href="/prints/#{german.category}/#{german.slug}")
+      refute html =~ ~s(href="/prints/#{french.category}/#{french.slug}")
+      assert html =~ "1 prints shown."
+      # The active button links back to every nationality.
+      assert html =~ ~r/href="\/prints"[^>]*aria-current="true"/
     end
 
-    test "category links and search keep the sort", %{conn: conn} do
-      html = conn |> get(~p"/prints?sort=size&q=beham") |> html_response(200)
-      assert html =~ ~s(href="/prints/old-masters?q=beham&amp;sort=size")
-      assert html =~ ~s(href="/prints?sort=size")
+    test "category links and search keep the nationality", %{conn: conn, german: german} do
+      q = german.artist |> String.split(",") |> hd() |> String.downcase()
+      html = conn |> get(~p"/prints?#{[nationality: "german", q: q]}") |> html_response(200)
+      assert html =~ ~s(href="/prints/#{german.category}/#{german.slug}")
+      assert html =~ ~s(href="/prints/old-masters?nationality=german&amp;q=#{q}")
       assert html =~ "Clear search"
+      assert html =~ ~s(href="/prints?nationality=german")
     end
 
-    test "ignores an unknown sort", %{conn: conn} do
-      html = conn |> get(~p"/prints?sort=colour") |> html_response(200)
+    test "ignores an unknown nationality", %{conn: conn} do
+      html = conn |> get(~p"/prints?nationality=martian") |> html_response(200)
       refute html =~ ~s(aria-current="true")
+      assert html =~ "#{length(Catalog.list_prints())} prints shown."
     end
   end
 

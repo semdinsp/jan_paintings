@@ -185,7 +185,8 @@ defmodule JanPaintingsWeb.Admin.PrintLiveTest do
           condition: "Fine.",
           catalogue_references: "Béraldi XII, 50",
           state: "First state",
-          sheet_size: "400 × 500mm"
+          sheet_size: "400 × 500mm",
+          nationality: "french"
         }
       )
       |> render_submit()
@@ -197,6 +198,7 @@ defmodule JanPaintingsWeb.Admin.PrintLiveTest do
       assert updated.catalogue_references == "Béraldi XII, 50"
       assert updated.state == "First state"
       assert updated.sheet_size == "400 × 500mm"
+      assert updated.nationality == "french"
       assert updated.image == print.image
       assert updated.gallery == print.gallery
     end

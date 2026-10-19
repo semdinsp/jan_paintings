@@ -21,11 +21,11 @@ defmodule JanPaintingsWeb.PrintHTML do
   @doc "Filter tabs for switching between all prints and each category."
   attr :current, :map, default: nil
   attr :query, :string, default: ""
-  attr :sort, :string, default: nil
+  attr :nationality, :string, default: nil
 
   def category_filter(assigns) do
-    # Switching category keeps the current search and sort.
-    params = listing_params(assigns.query, assigns.sort)
+    # Switching category keeps the current search and nationality.
+    params = listing_params(assigns.query, assigns.nationality)
 
     assigns =
       assign(assigns,
@@ -58,19 +58,20 @@ defmodule JanPaintingsWeb.PrintHTML do
   end
 
   @doc """
-  Price and Size buttons that reorder the listing, smallest first. Clicking
-  the active one again returns to the usual artist order.
+  Buttons that narrow the listing to one artist nationality. Clicking the
+  active one again shows every nationality.
   """
   attr :current, :map, default: nil
   attr :query, :string, default: ""
-  attr :sort, :string, default: nil
+  attr :nationality, :string, default: nil
+  attr :options, :list, required: true, doc: "`{key, label}` pairs to offer"
 
-  def sort_toggles(assigns) do
+  def nationality_filter(assigns) do
     assigns =
       assign(assigns,
-        options:
-          for {key, label, order} <- [{"price", "Price", "lowest"}, {"size", "Size", "smallest"}] do
-            active = assigns.sort == key
+        buttons:
+          for {key, label} <- assigns.options do
+            active = assigns.nationality == key
             params = listing_params(assigns.query, if(active, do: nil, else: key))
 
             path =
@@ -78,31 +79,34 @@ defmodule JanPaintingsWeb.PrintHTML do
                 do: ~p"/prints/#{assigns.current.slug}?#{params}",
                 else: ~p"/prints?#{params}"
 
-            {label, order, path, active}
+            {label, path, active}
           end
       )
 
     ~H"""
-    <div role="group" aria-label="Sort prints" class="flex flex-wrap items-center gap-2 pb-1">
-      <span class="type-meta mr-1">Sort by</span>
+    <div
+      :if={@buttons != []}
+      role="group"
+      aria-label="Filter by nationality"
+      class="-mx-4 flex items-center gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0"
+    >
+      <span class="type-meta mr-1 shrink-0">Nationality</span>
       <.link
-        :for={{label, order, path, active} <- @options}
+        :for={{label, path, active} <- @buttons}
         patch={path}
         aria-current={active && "true"}
         class={chip_class(active)}
       >
         {label}
-        <span :if={active} aria-hidden="true" class="ml-1">↑</span>
-        <span class="sr-only">
-          {if active, do: "(#{order} first; select again to undo)", else: "(#{order} first)"}
-        </span>
+        <span :if={active} class="sr-only">(selected; select again to show all)</span>
       </.link>
     </div>
     """
   end
 
-  defp listing_params(query, sort) do
-    [q: if(query != "", do: query), sort: sort] |> Enum.reject(fn {_, v} -> is_nil(v) end)
+  defp listing_params(query, nationality) do
+    [q: if(query != "", do: query), nationality: nationality]
+    |> Enum.reject(fn {_, v} -> is_nil(v) end)
   end
 
   defp chip_class(active) do

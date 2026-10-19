@@ -15,3 +15,7 @@
 # only, so it is safe to run again and never overwrites admin edits.
 # In production: bin/jan_paintings eval "JanPaintings.Release.seed()"
 JanPaintings.Catalog.Seed.load_catalogue_details() |> IO.inspect(label: "Catalogue details")
+
+# Each artist's nationality (Dutch/Flemish, Italian, German, French, British,
+# Canadian or Other), drafted from research. Also fills blanks only.
+JanPaintings.Catalog.Seed.load_nationalities() |> IO.inspect(label: "Nationalities")

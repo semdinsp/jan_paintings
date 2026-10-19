@@ -6,6 +6,9 @@ defmodule JanPaintings.Catalog.Print do
   test `field != ""`. `dimensions` is the plate or image size as catalogued;
   `sheet_size` is recorded only when the sheet size is stated separately.
 
+  `nationality` is the artist's nationality, one of the keys in
+  `nationalities/0`, or "" when it has not been set.
+
   `price_amount`, `price_currency`, `height_mm` and `width_mm` are read from
   the price and size text on every save (see `JanPaintings.Catalog.Measures`)
   and are used only for sorting; they are nil when the text has no number.
@@ -21,8 +24,18 @@ defmodule JanPaintings.Catalog.Print do
 
   @statuses ~w(available sold reserved)
 
+  @nationalities [
+    {"dutch_flemish", "Dutch/Flemish"},
+    {"italian", "Italian"},
+    {"german", "German"},
+    {"french", "French"},
+    {"british", "British"},
+    {"canadian", "Canadian"},
+    {"other", "Other"}
+  ]
+
   @text_fields ~w(dates medium details provenance watermark condition dimensions price
-                  thumb large_image catalogue_references state sheet_size)a
+                  thumb large_image catalogue_references state sheet_size nationality)a
 
   schema "prints" do
     field :slug, :string
@@ -40,6 +53,7 @@ defmodule JanPaintings.Catalog.Print do
     field :catalogue_references, :string, default: ""
     field :state, :string, default: ""
     field :status, :string, default: "available"
+    field :nationality, :string, default: ""
     field :price, :string, default: ""
     field :thumb, :string, default: ""
     field :image, :string, default: ""
@@ -54,6 +68,12 @@ defmodule JanPaintings.Catalog.Print do
   end
 
   def statuses, do: @statuses
+
+  @doc "Nationalities a print's artist can have, as `{key, label}` pairs in display order."
+  def nationalities, do: @nationalities
+
+  @doc ~S(The label for a nationality key, such as "Dutch/Flemish"; "" when not set.)
+  def nationality_label(key), do: List.keyfind(@nationalities, key, 0, {key, ""}) |> elem(1)
 
   @doc false
   def changeset(print, attrs, category_slugs) do
@@ -72,6 +92,7 @@ defmodule JanPaintings.Catalog.Print do
     |> validate_not_blank([:image], "add an image")
     |> validate_inclusion(:category, category_slugs)
     |> validate_inclusion(:status, @statuses)
+    |> validate_inclusion(:nationality, ["" | Enum.map(@nationalities, &elem(&1, 0))])
     |> validate_format(:slug, ~r/^[a-z0-9]+(?:-[a-z0-9]+)*$/,
       message: "use lower-case letters, numbers and dashes"
     )

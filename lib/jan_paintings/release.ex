@@ -14,7 +14,8 @@ defmodule JanPaintings.Release do
   end
 
   @doc """
-  Loads the catalogue details seed (see `JanPaintings.Catalog.Seed`). Run on
+  Loads the catalogue details and artist nationality seeds (see
+  `JanPaintings.Catalog.Seed`). Run on
   Fly with:
 
       fly ssh console -C '/app/bin/jan_paintings eval "JanPaintings.Release.seed()"'
@@ -22,12 +23,14 @@ defmodule JanPaintings.Release do
   def seed do
     load_app()
 
-    {:ok, summary, _} =
+    {:ok, {details, nationalities}, _} =
       Ecto.Migrator.with_repo(JanPaintings.Repo, fn _repo ->
-        JanPaintings.Catalog.Seed.load_catalogue_details()
+        {JanPaintings.Catalog.Seed.load_catalogue_details(),
+         JanPaintings.Catalog.Seed.load_nationalities()}
       end)
 
-    IO.inspect(summary, label: "Catalogue details")
+    IO.inspect(details, label: "Catalogue details")
+    IO.inspect(nationalities, label: "Nationalities")
   end
 
   def rollback(repo, version) do
