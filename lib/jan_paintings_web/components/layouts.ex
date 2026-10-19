@@ -99,7 +99,7 @@ defmodule JanPaintingsWeb.Layouts do
             alt="Ornament with a triton, engraving by Beham"
             width="798"
             height="275"
-            class="hidden h-20 w-auto sm:block md:h-30"
+            class="h-16 w-auto min-w-0 object-contain object-right sm:h-20 md:h-30"
           />
         </div>
       </header>
