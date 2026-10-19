@@ -33,7 +33,7 @@ defmodule JanPaintingsWeb.Layouts do
 
   attr :active, :string,
     default: nil,
-    doc: ~s(menu item for the current page: "prints", a category slug, or "about")
+    doc: ~s(menu item for the current page: "home", "prints", a category slug, or "about")
 
   slot :inner_block, required: true
 
@@ -107,9 +107,10 @@ defmodule JanPaintingsWeb.Layouts do
       <div class="sticky top-0 z-30 bg-paper">
         <nav
           aria-label="Main"
-          class="mx-auto max-w-[1200px] px-4 md:px-6"
+          class="relative mx-auto max-w-[1200px] px-4 md:px-6"
         >
           <div class="hidden h-12 items-stretch gap-7 border-b-3 border-gold md:flex">
+            <.home_link active={@active} />
             <.link
               :for={{key, label, path} <- @menu}
               navigate={path}
@@ -159,6 +160,10 @@ defmodule JanPaintingsWeb.Layouts do
               </.link>
             </div>
           </details>
+          <%!-- On phones, the right end of the Menu bar. --%>
+          <div class="absolute top-0 right-2 flex h-12 md:hidden">
+            <.home_link active={@active} class="w-11 justify-center" />
+          </div>
         </nav>
       </div>
 
@@ -197,6 +202,24 @@ defmodule JanPaintingsWeb.Layouts do
     </div>
 
     <.flash_group flash={@flash} />
+    """
+  end
+
+  @doc "Home icon for the menu bar."
+  attr :active, :string, default: nil
+  attr :class, :any, default: nil
+
+  def home_link(assigns) do
+    ~H"""
+    <.link
+      navigate={~p"/"}
+      class={["menu-item", @class]}
+      aria-current={@active == "home" && "page"}
+      title="Home"
+    >
+      <.icon name="hero-home" class="size-5" />
+      <span class="sr-only">Home</span>
+    </.link>
     """
   end
 
