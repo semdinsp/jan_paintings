@@ -76,6 +76,9 @@ defmodule JanPaintingsWeb.Router do
     pipe_through [:browser, :require_authenticated_user, :require_admin_user]
 
     get "/prints/export.csv", PrintCSVController, :export
+    get "/guides", GuideController, :index
+    get "/guides/adding-prints", GuideController, :adding
+    get "/guides/editing-prints", GuideController, :editing
 
     live_session :admin, on_mount: [{JanPaintingsWeb.UserAuth, :require_admin}] do
       live "/prints", PrintLive.Index, :index

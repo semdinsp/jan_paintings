@@ -1,0 +1,46 @@
+<Layouts.app flash={@flash} current_scope={@current_scope}>
+  <.link
+    navigate={~p"/admin/prints"}
+    class="text-sm uppercase tracking-widest text-base-content/60 hover:text-accent"
+  >
+    <span aria-hidden="true">&larr;</span> All prints
+  </.link>
+
+  <div class="mt-4 border-b border-base-300 pb-6">
+    <p class="text-xs uppercase tracking-[0.2em] text-base-content/60">Admin</p>
+    <h1 class="mt-1 font-serif text-3xl">Guides</h1>
+    <p class="mt-1 text-sm text-base-content/70">How to look after the prints on the site.</p>
+  </div>
+
+  <div class="mt-8 grid gap-6 sm:grid-cols-2">
+    <.link
+      id="guide-adding"
+      navigate={~p"/admin/guides/adding-prints"}
+      class="group flex gap-5 border border-rule bg-paper-2 p-6 transition hover:border-rose"
+    >
+      <.guide_icon guide={:adding} class="size-16 shrink-0" />
+      <div>
+        <h2 class="font-serif text-2xl group-hover:text-rose">Adding prints</h2>
+        <p class="mt-2 text-ink-2">
+          Add one print with its photos, or many at once from a spreadsheet. Includes drafts:
+          how prints stay hidden until they are ready.
+        </p>
+      </div>
+    </.link>
+
+    <.link
+      id="guide-editing"
+      navigate={~p"/admin/guides/editing-prints"}
+      class="group flex gap-5 border border-rule bg-paper-2 p-6 transition hover:border-rose"
+    >
+      <.guide_icon guide={:editing} class="size-16 shrink-0" />
+      <div>
+        <h2 class="font-serif text-2xl group-hover:text-rose">Editing prints</h2>
+        <p class="mt-2 text-ink-2">
+          Find a print, mark it sold or reserved, change its details and photos, take it off the
+          site, or delete it.
+        </p>
+      </div>
+    </.link>
+  </div>
+</Layouts.app>

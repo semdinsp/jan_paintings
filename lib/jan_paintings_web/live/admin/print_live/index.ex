@@ -21,6 +21,9 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Index do
           </p>
         </div>
         <div class="flex flex-wrap gap-2">
+          <.link navigate={~p"/admin/guides"} class="btn btn-ghost">
+            <.icon name="hero-book-open" class="size-4" /> Guides
+          </.link>
           <.link href={~p"/admin/prints/export.csv"} class="btn btn-ghost" download>
             <.icon name="hero-arrow-down-tray" class="size-4" /> Download CSV
           </.link>
