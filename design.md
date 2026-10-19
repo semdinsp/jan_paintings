@@ -145,6 +145,7 @@ Use `text-wrap: pretty` on paragraphs and `text-wrap: balance` on headings.
 ### Print detail page
 - Back link ("← Old Master Prints") above, in rose "more" style.
 - Two columns desktop: image 7/12 on a `--paper-2` mat, details 5/12. Stacked on mobile.
+- When a print has a larger image or extra views, a small secondary button "View larger" with a `hero-magnifying-glass-plus` icon sits under the image, right-aligned, and the image itself links to the larger view (zoom-in cursor). Both open it in a new tab and follow the selected gallery view.
 - Details: artist line, H1 title, medium/date, definition list (eyebrow labels, `--rule` hairlines between rows), price 20px/600, primary Enquire button.
 - Additional notes (commentary that was set in italics on the original site), when present: below the buttons, above a `--rule` hairline, "Additional notes" eyebrow, then each paragraph in Source Sans italic, `--ink-2`, 68ch.
 

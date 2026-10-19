@@ -20,6 +20,7 @@ defmodule JanPaintingsWeb.PrintController do
       category: category,
       print: print,
       views: Catalog.views(print),
+      enlargeable?: print.large_image != "" or print.gallery != [],
       more_by_artist?: Catalog.more_by_artist(print) != []
     )
   end
