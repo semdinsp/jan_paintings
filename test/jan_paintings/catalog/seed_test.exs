@@ -127,4 +127,44 @@ defmodule JanPaintings.Catalog.SeedTest do
       assert_raise ArgumentError, ~r/martian/, fn -> Seed.load_nationalities(path) end
     end
   end
+
+  describe "load_additional_notes/1" do
+    test "the shipped file matches every print it names, once" do
+      first = Seed.load_additional_notes()
+      assert first.missing == []
+      assert first.updated == 67
+
+      assert %{updated: 0, missing: []} = Seed.load_additional_notes()
+
+      della_bella =
+        Catalog.get_print(
+          "della-bella-diverses-exercices-de-cavalerie-the-set-of-19-plates-including-title"
+        )
+
+      assert della_bella.additional_notes =~ ~r/^Massar proposes .* date to 1645\.$/
+    end
+
+    test "keeps notes edited in the admin pages", %{tmp_dir: dir} do
+      print = Catalog.get_print("neilson-dredging-the-st-charles-river")
+      {:ok, _} = Catalog.update_print(print, %{"additional_notes" => "Jan's note"})
+      other = Catalog.get_print("bleker-a-cowherd-playing-his-horn")
+
+      path = Path.join(dir, "notes.json")
+
+      File.write!(
+        path,
+        Jason.encode!(%{
+          "prints" => [
+            %{"slug" => print.slug, "additional_notes" => "From the seed"},
+            %{"slug" => other.slug, "additional_notes" => "From the seed"},
+            %{"slug" => "no-such-print", "additional_notes" => "x"}
+          ]
+        })
+      )
+
+      assert %{updated: 1, missing: ["no-such-print"]} = Seed.load_additional_notes(path)
+      assert Catalog.get_print(print.slug).additional_notes == "Jan's note"
+      assert Catalog.get_print(other.slug).additional_notes == "From the seed"
+    end
+  end
 end
