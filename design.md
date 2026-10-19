@@ -152,7 +152,7 @@ Use `text-wrap: pretty` on paragraphs and `text-wrap: balance` on headings.
 
 ### Footer
 - Full-width `--dusk` band, 48px vertical padding, `--ink` text, 15px.
-- Columns: business name + address; email and phone links; "Log in" and the theme toggle. One column on phones, two on tablets (the third group wraps below), three from `lg` with the third right-aligned.
+- Columns: business name + address; email and phone links; a log-in icon (`hero-arrow-right-end-on-rectangle`, arrow pointing in, "Log in" as its title and screen-reader text) and the theme toggle. One column on phones, two on tablets (the third group wraps below), three from `lg` with the third right-aligned.
 
 ### Favicon
 - The triton's head from the header engraving in a round medallion on a `--dusk` square.
