@@ -81,6 +81,24 @@ defmodule JanPaintings.CatalogTest do
     end
   end
 
+  describe "artist_query/1" do
+    test "is the surname and first given name" do
+      assert Catalog.artist_query(%{artist: "BONNET, Louis-Marin direxit"}) == "BONNET Louis"
+      assert Catalog.artist_query(%{artist: "GHISI, Giorgio, attributed to"}) == "GHISI Giorgio"
+      assert Catalog.artist_query(%{artist: "NEILSON"}) == "NEILSON"
+    end
+
+    test "finds the print and all of its more-by-artist prints" do
+      prints = Catalog.list_prints()
+
+      for print <- prints do
+        found = Catalog.search(prints, Catalog.artist_query(print))
+        assert print in found
+        assert Enum.all?(Catalog.more_by_artist(print), &(&1 in found)), print.slug
+      end
+    end
+  end
+
   test "includes the Tiepolo prints from the original site's more-by-artist pages" do
     tiepolo = Catalog.list_prints() |> Enum.filter(&(&1.artist =~ "TIEPOLO"))
     assert length(tiepolo) == 3

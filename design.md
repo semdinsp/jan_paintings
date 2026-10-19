@@ -87,12 +87,12 @@ Use `text-wrap: pretty` on paragraphs and `text-wrap: balance` on headings.
 
 ### Links
 - Inline links: `--rose`, underline with `text-underline-offset: 3px`, `text-decoration-thickness: 1px`. Hover: `--rose-2`, thickness 2px.
-- "More" links ("← Old Master Prints", "More by this artist"): `--rose`, 15px/600, no underline by default, underline on hover. Arrow is a text character.
+- "More" links ("← Old Master Prints"): `--rose`, 15px/600, no underline by default, underline on hover. Arrow is a text character.
 - On `--dusk`, links are `--ink` with the same underline.
 
 ### Buttons
 - **Primary** ("Enquire about this print", "Send message"): background `--rose`, white text, 15px/600, padding 12px 20px, radius 2px. Hover `--rose-2`.
-- **Secondary**: transparent, 1px `--rose` border, `--rose` text. Hover: `--rose-tint` background.
+- **Secondary** ("More by this artist" on a print page, under the enquiry button; opens /prints searched by the artist's surname and first given name): transparent, 1px `--rose` border, `--rose` text. Hover: `--rose-tint` background.
 - Focus (all interactive): 2px `--rose` outline, 2px offset.
 - Minimum hit area 44px tall.
 
@@ -134,7 +134,7 @@ Use `text-wrap: pretty` on paragraphs and `text-wrap: balance` on headings.
 - **Search**: below the tiles, centred, max-width 512px, under a "Search the stock" eyebrow.
 - "From the stock" is not shown, but is kept as the `from_the_stock/1` component in `PageHTML`; its doc has the one line needed to restore it.
 
-### Print grid (listing pages, "More by this artist")
+### Print grid (listing pages)
 - CSS grid `repeat(auto-fill, minmax(220px, 1fr))`, gap 32px horizontal / 48px vertical.
 - Phones (< 640px): exactly two columns, gap 16px / 32px.
 - Image on a `--paper-2` mat, fixed 4:5 box, `object-fit: contain`, 16px padding, so prints of different shapes align.
