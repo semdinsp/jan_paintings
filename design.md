@@ -12,7 +12,7 @@ A museum-like print room where the prints carry the colour: warm paper, dark ink
 - **Antique gold** draws the lines: the rule under the menu bar and the outlines of form fields and filter buttons.
 - **Rose** marks what you can click: links, buttons, the active menu item and focus rings.
 
-The homepage is a set of large picture tiles, one per section of the print list, with search below them.
+The homepage is a set of large picture tiles, one per print category, with search below them.
 
 ## 2. Colour tokens
 
@@ -116,16 +116,15 @@ Use `text-wrap: pretty` on paragraphs and `text-wrap: balance` on headings.
 
 ### Homepage
 - No hero. A visually hidden H1 ("Jan Johnson, Old Master, Modern and Canadian prints for collectors and museums") keeps the page heading for search engines and screen readers.
-- **Tiles**: four large picture links, one per section of the print list, in this order (About has no tile; it is About Us in the menu bar):
+- **Tiles**: three large picture links, one per print category, in this order (All Prints and About have no tile; they are in the menu bar):
 
   | Tile | Links to | Image |
   |---|---|---|
-  | All Prints | /prints | Lepère, *Embarcadère sur la Garonne* |
   | Old Master Prints | /prints/old-masters | Dürer, *St George Slaying the Dragon* |
   | Modern Prints | /prints/modern | Chahine, *Invitation après la parade* |
   | Canadian Prints | /prints/canadian | Hornyansky, *Anxiety, People on the Shore* |
 
-  - Layout: centred flex-wrap, 24px gap. Four in a row from `lg`, two by two from `sm`, one per row on phones.
+  - Layout: centred flex-wrap, 24px gap. Three in a row from `sm`, one per row on phones.
   - Shape: 4:5 portrait from `sm`; 3:2 landscape on phones so the stack stays short.
   - Image fills the tile (`object-fit: cover`), with a per-tile `object-position` so faces and key details stay in frame. A tile can set a different position for the landscape phone crop (St George uses `object-[50%_10%] sm:object-center` so his head shows on phones). This is the one place a print may be cropped.
   - A 35% black wash over the image (20% on hover), with the label centred in white EB Garamond 32px and a soft text shadow.

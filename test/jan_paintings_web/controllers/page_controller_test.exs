@@ -7,15 +7,14 @@ defmodule JanPaintingsWeb.PageControllerTest do
     assert html =~ "Canadian Prints"
   end
 
-  test "the homepage has a tile for each print section and none for About", %{conn: conn} do
+  test "the homepage has a tile for each category and none for All Prints or About", %{
+    conn: conn
+  } do
     html = conn |> get(~p"/") |> html_response(200)
     [tiles] = Regex.run(~r{<nav[^>]*aria-label="Browse the gallery".*?</nav>}s, html)
 
-    for path <- ["/prints", "/prints/old-masters", "/prints/modern", "/prints/canadian"] do
-      assert tiles =~ ~s(href="#{path}")
-    end
-
-    refute tiles =~ ~s(href="/about")
+    hrefs = Regex.scan(~r{href="([^"]*)"}, tiles, capture: :all_but_first) |> List.flatten()
+    assert hrefs == ["/prints/old-masters", "/prints/modern", "/prints/canadian"]
     refute html =~ "About the Gallery"
   end
 

@@ -15,15 +15,9 @@ defmodule JanPaintingsWeb.PageController do
     )
   end
 
-  # Large image links on the homepage, one per section of the print list.
+  # Large image links on the homepage, one per print category.
   defp home_tiles do
     [
-      %{
-        label: "All Prints",
-        path: ~p"/prints",
-        image: "/images/catalogue/lepere-650.jpg",
-        position: "object-right-top"
-      },
       %{
         label: "Old Master Prints",
         path: ~p"/prints/old-masters",
