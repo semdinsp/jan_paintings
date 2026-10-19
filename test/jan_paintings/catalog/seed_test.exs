@@ -79,4 +79,52 @@ defmodule JanPaintings.Catalog.SeedTest do
     assert %{updated: 1} = Seed.load_catalogue_details(correction.(print.condition))
     assert Catalog.get_print(print.slug).condition == "Fixed"
   end
+
+  describe "load_nationalities/1" do
+    test "the shipped file gives every print in the catalogue a nationality, once" do
+      first = Seed.load_nationalities()
+      assert first.missing == []
+      assert first.updated == length(Catalog.list_prints())
+      assert Enum.all?(Catalog.list_prints(), &(&1.nationality != ""))
+
+      assert %{updated: 0, missing: []} = Seed.load_nationalities()
+
+      assert Catalog.get_print("neilson-dredging-the-st-charles-river").nationality == "canadian"
+    end
+
+    test "keeps nationalities chosen in the admin pages", %{tmp_dir: dir} do
+      print = Catalog.get_print("neilson-dredging-the-st-charles-river")
+      {:ok, _} = Catalog.update_print(print, %{"nationality" => "british"})
+
+      path = Path.join(dir, "nationalities.json")
+
+      File.write!(
+        path,
+        Jason.encode!(%{
+          "artists" => [
+            %{"artist" => print.artist, "nationality" => "canadian"},
+            %{"artist" => "NOBODY, Anyone", "nationality" => "other"}
+          ]
+        })
+      )
+
+      summary = Seed.load_nationalities(path)
+      assert summary.missing == ["NOBODY, Anyone"]
+      assert Catalog.get_print(print.slug).nationality == "british"
+      # The artist's other prints were still blank, so they were filled.
+      others = Enum.filter(Catalog.list_prints(), &(&1.artist == print.artist))
+      assert summary.updated == length(others) - 1
+    end
+
+    test "refuses an unknown nationality", %{tmp_dir: dir} do
+      path = Path.join(dir, "bad.json")
+
+      File.write!(
+        path,
+        Jason.encode!(%{"artists" => [%{"artist" => "ABEL, Josef", "nationality" => "martian"}]})
+      )
+
+      assert_raise ArgumentError, ~r/martian/, fn -> Seed.load_nationalities(path) end
+    end
+  end
 end

@@ -13,10 +13,13 @@ defmodule JanPaintings.Catalog.Seed do
     * a correction only applies while the field still holds the exact value
       it corrects.
 
-  Run it with `mix run priv/repo/seeds.exs` locally, or
+  `load_nationalities/1` fills in each artist's nationality the same way.
+
+  Run both with `mix run priv/repo/seeds.exs` locally, or
   `bin/jan_paintings eval "JanPaintings.Release.seed()"` in a release.
   """
   import Ecto.Changeset
+  import Ecto.Query
 
   alias JanPaintings.Catalog.Print
   alias JanPaintings.Repo
@@ -25,6 +28,42 @@ defmodule JanPaintings.Catalog.Seed do
 
   def default_path,
     do: Path.join(:code.priv_dir(:jan_paintings), "repo/seeds/print_catalogue_details.json")
+
+  def nationalities_path,
+    do: Path.join(:code.priv_dir(:jan_paintings), "repo/seeds/print_nationalities.json")
+
+  @doc """
+  Sets each artist's nationality from `priv/repo/seeds/print_nationalities.json`
+  on their prints, matching the artist exactly as stored. Like the catalogue
+  details, it only fills prints whose nationality is still blank, so choices
+  made in the admin pages are kept and it is safe to run again.
+
+  Returns how many prints were updated and the artists in the file that no
+  print matched.
+  """
+  def load_nationalities(path \\ nationalities_path()) do
+    %{"artists" => entries} = path |> File.read!() |> Jason.decode!()
+
+    Enum.reduce(entries, %{updated: 0, missing: []}, fn %{"artist" => artist} = entry, summary ->
+      nationality = Map.fetch!(entry, "nationality")
+
+      unless List.keymember?(Print.nationalities(), nationality, 0),
+        do: raise(ArgumentError, "unknown nationality #{inspect(nationality)} for #{artist}")
+
+      if Repo.exists?(from p in Print, where: p.artist == ^artist) do
+        {count, _} =
+          from(p in Print, where: p.artist == ^artist and p.nationality == "")
+          |> Repo.update_all(
+            set: [nationality: nationality, updated_at: DateTime.utc_now(:second)]
+          )
+
+        Map.update!(summary, :updated, &(&1 + count))
+      else
+        Map.update!(summary, :missing, &[artist | &1])
+      end
+    end)
+    |> Map.update!(:missing, &Enum.reverse/1)
+  end
 
   @doc """
   Applies the seed file. Returns a summary map: how many prints were updated,

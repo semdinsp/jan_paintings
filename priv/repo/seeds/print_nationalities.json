@@ -1,0 +1,528 @@
+{
+  "artists": [
+    {
+      "artist": "ABEL, Josef",
+      "nationality": "other"
+    },
+    {
+      "artist": "ALEXANDER, William W.",
+      "nationality": "canadian"
+    },
+    {
+      "artist": "ARMINGTON, Caroline",
+      "nationality": "canadian"
+    },
+    {
+      "artist": "ARMINGTON, Frank",
+      "nationality": "canadian"
+    },
+    {
+      "artist": "BAERTSOEN, Albert",
+      "nationality": "dutch_flemish"
+    },
+    {
+      "artist": "BARTH, Friedrich",
+      "nationality": "german"
+    },
+    {
+      "artist": "BEDER, Jack",
+      "nationality": "canadian"
+    },
+    {
+      "artist": "BEHAM, Hans Sebald",
+      "nationality": "german"
+    },
+    {
+      "artist": "BERCHEM, Nicolaes",
+      "nationality": "dutch_flemish"
+    },
+    {
+      "artist": "BESNARD, Albert",
+      "nationality": "french"
+    },
+    {
+      "artist": "BIELER, André",
+      "nationality": "canadian"
+    },
+    {
+      "artist": "BISCAINO, Bartolomeo",
+      "nationality": "italian"
+    },
+    {
+      "artist": "BLEKER, Gerrit Claesz.",
+      "nationality": "dutch_flemish"
+    },
+    {
+      "artist": "BLOOTELING, Abraham",
+      "nationality": "dutch_flemish"
+    },
+    {
+      "artist": "BOLSWERT, Schelte à",
+      "nationality": "dutch_flemish"
+    },
+    {
+      "artist": "BONE, Sir David Muirhead",
+      "nationality": "british"
+    },
+    {
+      "artist": "BONNET, Louis-Marin",
+      "nationality": "french"
+    },
+    {
+      "artist": "BONNET, Louis-Marin direxit",
+      "nationality": "french"
+    },
+    {
+      "artist": "BOYVIN, Réné",
+      "nationality": "french"
+    },
+    {
+      "artist": "BRANDTNER, Fritz",
+      "nationality": "canadian"
+    },
+    {
+      "artist": "BRESDIN, Rodolphe",
+      "nationality": "french"
+    },
+    {
+      "artist": "BULLER, Cecil",
+      "nationality": "canadian"
+    },
+    {
+      "artist": "CARON, Paul",
+      "nationality": "canadian"
+    },
+    {
+      "artist": "CHAHINE, Edgar",
+      "nationality": "french"
+    },
+    {
+      "artist": "COCHIN, Charles-Nicolas père",
+      "nationality": "french"
+    },
+    {
+      "artist": "COENTGEN, H. after Johann Merken",
+      "nationality": "german"
+    },
+    {
+      "artist": "DAUBIGNY, Charles-François",
+      "nationality": "french"
+    },
+    {
+      "artist": "DAUMIER, Honoré",
+      "nationality": "french"
+    },
+    {
+      "artist": "DAVID, Giovanni",
+      "nationality": "italian"
+    },
+    {
+      "artist": "DE JODE, Pieter the elder",
+      "nationality": "dutch_flemish"
+    },
+    {
+      "artist": "DE LATENAY, Gaston",
+      "nationality": "french"
+    },
+    {
+      "artist": "DELCOURT, Maurice",
+      "nationality": "french"
+    },
+    {
+      "artist": "DELFF, William Jacobsz.",
+      "nationality": "dutch_flemish"
+    },
+    {
+      "artist": "DELLA BELLA, Stefano",
+      "nationality": "italian"
+    },
+    {
+      "artist": "DEMARTEAU, Gilles",
+      "nationality": "french"
+    },
+    {
+      "artist": "DESBOUTIN, Marcellin",
+      "nationality": "french"
+    },
+    {
+      "artist": "DEVERIA, Achille",
+      "nationality": "french"
+    },
+    {
+      "artist": "DIETTERLIN, Wendel the Elder",
+      "nationality": "german"
+    },
+    {
+      "artist": "DODD, Francis",
+      "nationality": "british"
+    },
+    {
+      "artist": "DOETECUM, Jan or Lucas",
+      "nationality": "dutch_flemish"
+    },
+    {
+      "artist": "DOLENDO, Zacharias",
+      "nationality": "dutch_flemish"
+    },
+    {
+      "artist": "DORÉ, Gustav",
+      "nationality": "french"
+    },
+    {
+      "artist": "DUGUAY, Rodolphe",
+      "nationality": "canadian"
+    },
+    {
+      "artist": "DURER, Albrecht",
+      "nationality": "german"
+    },
+    {
+      "artist": "DUSART, Cornelis",
+      "nationality": "dutch_flemish"
+    },
+    {
+      "artist": "EVERDINGEN, Allaert van",
+      "nationality": "dutch_flemish"
+    },
+    {
+      "artist": "FITZGERALD, Lionel Lemoine",
+      "nationality": "canadian"
+    },
+    {
+      "artist": "FONTEBASSO, Francesco",
+      "nationality": "italian"
+    },
+    {
+      "artist": "GAGNON, Clarence",
+      "nationality": "canadian"
+    },
+    {
+      "artist": "GAVARNI (Paul Sulpice Guillaume Chevalier)",
+      "nationality": "french"
+    },
+    {
+      "artist": "GHISI, Giorgio",
+      "nationality": "italian"
+    },
+    {
+      "artist": "GHISI, Giorgio, attributed to",
+      "nationality": "italian"
+    },
+    {
+      "artist": "GOENEUTTE, Norbert",
+      "nationality": "french"
+    },
+    {
+      "artist": "GOLDHAMER, Charles",
+      "nationality": "canadian"
+    },
+    {
+      "artist": "GOLTZIUS, Hendrick",
+      "nationality": "dutch_flemish"
+    },
+    {
+      "artist": "GORANSON, Paul",
+      "nationality": "canadian"
+    },
+    {
+      "artist": "GOYA, Francisco",
+      "nationality": "other"
+    },
+    {
+      "artist": "GREENE, T.G.",
+      "nationality": "canadian"
+    },
+    {
+      "artist": "GRIGGS, Frederick L.",
+      "nationality": "british"
+    },
+    {
+      "artist": "GROZER, Joseph",
+      "nationality": "british"
+    },
+    {
+      "artist": "HEYDEN, Jan van der",
+      "nationality": "dutch_flemish"
+    },
+    {
+      "artist": "HEYMAN, Charles",
+      "nationality": "french"
+    },
+    {
+      "artist": "HOLLAR, Wenzel",
+      "nationality": "other"
+    },
+    {
+      "artist": "HORNYANSKY, Nicholas",
+      "nationality": "canadian"
+    },
+    {
+      "artist": "HUQUIER, Gabriel",
+      "nationality": "french"
+    },
+    {
+      "artist": "ISABEY, Eugene",
+      "nationality": "french"
+    },
+    {
+      "artist": "JEANNIOT, Pierre Georges",
+      "nationality": "french"
+    },
+    {
+      "artist": "JONGKIND, Jean-Barthold",
+      "nationality": "dutch_flemish"
+    },
+    {
+      "artist": "KLINGER, Max",
+      "nationality": "german"
+    },
+    {
+      "artist": "KNIGHT, Dame Laura",
+      "nationality": "british"
+    },
+    {
+      "artist": "KOLBE, Carl Wilhelm",
+      "nationality": "german"
+    },
+    {
+      "artist": "LAAGE, Wilhelm",
+      "nationality": "german"
+    },
+    {
+      "artist": "LASINIO, Carlo",
+      "nationality": "italian"
+    },
+    {
+      "artist": "LE NOTRE, BOUTICOURT AND LEBLOND, after, 17TH C.",
+      "nationality": "french"
+    },
+    {
+      "artist": "LEBAS, Jacques-Philippe",
+      "nationality": "french"
+    },
+    {
+      "artist": "LEGEAY, Jean-Laurent",
+      "nationality": "french"
+    },
+    {
+      "artist": "LEPERE, Auguste",
+      "nationality": "french"
+    },
+    {
+      "artist": "LORRAIN, Louis-Joseph",
+      "nationality": "french"
+    },
+    {
+      "artist": "MARTIN, John (Jack)",
+      "nationality": "canadian"
+    },
+    {
+      "artist": "MATHAM Jacob",
+      "nationality": "dutch_flemish"
+    },
+    {
+      "artist": "MAUPERCHÉ, Henri",
+      "nationality": "french"
+    },
+    {
+      "artist": "MAURIN, Charles",
+      "nationality": "french"
+    },
+    {
+      "artist": "MAW, Samuel Herbert",
+      "nationality": "canadian"
+    },
+    {
+      "artist": "MCARDELL, James",
+      "nationality": "british"
+    },
+    {
+      "artist": "MIGNON, Jean",
+      "nationality": "french"
+    },
+    {
+      "artist": "MULLER Jan Harmensz",
+      "nationality": "dutch_flemish"
+    },
+    {
+      "artist": "MULLER, Alfredo",
+      "nationality": "italian"
+    },
+    {
+      "artist": "NEILSON, Henry Ivan",
+      "nationality": "canadian"
+    },
+    {
+      "artist": "OSTADE, Adriaen van",
+      "nationality": "dutch_flemish"
+    },
+    {
+      "artist": "PENCZ, Georg",
+      "nationality": "german"
+    },
+    {
+      "artist": "PETHER, William",
+      "nationality": "british"
+    },
+    {
+      "artist": "PIERRE, Gustave",
+      "nationality": "french"
+    },
+    {
+      "artist": "PILLEMENT, Jean-Baptiste",
+      "nationality": "french"
+    },
+    {
+      "artist": "PIRANESI, G.B.",
+      "nationality": "italian"
+    },
+    {
+      "artist": "PISSARRO, Camille",
+      "nationality": "french"
+    },
+    {
+      "artist": "POTTER, Paulus",
+      "nationality": "dutch_flemish"
+    },
+    {
+      "artist": "PREISSLER, Valentin Daniel",
+      "nationality": "german"
+    },
+    {
+      "artist": "RAINE, Herbert",
+      "nationality": "canadian"
+    },
+    {
+      "artist": "RASSENFOSSE, Armand",
+      "nationality": "dutch_flemish"
+    },
+    {
+      "artist": "REINBLATT, Moe",
+      "nationality": "canadian"
+    },
+    {
+      "artist": "RICCI, Marco",
+      "nationality": "italian"
+    },
+    {
+      "artist": "ROBERTS, Tom",
+      "nationality": "canadian"
+    },
+    {
+      "artist": "ROSA, Salvator",
+      "nationality": "italian"
+    },
+    {
+      "artist": "ROUX, Marcel",
+      "nationality": "french"
+    },
+    {
+      "artist": "SADELER, Aegidius",
+      "nationality": "dutch_flemish"
+    },
+    {
+      "artist": "SAENREDAM, Jan",
+      "nationality": "dutch_flemish"
+    },
+    {
+      "artist": "SAINT-NON, Jean-Claude-Richard, abbé de",
+      "nationality": "french"
+    },
+    {
+      "artist": "SCHAEFER, Carl",
+      "nationality": "canadian"
+    },
+    {
+      "artist": "SCHMUTZER Ferdinand",
+      "nationality": "other"
+    },
+    {
+      "artist": "SIRANI, Giovanni Andrea",
+      "nationality": "italian"
+    },
+    {
+      "artist": "SMITH, John",
+      "nationality": "british"
+    },
+    {
+      "artist": "STEINLEN, Théophile Alexandre",
+      "nationality": "french"
+    },
+    {
+      "artist": "STOCK, Andries",
+      "nationality": "dutch_flemish"
+    },
+    {
+      "artist": "STOOP, Dirk",
+      "nationality": "dutch_flemish"
+    },
+    {
+      "artist": "STRADA, Vespasiano",
+      "nationality": "italian"
+    },
+    {
+      "artist": "STRANG, William",
+      "nationality": "british"
+    },
+    {
+      "artist": "TAYLOR, Frederick B.",
+      "nationality": "canadian"
+    },
+    {
+      "artist": "TIEPOLO, Giandomenico",
+      "nationality": "italian"
+    },
+    {
+      "artist": "TISSOT, Jacques Joseph",
+      "nationality": "french"
+    },
+    {
+      "artist": "VALLOTTON, Felix",
+      "nationality": "french"
+    },
+    {
+      "artist": "VAN VLIET, Jan Gillisz",
+      "nationality": "dutch_flemish"
+    },
+    {
+      "artist": "VANNI, Giovanni Battista",
+      "nationality": "italian"
+    },
+    {
+      "artist": "VELDE, Jan van de II",
+      "nationality": "dutch_flemish"
+    },
+    {
+      "artist": "VERBOOM, Adriaen",
+      "nationality": "dutch_flemish"
+    },
+    {
+      "artist": "VICO, Enea",
+      "nationality": "italian"
+    },
+    {
+      "artist": "VILLON, Jacques",
+      "nationality": "french"
+    },
+    {
+      "artist": "VREDEMAN DE VRIES, Hans",
+      "nationality": "dutch_flemish"
+    },
+    {
+      "artist": "VUILLARD, Edouard",
+      "nationality": "french"
+    },
+    {
+      "artist": "WATERLOO, Anthonie",
+      "nationality": "dutch_flemish"
+    },
+    {
+      "artist": "WATSON, Homer",
+      "nationality": "canadian"
+    },
+    {
+      "artist": "WEIROTTER, Franz Edmund",
+      "nationality": "other"
+    }
+  ]
+}
