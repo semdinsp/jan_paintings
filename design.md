@@ -147,7 +147,7 @@ Use `text-wrap: pretty` on paragraphs and `text-wrap: balance` on headings.
 - Two columns desktop: image 7/12 on a `--paper-2` mat, details 5/12. Stacked on mobile.
 - When a print has a larger image or extra views, a small secondary button "View larger" with a `hero-magnifying-glass-plus` icon sits under the image, right-aligned, and the image itself links to the larger view (zoom-in cursor). Both open it in a new tab and follow the selected gallery view.
 - Details: artist line, H1 title, medium/date, definition list (eyebrow labels, `--rule` hairlines between rows), price 20px/600, primary Enquire button.
-- Additional notes (commentary that was set in italics on the original site), when present: below the buttons, above a `--rule` hairline, "Additional notes" eyebrow, then each paragraph in Source Sans italic, `--ink-2`, 68ch.
+- Additional notes (commentary that was set in italics on the original site), when present: a row of the definition list labelled "Additional notes", straight after Condition (so before Provenance, Watermark and Price), each paragraph in Source Sans italic, `--ink-2`.
 
 ### About page
 - Text column (68ch). Jan's portrait (`images/jan-johnson.jpg`) on a `--paper-2` mat with "Jan Johnson" below: beside the text from `lg` (1024px); below the text on phones and tablets, at most 320px wide.

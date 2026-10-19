@@ -119,6 +119,12 @@ defmodule JanPaintingsWeb.PrintControllerTest do
     assert html =~ "Additional notes"
     assert html =~ ~r/<p[^>]*italic[^>]*>\s*First thought.\s*<\/p>/
     assert html =~ ~r/<p[^>]*italic[^>]*>\s*Second thought.\s*<\/p>/
+
+    # A row of the details, straight after Condition and before Price.
+    [_, after_condition] = String.split(html, ">Condition</dt>", parts: 2)
+    [notes_row, _] = String.split(after_condition, ">Price</dt>", parts: 2)
+    assert notes_row =~ ">Additional notes</dt>"
+    assert notes_row =~ "First thought."
   end
 
   test "shows prices with their currency", %{conn: conn} do
