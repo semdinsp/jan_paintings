@@ -1,11 +1,12 @@
 defmodule JanPaintingsWeb.PrintLive.Index do
-  @moduledoc "Print grid for all prints or one category, with live search."
+  @moduledoc "Print grid for all prints or one category, with live search and a nationality filter."
   use JanPaintingsWeb, :live_view
 
   import JanPaintingsWeb.PageHTML, only: [print_card: 1, search_form: 1]
-  import JanPaintingsWeb.PrintHTML, only: [category_filter: 1, sort_toggles: 1]
+  import JanPaintingsWeb.PrintHTML, only: [category_filter: 1, nationality_filter: 1]
 
   alias JanPaintings.Catalog
+  alias JanPaintings.Catalog.Print
   alias JanPaintingsWeb.SEO
 
   @impl true
@@ -17,10 +18,16 @@ defmodule JanPaintingsWeb.PrintLive.Index do
       end
 
     query = params |> Map.get("q", "") |> to_string() |> String.trim()
-    sort = if params["sort"] in ~w(price size), do: params["sort"]
+
+    nationality =
+      Enum.find_value(Print.nationalities(), fn {key, _} ->
+        key == params["nationality"] && key
+      end)
+
     prints = if category, do: Catalog.list_prints(category.slug), else: Catalog.list_prints()
 
-    shown = prints |> Catalog.search(query) |> Catalog.order_prints(sort)
+    matching = Catalog.search(prints, query)
+    shown = Catalog.filter_nationality(matching, nationality)
     path = if category, do: "/prints/#{category.slug}", else: "/prints"
     description = description(category, length(prints))
 
@@ -39,8 +46,9 @@ defmodule JanPaintingsWeb.PrintLive.Index do
          ),
        category: category,
        query: query,
-       sort: sort,
-       clear_search_path: search_path(category, "", sort),
+       nationality: nationality,
+       nationalities: nationalities_present(matching, nationality),
+       clear_search_path: search_path(category, "", nationality),
        prints: shown
      )}
   end
@@ -48,13 +56,24 @@ defmodule JanPaintingsWeb.PrintLive.Index do
   # Keep the URL in sync with the search box, without a history entry per keystroke.
   @impl true
   def handle_event("search", %{"q" => query}, socket) do
-    %{category: category, sort: sort} = socket.assigns
-    {:noreply, push_patch(socket, to: search_path(category, query, sort), replace: true)}
+    %{category: category, nationality: nationality} = socket.assigns
+    {:noreply, push_patch(socket, to: search_path(category, query, nationality), replace: true)}
   end
 
-  defp search_path(category, query, sort) do
+  # Only offer nationalities that would show prints, plus the one selected,
+  # and no filter at all when it would just repeat the whole list.
+  defp nationalities_present(prints, selected) do
+    present = MapSet.new(prints, & &1.nationality)
+
+    case Enum.filter(Print.nationalities(), fn {key, _} -> key == selected or key in present end) do
+      [{key, _}] when key != selected -> []
+      options -> options
+    end
+  end
+
+  defp search_path(category, query, nationality) do
     params =
-      [q: if(String.trim(query) != "", do: String.trim(query)), sort: sort]
+      [q: if(String.trim(query) != "", do: String.trim(query)), nationality: nationality]
       |> Enum.reject(fn {_, v} -> is_nil(v) end)
 
     if category, do: ~p"/prints/#{category.slug}?#{params}", else: ~p"/prints?#{params}"

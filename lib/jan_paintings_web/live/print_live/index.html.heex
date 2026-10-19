@@ -17,9 +17,14 @@
       phx-change="search"
       phx-submit="search"
     />
-    <div class="mt-4 flex flex-wrap items-center gap-x-6 gap-y-3">
-      <.category_filter current={@category} query={@query} sort={@sort} />
-      <.sort_toggles current={@category} query={@query} sort={@sort} />
+    <div class="mt-4 space-y-3">
+      <.category_filter current={@category} query={@query} nationality={@nationality} />
+      <.nationality_filter
+        current={@category}
+        query={@query}
+        nationality={@nationality}
+        options={@nationalities}
+      />
     </div>
     <p class="type-meta mt-4">
       <%= if @query != "" do %>

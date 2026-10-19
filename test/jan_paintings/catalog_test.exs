@@ -120,30 +120,17 @@ defmodule JanPaintings.CatalogTest do
     end
   end
 
-  describe "order_prints/2" do
-    test "orders by price, lowest first, with unpriced prints last" do
-      ordered = Catalog.order_prints(Catalog.list_prints(), "price")
-      {priced, unpriced} = Enum.split_while(ordered, & &1.price_amount)
+  describe "filter_nationality/2" do
+    test "keeps only prints with that nationality; nil or blank keeps all" do
+      [a, b | _] = prints = Catalog.list_prints()
+      {:ok, _} = Catalog.update_print(a, %{"nationality" => "french"})
+      {:ok, _} = Catalog.update_print(b, %{"nationality" => "italian"})
+      prints = Enum.map(prints, &Catalog.get_print(&1.slug))
 
-      assert Enum.map(priced, & &1.price_amount) == Enum.sort(Enum.map(priced, & &1.price_amount))
-      assert unpriced != []
-      assert Enum.all?(unpriced, &is_nil(&1.price_amount))
-    end
-
-    test "orders by plate area, smallest first, with unsized prints last" do
-      ordered = Catalog.order_prints(Catalog.list_prints(), "size")
-      {sized, unsized} = Enum.split_while(ordered, & &1.height_mm)
-      areas = Enum.map(sized, &(&1.height_mm * &1.width_mm))
-
-      assert areas == Enum.sort(areas)
-      assert unsized != []
-      assert Enum.all?(unsized, &is_nil(&1.height_mm))
-    end
-
-    test "keeps the usual order for no sort or an unknown one" do
-      prints = Catalog.list_prints()
-      assert Catalog.order_prints(prints, nil) == prints
-      assert Catalog.order_prints(prints, "colour") == prints
+      assert Enum.map(Catalog.filter_nationality(prints, "french"), & &1.slug) == [a.slug]
+      assert Enum.map(Catalog.filter_nationality(prints, "italian"), & &1.slug) == [b.slug]
+      assert Catalog.filter_nationality(prints, nil) == prints
+      assert Catalog.filter_nationality(prints, "") == prints
     end
   end
 

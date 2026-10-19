@@ -107,12 +107,12 @@ Use `text-wrap: pretty` on paragraphs and `text-wrap: balance` on headings.
 - Hover: border and text `--rose`.
 - Selected: `--rose` border, `--rose-tint` background, `--rose` text, weight 600.
 
-### Sort toggles (listing pages)
-- After the category filters, on the same row on desktop (wrapping below on phones): a small "Sort by" label, then **Price** and **Size** buttons in the same style as the filter buttons.
-- Clicking one sorts smallest first (Size is plate area) and shows it selected with a "↑"; clicking it again returns to the usual artist order. Only one is active at a time.
-- Prints with no price ("On request", blank) or no size go last. Prices compare as numbers regardless of currency.
-- The sort is kept in the URL (`?sort=price`) and carried through category changes and searches.
-- The numbers come from `price_amount`, `price_currency`, `height_mm` and `width_mm`, worked out from the price and size text whenever a print is saved. The admin form shows what each sorts as, and warns when it can't read a number.
+### Nationality filter (listing pages)
+- On its own row under the category filters: a small "Nationality" label, then one button per nationality (Dutch/Flemish · Italian · German · French · British · Canadian · Other) in the same style as the category buttons. On phones the row scrolls sideways like the category row.
+- Only nationalities that have prints in the current category and search are offered; the row is hidden when there would be just one (e.g. Canadian Prints). A selected nationality always stays visible so it can be cleared.
+- Clicking one shows only that nationality, selected in rose; clicking it again shows all. The choice is kept in the URL (`?nationality=french`) and carried through category changes and searches.
+- Nationality is set per print in the admin form; `priv/repo/seeds/print_nationalities.json` holds the drafted value for each artist, loaded by `JanPaintings.Catalog.Seed.load_nationalities/1`.
+- There is no sort control. `price_amount`, `price_currency`, `height_mm` and `width_mm` are still worked out from the price and size text on save, and the admin form shows what each reads as.
 
 ### Homepage
 - No hero. A visually hidden H1 ("Jan Johnson, Old Master, Modern and Canadian prints for collectors and museums") keeps the page heading for search engines and screen readers.
