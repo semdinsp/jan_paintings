@@ -43,6 +43,8 @@ defmodule JanPaintingsWeb.PrintControllerTest do
     test "offers only nationalities that have prints, and no sort buttons", %{conn: conn} do
       html = conn |> get(~p"/prints") |> html_response(200)
       assert html =~ ~s(aria-label="Filter by nationality")
+      # No visible label: the country names speak for themselves.
+      refute html =~ ~r/>\s*Nationality\s*</
       assert html =~ ~s(href="/prints?nationality=german")
       assert html =~ ~s(href="/prints?nationality=french")
       refute html =~ "nationality=italian"
