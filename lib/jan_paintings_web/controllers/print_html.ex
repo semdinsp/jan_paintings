@@ -7,11 +7,12 @@ defmodule JanPaintingsWeb.PrintHTML do
 
   @doc "One labelled row in a print's description."
   attr :label, :string, required: true
+  attr :class, :any, default: nil
   slot :inner_block, required: true
 
   def detail(assigns) do
     ~H"""
-    <div class="border-b border-rule py-3 sm:grid sm:grid-cols-[7rem_1fr] sm:gap-4">
+    <div class={["border-b border-rule py-3 sm:grid sm:grid-cols-[7rem_1fr] sm:gap-4", @class]}>
       <dt class="type-eyebrow sm:pt-1">{@label}</dt>
       <dd class="mt-1 sm:mt-0">{render_slot(@inner_block)}</dd>
     </div>
