@@ -31,22 +31,16 @@ defmodule JanPaintingsWeb.PageControllerTest do
     refute Enum.any?(home_links.(about), current?)
   end
 
-  test "the menu bar shows All Prints as a grid icon, marked current on /prints", %{conn: conn} do
-    icon =
-      ~r{<a[^>]*href="/prints"[^>]*title="All Prints"[^>]*>\s*<span[^>]*class="hero-squares-2x2}
+  test "the menu bar has no All Prints link, but the page is still there", %{conn: conn} do
+    for path <- [~p"/", ~p"/about", ~p"/prints"] do
+      html = conn |> get(path) |> html_response(200)
+      [nav] = Regex.run(~r{<nav[^>]*aria-label="Main".*?</nav>}s, html)
+      refute nav =~ "All Prints"
+      refute nav =~ "hero-squares-2x2"
+      refute nav =~ ~r{<a[^>]*class="drawer-item"[^>]*href="/prints"|<a[^>]*href="/prints"[^>]*class="drawer-item"}
+    end
 
-    about = conn |> get(~p"/about") |> html_response(200)
-    assert [[tag]] = Regex.scan(~r{<a[^>]*href="/prints"[^>]*title="All Prints"[^>]*>}, about)
-    assert about =~ icon
-    assert tag =~ "menu-icon"
-    refute tag =~ ~s(aria-current="page")
-
-    prints = conn |> get(~p"/prints") |> html_response(200)
-
-    assert [[current]] =
-             Regex.scan(~r{<a[^>]*href="/prints"[^>]*title="All Prints"[^>]*>}, prints)
-
-    assert current =~ ~s(aria-current="page")
+    assert conn |> get(~p"/prints") |> html_response(200) =~ "All Prints"
   end
 
   test "the menu bar has a search box that opens the matches on /prints", %{conn: conn} do

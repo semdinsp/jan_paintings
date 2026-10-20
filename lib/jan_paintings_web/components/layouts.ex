@@ -33,7 +33,7 @@ defmodule JanPaintingsWeb.Layouts do
 
   attr :active, :string,
     default: nil,
-    doc: ~s(menu item for the current page: "home", "prints", a category slug, or "about")
+    doc: ~s(menu item for the current page: "home", a category slug, or "about")
 
   slot :inner_block, required: true
 
@@ -41,11 +41,10 @@ defmodule JanPaintingsWeb.Layouts do
     assigns =
       assign(assigns,
         menu:
-          [{"prints", "All Prints", ~p"/prints"}] ++
-            Enum.map(
-              JanPaintings.Catalog.categories(),
-              &{&1.slug, &1.name, ~p"/prints/#{&1.slug}"}
-            ),
+          Enum.map(
+            JanPaintings.Catalog.categories(),
+            &{&1.slug, &1.name, ~p"/prints/#{&1.slug}"}
+          ),
         about_menu: [{"about", "About Us", ~p"/about"}]
       )
 
@@ -113,14 +112,8 @@ defmodule JanPaintingsWeb.Layouts do
         >
           <div class="hidden h-12 items-stretch gap-7 border-b-3 border-gold md:flex">
             <.home_link active={@active} />
-            <.icon_link
-              navigate={~p"/prints"}
-              icon="hero-squares-2x2"
-              label="All Prints"
-              current={@active == "prints"}
-            />
             <.link
-              :for={{key, label, path} <- Enum.reject(@menu, &(elem(&1, 0) == "prints"))}
+              :for={{key, label, path} <- @menu}
               navigate={path}
               class="menu-item"
               aria-current={key == @active && "page"}
