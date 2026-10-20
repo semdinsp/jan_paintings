@@ -55,7 +55,6 @@ defmodule JanPaintingsWeb.PrintHTML do
         @class
       ]}
     >
-      <span class="type-meta mr-1 shrink-0">Nationality</span>
       <.link
         :for={{label, path, active} <- @buttons}
         patch={path}
