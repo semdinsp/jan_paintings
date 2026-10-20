@@ -73,6 +73,11 @@
           <img src={view.src} alt="" loading="lazy" class="size-full object-contain" />
         </a>
       </div>
+
+      <%!-- From md, the notes sit under the images; on phones they are a row of the details. --%>
+      <div :if={@notes != []} id="print-notes" class="mt-6 hidden max-w-[68ch] md:block">
+        <p :for={paragraph <- @notes} class="italic text-ink-2 [&+&]:mt-3">{paragraph}</p>
+      </div>
     </div>
 
     <div class="min-w-0 md:col-span-5">
@@ -92,13 +97,8 @@
         <.detail :if={@print.dimensions != ""} label="Size">{@print.dimensions}</.detail>
         <.detail :if={@print.sheet_size != ""} label="Sheet">{@print.sheet_size}</.detail>
         <.detail :if={@print.condition != ""} label="Condition">{@print.condition}</.detail>
-        <.detail :if={@print.additional_notes != ""} label="Additional notes">
-          <p
-            :for={paragraph <- String.split(@print.additional_notes, ~r/\n\s*\n/, trim: true)}
-            class="italic text-ink-2 [&+&]:mt-3"
-          >
-            {paragraph}
-          </p>
+        <.detail :if={@notes != []} label="Additional notes" class="md:hidden">
+          <p :for={paragraph <- @notes} class="italic text-ink-2 [&+&]:mt-3">{paragraph}</p>
         </.detail>
         <.detail :if={@print.provenance != ""} label="Provenance">{@print.provenance}</.detail>
         <.detail :if={@print.watermark != ""} label="Watermark">{@print.watermark}</.detail>

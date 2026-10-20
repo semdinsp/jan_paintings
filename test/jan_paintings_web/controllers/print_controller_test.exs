@@ -130,6 +130,15 @@ defmodule JanPaintingsWeb.PrintControllerTest do
     [notes_row, _] = String.split(after_condition, ">Price</dt>", parts: 2)
     assert notes_row =~ ">Additional notes</dt>"
     assert notes_row =~ "First thought."
+
+    # That row is for phones; from md the notes sit under the images, unlabelled.
+    assert html =~ ~r/<div[^>]*class="[^"]*md:hidden[^"]*"[^>]*>\s*<dt[^>]*>Additional notes<\/dt>/
+    [_, under_images] = String.split(html, ~s(id="print-notes"), parts: 2)
+    [under_images, _] = String.split(under_images, "</div>", parts: 2)
+    assert under_images =~ ~r/class="[^"]*hidden[^"]*md:block/
+    assert under_images =~ ~r/<p[^>]*italic[^>]*>\s*Second thought.\s*<\/p>/
+    refute under_images =~ "Additional notes"
+    assert String.split(html, ~s(id="print-notes")) |> hd() =~ ~s(id="print-main-image")
   end
 
   test "shows prices with their currency", %{conn: conn} do
