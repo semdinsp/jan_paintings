@@ -109,6 +109,9 @@ Use `text-wrap: pretty` on paragraphs and `text-wrap: balance` on headings.
 - Hover: border and text `--rose`.
 - Selected: `--rose` border, `--rose-tint` background, `--rose` text, weight 600.
 
+### Search box (listing pages)
+- Only All Prints (/prints) has a search box under the heading, since the menu search and the More by this artist button open there. The category pages (Old Master, Modern, Canadian) have none.
+
 ### Nationality filter (listing pages)
 - Under the search box: one button per nationality (Dutch/Flemish · Italian · German · French · British · Canadian · Other) in the filter button style, with no label in front: the country names say what they are, and screen readers hear "Filter by nationality" from the group. On phones the row scrolls sideways.
 - Only nationalities that have prints in the current category and search are offered; the row is hidden when there would be just one (e.g. Canadian Prints). A selected nationality always stays visible so it can be cleared.
