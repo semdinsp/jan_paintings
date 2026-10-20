@@ -82,8 +82,8 @@ Use `text-wrap: pretty` on paragraphs and `text-wrap: balance` on headings.
 - A 3px `--gold` rule along the bottom only (no top rule). Height 48px.
 - Items: `--ink`, 15px/500, 28px gap; full bar height as hit area. Hover: text `--rose`.
 - Active page: text `--rose`, weight 600, 2px `--rose` bottom border.
-- Icon items (Home, All Prints): always `--rose` (hover `--rose-2`), 20px, with the label as tooltip and screen-reader text; the rose underline marks the current page. The phone drawer lists All Prints as text.
-- Order: a home icon (`hero-home`) and an All Prints icon (`hero-squares-2x2`), then Old Master Prints · Modern Prints · Canadian Prints on the left; About Us right-aligned (the contact details and form are on the About page, linked from print enquiry buttons and the "ask us" note on listings).
+- Icon item (Home): always `--rose` (hover `--rose-2`), 20px, with the label as tooltip and screen-reader text; the rose underline marks the current page.
+- Order: a home icon (`hero-home`), then Old Master Prints · Modern Prints · Canadian Prints on the left; About Us right-aligned (the contact details and form are on the About page, linked from print enquiry buttons and the "ask us" note on listings).
 - Search: from `lg` (1024px), a 240px search box (36px tall, gold field border, "Artist or title" placeholder, magnifier submit button) sits right-aligned before About Us; Enter opens the matches on /prints. On tablets (768–1023px) there is no room for the box, so a magnifier icon links to /prints and its search box instead.
 - Mobile (< 768px): "Menu" + hamburger on the left, the home icon at the right end of the bar; the menu opens a `--paper` drawer with the search box at the top, then stacked 48px rows separated by `--rule` hairlines, active row in rose.
 
@@ -104,7 +104,7 @@ Use `text-wrap: pretty` on paragraphs and `text-wrap: balance` on headings.
 - Search: "Search" button attached on the right, styled like a selected filter button (2px `--rose` border, `--rose-tint` background, `--rose` text, weight 600; hover `--rose-2`), so it matches the filters beneath it in both light and dark mode. As you type on the homepage, up to six matches drop down below the box; Enter opens the full results on /prints.
 
 ### Filter buttons (listing pages)
-- There are no category buttons on the listing pages; the menu bar links to All Prints and each category.
+- There are no category buttons on the listing pages; the menu bar links to each category. There is no All Prints menu item (desktop or phone drawer); the /prints page remains, reached through search and the More by this artist button.
 - Filter buttons (the nationality filter below) are 44px tall, 2px `--gold` border, `--ink` text; 12px side padding on phones, 16px from `sm`.
 - Hover: border and text `--rose`.
 - Selected: `--rose` border, `--rose-tint` background, `--rose` text, weight 600.
@@ -118,7 +118,7 @@ Use `text-wrap: pretty` on paragraphs and `text-wrap: balance` on headings.
 
 ### Homepage
 - No hero. A visually hidden H1 ("Jan Johnson, Old Master, Modern and Canadian prints for collectors and museums") keeps the page heading for search engines and screen readers.
-- **Tiles**: three large picture links, one per print category, in this order (All Prints and About have no tile; they are in the menu bar):
+- **Tiles**: three large picture links, one per print category, in this order (About has no tile; it is in the menu bar):
 
   | Tile | Links to | Image |
   |---|---|---|
