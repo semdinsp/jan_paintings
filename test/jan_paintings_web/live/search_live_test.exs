@@ -24,13 +24,14 @@ defmodule JanPaintingsWeb.SearchLiveTest do
       assert render(view) =~ "180 prints shown"
     end
 
-    test "searching within a category stays in that category", %{conn: conn} do
-      {:ok, view, _html} = live(conn, ~p"/prints/canadian")
+    test "the category pages have no search box", %{conn: conn} do
+      for slug <- ~w(old-masters modern canadian) do
+        {:ok, view, _html} = live(conn, ~p"/prints/#{slug}")
+        refute has_element?(view, "#search-form")
+      end
 
-      view |> form("#search-form", q: "gagnon") |> render_change()
-
-      assert_patch(view, ~p"/prints/canadian?q=gagnon")
-      assert render(view) =~ "2 prints matching"
+      {:ok, view, _html} = live(conn, ~p"/prints")
+      assert has_element?(view, "#search-form")
     end
   end
 

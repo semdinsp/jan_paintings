@@ -11,7 +11,9 @@
       {(@category && @category.blurb) ||
         "A selection from the stock across Old Master, Modern and Canadian prints."}
     </p>
+    <%!-- Only on /prints, where the menu search and More by this artist land. --%>
     <.search_form
+      :if={!@category}
       value={@query}
       class="mt-6 max-w-xl"
       phx-change="search"
