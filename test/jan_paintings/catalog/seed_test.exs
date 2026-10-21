@@ -168,6 +168,45 @@ defmodule JanPaintings.Catalog.SeedTest do
     end
   end
 
+  describe "load_mediums/1" do
+    test "the shipped file covers every print and leaves none blank" do
+      assert %{missing: []} = Seed.load_mediums()
+      assert %{updated: 0, missing: []} = Seed.load_mediums()
+      assert Enum.all?(Catalog.list_all_prints(), &(&1.medium != ""))
+
+      assert Catalog.get_print("cochin-le-garcon-cabartier-after-j-b-s-chardin").medium ==
+               "Engraving"
+
+      assert Catalog.get_print(
+               "goldhamer-lithographs-of-ontario-georgian-bay-and-haliburton-a-portfolio-contain"
+             ).medium == "Lithographs, c. 1932"
+    end
+
+    test "corrects a wrong medium, but not one changed in the admin pages", %{tmp_dir: dir} do
+      slug = "saenredam-adam-and-eve-forced-to-labour-plate-5-from-the-six-plate-series-histor"
+      print = Catalog.get_print(slug)
+      {:ok, _} = Catalog.update_print(print, %{"medium" => "Engravings, 1601"})
+
+      path =
+        write_seed(dir, [
+          %{
+            "slug" => slug,
+            "medium" => "Engraving, 1604",
+            "corrections" => [
+              %{"field" => "medium", "from" => "Engravings, 1601", "to" => "Engraving, 1604"}
+            ]
+          }
+        ])
+
+      assert %{updated: 1} = Seed.load_mediums(path)
+      assert Catalog.get_print(slug).medium == "Engraving, 1604"
+
+      {:ok, _} = Catalog.update_print(Catalog.get_print(slug), %{"medium" => "Engraving"})
+      assert %{updated: 0} = Seed.load_mediums(path)
+      assert Catalog.get_print(slug).medium == "Engraving"
+    end
+  end
+
   describe "load_catalogue_entries/1" do
     test "the shipped file covers every print, once" do
       first = Seed.load_catalogue_entries()
