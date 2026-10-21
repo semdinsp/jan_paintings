@@ -78,6 +78,15 @@ defmodule JanPaintingsWeb.PageController do
     ]
   end
 
+  def terms(conn, _params) do
+    render(conn, :terms,
+      page_title: "Terms of sale",
+      meta_description:
+        "Every print is guaranteed authentic and as described, with a full refund if not. Prints on approval, shipping, payment and Canadian taxes.",
+      canonical_path: "/terms-of-sale"
+    )
+  end
+
   # The old contact page now lives on the about page; keep links working.
   def contact_redirect(conn, params) do
     query = Map.take(params, ["print"])

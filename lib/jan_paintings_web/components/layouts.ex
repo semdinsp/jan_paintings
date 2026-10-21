@@ -189,6 +189,7 @@ defmodule JanPaintingsWeb.Layouts do
             <br /> Phone <a href="tel:+14506582752" class="link">450.658.2752</a>
             · Cell <a href="tel:+15146086959" class="link">514.608.6959</a>
             <br /> <.link href={~p"/about" <> "#contact"} class="link">Contact us</.link>
+            · <.link href={~p"/terms-of-sale"} class="link">Terms of sale</.link>
           </p>
           <div class="flex items-start gap-5 md:col-span-2 lg:col-span-1 lg:justify-end">
             <.link
