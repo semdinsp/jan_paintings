@@ -181,7 +181,8 @@ defmodule JanPaintingsWeb.PrintControllerTest do
     detail = conn |> get(~p"/prints/canadian/#{sold.slug}") |> html_response(200)
     assert detail =~ ~r/>\s*sold\s*</
     assert detail =~ "Ask about similar prints"
-    refute detail =~ "CAD"
+    # No price. Match a price, not bare "CAD", which the random CSRF token can contain.
+    refute detail =~ ~r/\d CAD\b/
   end
 
   test "reserved prints get a reserved badge", %{conn: conn} do
