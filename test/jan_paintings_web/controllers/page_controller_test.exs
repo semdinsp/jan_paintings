@@ -50,9 +50,26 @@ defmodule JanPaintingsWeb.PageControllerTest do
     assert html =~ ~s(id="drawer-search-input")
   end
 
+  test "the menu bar and phone drawer have Contact Us, going to the contact section", %{
+    conn: conn
+  } do
+    for path <- [~p"/", ~p"/about", ~p"/prints/modern"] do
+      html = conn |> get(path) |> html_response(200)
+      [nav] = Regex.run(~r{<nav[^>]*aria-label="Main".*?</nav>}s, html)
+
+      # Once in the desktop bar and once in the drawer, never marked current.
+      contact = Regex.scan(~r{<a[^>]*href="/about#contact"[^>]*>\s*Contact Us\s*</a>}, nav)
+      assert length(contact) == 2
+      refute Enum.any?(contact, fn [tag] -> tag =~ "aria-current" end)
+    end
+
+    assert conn |> get(~p"/about") |> html_response(200) =~ ~s(id="contact")
+  end
+
   test "GET /about", %{conn: conn} do
     html = conn |> get(~p"/about") |> html_response(200)
     assert html =~ "International Fine Print Dealers"
+    assert html =~ ~r/<h1[^>]*>About Us<\/h1>/
     assert html =~ ~s(href="/about#contact")
     assert html =~ ~s(src="/images/jan-johnson.jpg")
     # Shown at every screen size, not only beside the text on wide screens.
