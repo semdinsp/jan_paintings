@@ -24,6 +24,9 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Index do
           <.link navigate={~p"/admin/guides"} class="btn btn-ghost">
             <.icon name="hero-book-open" class="size-4" /> Guides
           </.link>
+          <.link navigate={~p"/admin/mailing-list"} class="btn btn-ghost">
+            <.icon name="hero-envelope" class="size-4" /> Mailing list
+          </.link>
           <.link href={~p"/admin/prints/export.csv"} class="btn btn-ghost" download>
             <.icon name="hero-arrow-down-tray" class="size-4" /> Download CSV
           </.link>

@@ -1,0 +1,64 @@
+<Layouts.app flash={@flash} current_scope={@current_scope}>
+  <.link
+    navigate={~p"/admin/prints"}
+    class="text-sm uppercase tracking-widest text-base-content/60 hover:text-accent"
+  >
+    <span aria-hidden="true">&larr;</span> All prints
+  </.link>
+
+  <div class="mt-4 flex flex-wrap items-end justify-between gap-4 border-b border-base-300 pb-6">
+    <div>
+      <p class="text-xs uppercase tracking-[0.2em] text-base-content/60">Admin</p>
+      <h1 class="mt-1 font-serif text-3xl">Mailing list</h1>
+      <p class="mt-1 text-sm text-base-content/70">
+        {length(@subscribers)} {if length(@subscribers) == 1, do: "person", else: "people"} signed up
+        on the About page. Newest first.
+      </p>
+    </div>
+    <.link
+      :if={@subscribers != []}
+      href={~p"/admin/mailing-list/export.csv"}
+      class="btn btn-ghost"
+      download
+    >
+      <.icon name="hero-arrow-down-tray" class="size-4" /> Download CSV
+    </.link>
+  </div>
+
+  <p :if={@subscribers == []} class="mt-10 text-center text-base-content/60">
+    No one has signed up yet.
+  </p>
+
+  <ul :if={@subscribers != []} id="subscribers" class="mt-4 divide-y divide-base-300">
+    <li
+      :for={subscriber <- @subscribers}
+      id={"subscriber-#{subscriber.id}"}
+      class="grid gap-x-4 gap-y-1 py-4 sm:grid-cols-[1fr_7rem_auto] sm:items-start"
+    >
+      <div class="min-w-0">
+        <a
+          href={"mailto:#{subscriber.email}"}
+          class="block truncate font-medium hover:text-accent"
+        >
+          {subscriber.email}
+        </a>
+        <p :if={subscriber.name} class="text-sm">{subscriber.name}</p>
+        <p :if={subscriber.interests} class="mt-1 text-sm text-base-content/70">
+          <span class="text-xs uppercase tracking-wider text-base-content/60">Interests</span>
+          {subscriber.interests}
+        </p>
+      </div>
+      <p class="text-sm text-base-content/70">
+        {Calendar.strftime(subscriber.inserted_at, "%-d %b %Y")}
+      </p>
+      <.link
+        href={~p"/admin/mailing-list/#{subscriber.id}"}
+        method="delete"
+        data-confirm={"Take #{subscriber.email} off the mailing list?"}
+        class="text-sm text-base-content/60 hover:text-error hover:underline"
+      >
+        Remove
+      </.link>
+    </li>
+  </ul>
+</Layouts.app>

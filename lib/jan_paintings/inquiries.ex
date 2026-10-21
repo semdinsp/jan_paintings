@@ -48,6 +48,31 @@ defmodule JanPaintings.Inquiries do
   end
 
   def list_subscribers do
-    Repo.all(from s in Subscriber, order_by: [desc: s.inserted_at])
+    Repo.all(from s in Subscriber, order_by: [desc: s.inserted_at, desc: s.id])
   end
+
+  def get_subscriber!(id), do: Repo.get!(Subscriber, id)
+
+  @doc "Takes someone off the mailing list, e.g. when they ask to unsubscribe."
+  def delete_subscriber(%Subscriber{} = subscriber), do: Repo.delete(subscriber)
+
+  @doc """
+  The subscribers as CSV text (iodata), with a header row.
+
+  The values were typed in by the public, so any that a spreadsheet would
+  run as a formula (starting with =, +, -, @, tab or return) get a leading
+  apostrophe.
+  """
+  def subscribers_csv(subscribers) do
+    rows =
+      Enum.map(subscribers, fn s ->
+        [s.email, s.name || "", s.interests || "", Calendar.strftime(s.inserted_at, "%Y-%m-%d")]
+        |> Enum.map(&csv_safe/1)
+      end)
+
+    NimbleCSV.RFC4180.dump_to_iodata([["email", "name", "interests", "signed_up"] | rows])
+  end
+
+  defp csv_safe(<<first, _::binary>> = value) when first in ~c"=+-@\t\r", do: "'" <> value
+  defp csv_safe(value), do: value
 end
