@@ -114,6 +114,28 @@ defmodule JanPaintingsWeb.PrintControllerTest do
     assert list =~ ~r/<a(?=[^>]*id="#{anchor}")[^>]*href="\/prints\/old-masters\/#{print.slug}"/
   end
 
+  test "lists the details in the gallery's order", %{conn: conn} do
+    print = Catalog.get_print("dusart-fiddler-in-an-inn")
+
+    {:ok, _} =
+      Catalog.update_print(print, %{
+        "medium" => "Etching",
+        "catalogue_references" => "Hollstein 15",
+        "state" => "Only state",
+        "watermark" => "Arms of Amsterdam",
+        "provenance" => "A collection",
+        "condition" => "Fine",
+        "dimensions" => "282 × 253mm",
+        "sheet_size" => "300 × 270mm"
+      })
+
+    html = conn |> get(~p"/prints/old-masters/#{print.slug}") |> html_response(200)
+    labels = Regex.scan(~r{<dt[^>]*>([^<]+)</dt>}, html, capture: :all_but_first) |> List.flatten()
+
+    assert labels ==
+             ~w(Medium References State Watermark Provenance Condition Size Sheet Price)
+  end
+
   test "shows the print description", %{conn: conn} do
     print = Catalog.get_print("dusart-fiddler-in-an-inn")
     html = conn |> get(~p"/prints/old-masters/#{print.slug}") |> html_response(200)
@@ -137,7 +159,7 @@ defmodule JanPaintingsWeb.PrintControllerTest do
     assert html =~ ~r/<p[^>]*italic[^>]*>\s*First thought.\s*<\/p>/
     assert html =~ ~r/<p[^>]*italic[^>]*>\s*Second thought.\s*<\/p>/
 
-    # A row of the details, straight after Condition and before Price.
+    # A row of the details, after Condition and before Price.
     [_, after_condition] = String.split(html, ">Condition</dt>", parts: 2)
     [notes_row, _] = String.split(after_condition, ">Price</dt>", parts: 2)
     assert notes_row =~ ">Additional notes</dt>"
