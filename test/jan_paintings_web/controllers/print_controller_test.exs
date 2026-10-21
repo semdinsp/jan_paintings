@@ -246,11 +246,18 @@ defmodule JanPaintingsWeb.PrintControllerTest do
 
     large = "/images/prints/tiepolo-venice-receiving-neptunes-homage-large.jpg"
 
-    # A button with a magnifier, and the image itself, both open the larger view.
+    # A button with a magnifier, and the image itself, both open the larger view...
     assert html =~
-             ~r/<a[^>]*id="print-view-larger"[^>]*href="#{large}"[^>]*class="btn[^"]*"[^>]*>\s*<span[^>]*hero-magnifying-glass-plus/
+             ~r/<a(?=[^>]*id="print-view-larger")(?=[^>]*href="#{large}")(?=[^>]*data-lightbox)[^>]*class="btn[^"]*"[^>]*>\s*<span[^>]*hero-magnifying-glass-plus/
 
-    assert html =~ ~r/<a[^>]*id="print-main-link"[^>]*href="#{large}"/
+    assert html =~
+             ~r/<a(?=[^>]*id="print-main-link")(?=[^>]*data-lightbox)[^>]*href="#{large}"/
+
+    # ...in a full-screen dialog with a Close button, not a new tab.
+    refute html =~ ~s(target="_blank")
+    assert html =~ ~r/<dialog[^>]*id="print-lightbox"/
+    assert html =~ ~r/<form method="dialog"[^>]*>\s*<button[^>]*id="print-lightbox-close"[^>]*>[\s\S]*?Close/
+    assert html =~ ~s(id="print-lightbox-image")
     refute html =~ ~s(id="print-gallery")
   end
 
@@ -259,6 +266,7 @@ defmodule JanPaintingsWeb.PrintControllerTest do
     refute html =~ "View larger"
     refute html =~ ~s(id="print-main-link")
     assert html =~ ~s(id="print-main-image")
+    refute html =~ ~s(id="print-lightbox")
   end
 
   test "prints without extra views have no gallery", %{conn: conn} do

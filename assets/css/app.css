@@ -277,6 +277,47 @@ p { text-wrap: pretty; }
   --btn-border: var(--rose-2);
 }
 
+/* Print detail "View larger": a full-screen <dialog> on paper, Close at the top right. */
+.print-lightbox {
+  width: 100vw;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: var(--paper);
+  color: var(--ink);
+}
+.print-lightbox[open] {
+  display: flex;
+  flex-direction: column;
+}
+.print-lightbox::backdrop {
+  background: var(--paper);
+}
+.print-lightbox-bar {
+  display: flex;
+  justify-content: flex-end;
+  padding: max(0.75rem, env(safe-area-inset-top)) 1rem 0.75rem;
+}
+.print-lightbox-stage {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1rem max(1rem, env(safe-area-inset-bottom));
+}
+.print-lightbox-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+body:has(.print-lightbox[open]) {
+  overflow: hidden;
+}
+
 /* Every interactive element gets the same rose focus ring. */
 :where(a, button, summary, input, select, textarea, [tabindex]):focus-visible {
   outline: 2px solid var(--rose);

@@ -58,6 +58,23 @@ document.addEventListener("click", event => {
   })
 })
 
+// Print detail "View larger" (the button or the main image): shows the larger
+// image in a full-screen dialog, closed with its Close button, Esc, or a tap
+// beside the image. Without JS the links open the image itself.
+document.addEventListener("click", event => {
+  const dialog = document.getElementById("print-lightbox")
+  if (!dialog) return
+
+  const opener = event.target.closest("[data-lightbox]")
+  if (opener) {
+    event.preventDefault()
+    document.getElementById("print-lightbox-image").src = opener.href
+    dialog.showModal()
+  } else if (event.target === dialog || event.target.matches(".print-lightbox-stage")) {
+    dialog.close()
+  }
+})
+
 // expose liveSocket on window for web console debug logs and latency simulation:
 // >> liveSocket.enableDebug()
 // >> liveSocket.enableLatencySim(1000)  // enabled for duration of browser session
