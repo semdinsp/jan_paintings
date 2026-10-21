@@ -69,6 +69,14 @@ defmodule JanPaintingsWeb.PageControllerTest do
   test "GET /about", %{conn: conn} do
     html = conn |> get(~p"/about") |> html_response(200)
     assert html =~ "International Fine Print Dealers"
+
+    # The museum clients, in alphabetical order.
+    [clients] = Regex.run(~r{<section[^>]*id="about-clients".*?</section>}s, html)
+    names = Regex.scan(~r{<li>\s*(.*?)\s*</li>}s, clients, capture: :all_but_first)
+    assert length(names) == 43
+    assert ["Agnes Etherington Art Centre" <> _] = hd(names)
+    assert ["Zimmerli Art Museum" <> _] = List.last(names)
+    assert clients =~ "British Museum"
     assert html =~ ~r/<h1[^>]*>About Us<\/h1>/
     assert html =~ ~s(href="/about#contact")
     assert html =~ ~s(src="/images/jan-johnson.jpg")

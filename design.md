@@ -155,6 +155,8 @@ Use `text-wrap: pretty` on paragraphs and `text-wrap: balance` on headings.
 
 ### About page
 - Text column (68ch). Jan's portrait (`images/jan-johnson.jpg`) on a `--paper-2` mat with "Jan Johnson" below: beside the text from `lg` (1024px); below the text on phones and tablets, at most 320px wide.
+- Text (in the gallery's own words, "we"): founding and history; the stock; focused stock lists and the mailing list (links to email and the contact form); auction and appraisal services; print fairs and IFPDA.
+- Museum clients: a full-width section under the text and portrait (`--rule` hairline above), H2 "Museum clients", a one-line `--ink-2` intro, then the 43 museums in alphabetical order, 15px, one column on phones, two from `sm`, three from `lg`.
 - Contact section below: details on the left, the "Send a message" form on a `--paper-2` panel on the right (stacked on mobile).
 
 ### Footer
