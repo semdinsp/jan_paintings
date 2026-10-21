@@ -83,8 +83,8 @@ Use `text-wrap: pretty` on paragraphs and `text-wrap: balance` on headings.
 - Items: `--ink`, 15px/500, 28px gap; full bar height as hit area. Hover: text `--rose`.
 - Active page: text `--rose`, weight 600, 2px `--rose` bottom border.
 - Icon item (Home): always `--rose` (hover `--rose-2`), 20px, with the label as tooltip and screen-reader text; the rose underline marks the current page.
-- Order: a home icon (`hero-home`), then Old Master Prints · Modern Prints · Canadian Prints on the left; About Us right-aligned (the contact details and form are on the About page, linked from print enquiry buttons and the "ask us" note on listings).
-- Search: from `lg` (1024px), a 240px search box (36px tall, gold field border, "Artist or title" placeholder, magnifier submit button) sits right-aligned before About Us; Enter opens the matches on /prints. On tablets (768–1023px) there is no room for the box, so a magnifier icon links to /prints and its search box instead.
+- Order: a home icon (`hero-home`), then Old Master Prints · Modern Prints · Canadian Prints on the left; About Us · Contact Us right-aligned (Contact Us goes to `/about#contact`, the contact details and form on the About page, which are also linked from print enquiry buttons and the "ask us" note on listings).
+- Search: from `lg` (1024px), a 240px search box (36px tall, gold field border, "Artist or title" placeholder, magnifier submit button) sits right-aligned before About Us and Contact Us; Enter opens the matches on /prints. On tablets (768–1023px) there is no room for the box, so a magnifier icon links to /prints and its search box instead.
 - Mobile (< 768px): "Menu" + hamburger on the left, the home icon at the right end of the bar; the menu opens a `--paper` drawer with the search box at the top, then stacked 48px rows separated by `--rule` hairlines, active row in rose.
 
 ### Links
