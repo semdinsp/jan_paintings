@@ -105,6 +105,10 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Form do
             placeholder="Bartsch 96; New Hollstein 12"
           />
           <.input field={@form[:state]} label="State" placeholder="Second state of three" />
+          <%!-- In the order the print page shows them. --%>
+          <.input field={@form[:watermark]} label="Watermark" />
+          <.input field={@form[:provenance]} type="textarea" label="Provenance" rows="2" />
+          <.input field={@form[:condition]} type="textarea" label="Condition" rows="3" />
           <div class="grid gap-x-4 sm:grid-cols-2">
             <div>
               <.input
@@ -116,9 +120,6 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Form do
             </div>
             <.input field={@form[:sheet_size]} label="Sheet size" placeholder="If stated" />
           </div>
-          <.input field={@form[:condition]} type="textarea" label="Condition" rows="3" />
-          <.input field={@form[:provenance]} type="textarea" label="Provenance" rows="2" />
-          <.input field={@form[:watermark]} label="Watermark" />
           <.input
             field={@form[:additional_notes]}
             type="textarea"

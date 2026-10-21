@@ -108,7 +108,9 @@ defmodule JanPaintingsWeb.SEOTest do
 
     test "show medium and date", %{conn: conn} do
       html = conn |> get("/prints/old-masters/beham-leda-and-the-swan") |> html_response(200)
-      assert html =~ ~r{<h1[^>]*>\s*Leda and the Swan\s*</h1>\s*<p[^>]*>\s*Engraving, 1548\s*</p>}
+      # The first row of the details, as well as in the title and JSON-LD.
+      assert html =~ ~r{>Medium</dt>\s*<dd[^>]*>\s*Engraving, 1548\s*</dd>}
+      assert json_ld(html)["artMedium"] == "Engraving"
     end
 
     test "escape </script> inside JSON-LD", %{conn: conn} do
