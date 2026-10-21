@@ -112,12 +112,55 @@
         touch directly. Prices are in US dollars, and Canadian prints in Canadian dollars.
       </p>
       <.contact_details class="mt-8" />
+    </section>
 
-      <section id="mailing-list" class="mt-12 scroll-mt-16 border-t border-rule pt-8">
+    <div class="space-y-8">
+      <section class="bg-paper-2 p-6 sm:p-8">
+        <h2 class="type-h2">Send a message</h2>
+        <p class="type-meta mt-1">
+          We'll reply by email, usually within a few days.
+        </p>
+
+        <.form for={@form} action={~p"/about" <> "#contact"} id="contact-form" class="mt-6">
+          <div class="grid gap-x-4 sm:grid-cols-2">
+            <.input field={@form[:name]} label="Name" autocomplete="name" required />
+            <.input
+              field={@form[:email]}
+              type="email"
+              label="Email"
+              autocomplete="email"
+              required
+            />
+          </div>
+          <div class="grid gap-x-4 sm:grid-cols-2">
+            <.input field={@form[:phone]} type="tel" label="Phone (optional)" autocomplete="tel" />
+            <.input field={@form[:subject]} label="Subject (optional)" />
+          </div>
+          <.input field={@form[:message]} type="textarea" label="Message" rows="6" required />
+          <.input field={@form[:print_slug]} type="hidden" />
+
+          <%!-- Spam trap: hidden from people, often filled in by bots. --%>
+          <div class="hidden" aria-hidden="true">
+            <label>
+              Leave this empty
+              <input
+                type="text"
+                name="contact_message[website]"
+                value=""
+                tabindex="-1"
+                autocomplete="off"
+              />
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn-primary mt-2 w-full sm:w-auto">Send message</button>
+        </.form>
+      </section>
+
+      <section id="mailing-list" class="scroll-mt-16 bg-paper-2 p-6 sm:p-8">
         <h2 class="type-h2">Join our mailing list</h2>
-        <p class="mt-3">
-          Hear about new stock and print fairs. Tell us what you collect and we'll send lists to
-          match.
+        <p class="type-meta mt-1">
+          Hear about new stock and print fairs. Tell us what you collect and we'll send lists to match.
         </p>
 
         <.form
@@ -126,18 +169,20 @@
           id="mailing-list-form"
           class="mt-6"
         >
-          <.input
-            field={@subscriber_form[:email]}
-            type="email"
-            label="Email"
-            autocomplete="email"
-            required
-          />
-          <.input field={@subscriber_form[:name]} label="Name (optional)" autocomplete="name" />
+          <div class="grid gap-x-4 sm:grid-cols-2">
+            <.input
+              field={@subscriber_form[:email]}
+              type="email"
+              label="Email"
+              autocomplete="email"
+              required
+            />
+            <.input field={@subscriber_form[:name]} label="Name (optional)" autocomplete="name" />
+          </div>
           <.input
             field={@subscriber_form[:interests]}
             label="Interests (optional)"
-            placeholder="e.g. Rembrandt etchings, Canadian wood-engravings"
+            placeholder="e.g. Rembrandt etchings"
           />
 
           <%!-- Spam trap: hidden from people, often filled in by bots. --%>
@@ -154,47 +199,11 @@
             </label>
           </div>
 
-          <button type="submit" class="btn btn-secondary-rose mt-2 w-full sm:w-auto">
+          <button type="submit" class="btn btn-primary mt-2 w-full sm:w-auto">
             Join the mailing list
           </button>
         </.form>
       </section>
-    </section>
-
-    <section class="bg-paper-2 p-6 sm:p-8">
-      <h2 class="type-h2">Send a message</h2>
-      <p class="type-meta mt-1">
-        We'll reply by email, usually within a few days.
-      </p>
-
-      <.form for={@form} action={~p"/about" <> "#contact"} id="contact-form" class="mt-6">
-        <div class="grid gap-x-4 sm:grid-cols-2">
-          <.input field={@form[:name]} label="Name" autocomplete="name" required />
-          <.input field={@form[:email]} type="email" label="Email" autocomplete="email" required />
-        </div>
-        <div class="grid gap-x-4 sm:grid-cols-2">
-          <.input field={@form[:phone]} type="tel" label="Phone (optional)" autocomplete="tel" />
-          <.input field={@form[:subject]} label="Subject (optional)" />
-        </div>
-        <.input field={@form[:message]} type="textarea" label="Message" rows="6" required />
-        <.input field={@form[:print_slug]} type="hidden" />
-
-        <%!-- Spam trap: hidden from people, often filled in by bots. --%>
-        <div class="hidden" aria-hidden="true">
-          <label>
-            Leave this empty
-            <input
-              type="text"
-              name="contact_message[website]"
-              value=""
-              tabindex="-1"
-              autocomplete="off"
-            />
-          </label>
-        </div>
-
-        <button type="submit" class="btn btn-primary mt-2 w-full sm:w-auto">Send message</button>
-      </.form>
-    </section>
+    </div>
   </div>
 </Layouts.app>
