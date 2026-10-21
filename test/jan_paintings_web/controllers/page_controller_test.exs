@@ -37,7 +37,9 @@ defmodule JanPaintingsWeb.PageControllerTest do
       [nav] = Regex.run(~r{<nav[^>]*aria-label="Main".*?</nav>}s, html)
       refute nav =~ "All Prints"
       refute nav =~ "hero-squares-2x2"
-      refute nav =~ ~r{<a[^>]*class="drawer-item"[^>]*href="/prints"|<a[^>]*href="/prints"[^>]*class="drawer-item"}
+
+      refute nav =~
+               ~r{<a[^>]*class="drawer-item"[^>]*href="/prints"|<a[^>]*href="/prints"[^>]*class="drawer-item"}
     end
 
     assert conn |> get(~p"/prints") |> html_response(200) =~ "All Prints"
@@ -48,6 +50,28 @@ defmodule JanPaintingsWeb.PageControllerTest do
     assert html =~ ~r{<form[^>]* id="menu-search" action="/prints" method="get"}
     assert html =~ ~s(id="menu-search-input")
     assert html =~ ~s(id="drawer-search-input")
+  end
+
+  test "GET /terms-of-sale, linked from the footer", %{conn: conn} do
+    html = conn |> get(~p"/terms-of-sale") |> html_response(200)
+    assert html =~ ~r/<h1[^>]*>Terms of Sale<\/h1>/
+
+    for heading <- [
+          "Authenticity",
+          "Prints on approval",
+          "Packing and shipping",
+          "Payment",
+          "Canadian clients"
+        ] do
+      assert html =~ ~r/<h2[^>]*>#{heading}<\/h2>/
+    end
+
+    assert html =~ "refund your payment in full"
+    assert html =~ "credit cards during 2026"
+    assert html =~ ~r{<link[^>]*rel="canonical"[^>]*href="[^"]*/terms-of-sale"}
+
+    [footer] = Regex.run(~r{<footer.*?</footer>}s, html)
+    assert footer =~ ~r{<a[^>]*href="/terms-of-sale"[^>]*>Terms of sale</a>}
   end
 
   test "GET /about", %{conn: conn} do

@@ -11,7 +11,8 @@ defmodule JanPaintingsWeb.SEOController do
   alias JanPaintingsWeb.SEO
 
   @doc """
-  Lists the home, about, print list and category pages, and every print.
+  Lists the home, about, terms of sale, print list and category pages, and
+  every print.
   Sold prints are included: their pages stay up as a record of the stock
   and still answer searches for the artist and title.
   """
@@ -20,7 +21,7 @@ defmodule JanPaintingsWeb.SEOController do
     latest = prints |> Enum.map(& &1.updated_at) |> Enum.max(DateTime, fn -> nil end)
 
     pages =
-      [{"/", latest}, {"/about", nil}, {"/prints", latest}] ++
+      [{"/", latest}, {"/about", nil}, {"/terms-of-sale", nil}, {"/prints", latest}] ++
         Enum.map(Catalog.categories(), fn category ->
           {"/prints/#{category.slug}",
            prints |> Enum.filter(&(&1.category == category.slug)) |> latest_update()}
@@ -105,6 +106,7 @@ defmodule JanPaintingsWeb.SEOController do
     - [All prints](#{SEO.url("/prints")})
     #{categories}
     - [About the gallery](#{SEO.url("/about")})
+    - [Terms of sale](#{SEO.url("/terms-of-sale")}): authenticity guarantee, approval, shipping and payment.
     - [Sitemap](#{SEO.url("/sitemap.xml")}): every print page, with last-updated dates.
 
     Each print page lists the artist, title, medium and date, size, condition, provenance where known, price and availability, and carries schema.org JSON-LD.

@@ -166,11 +166,12 @@ defmodule JanPaintingsWeb.SEOTest do
       assert xml =~ ~s(<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">)
       assert xml =~ "<loc>#{base()}/</loc>"
       assert xml =~ "<loc>#{base()}/prints/old-masters</loc>"
+      assert xml =~ "<loc>#{base()}/terms-of-sale</loc>"
       assert xml =~ "<loc>#{base()}/prints/old-masters/beham-leda-and-the-swan</loc><lastmod>"
 
       sold = Enum.find(Catalog.list_prints(), &(&1.status == "sold"))
       assert xml =~ base() <> SEO.print_path(sold)
-      assert length(Regex.scan(~r/<url>/, xml)) == 6 + length(Catalog.list_prints())
+      assert length(Regex.scan(~r/<url>/, xml)) == 7 + length(Catalog.list_prints())
     end
 
     test "robots.txt allows crawlers and points at the sitemap", %{conn: conn} do

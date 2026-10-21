@@ -38,6 +38,7 @@ defmodule JanPaintingsWeb.Router do
     get "/", PageController, :home
     get "/about", PageController, :about
     post "/about", PageController, :create_message
+    get "/terms-of-sale", PageController, :terms
     get "/contact", PageController, :contact_redirect
 
     live_session :public, on_mount: [{JanPaintingsWeb.UserAuth, :mount_current_scope}] do

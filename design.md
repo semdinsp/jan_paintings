@@ -159,7 +159,12 @@ Use `text-wrap: pretty` on paragraphs and `text-wrap: balance` on headings.
 
 ### Footer
 - Full-width `--dusk` band, 48px vertical padding, `--ink` text, 15px.
-- Columns: business name + address; email and phone links, then a "Contact us" link to the form on the About page; a log-in icon (`hero-arrow-right-end-on-rectangle`, arrow pointing in, "Log in" as its title and screen-reader text) and the theme toggle. One column on phones, two on tablets (the third group wraps below), three from `lg` with the third right-aligned.
+- Columns: business name + address; email and phone links, then "Contact us" (the form on the About page) · "Terms of sale" links; a log-in icon (`hero-arrow-right-end-on-rectangle`, arrow pointing in, "Log in" as its title and screen-reader text) and the theme toggle. One column on phones, two on tablets (the third group wraps below), three from `lg` with the third right-aligned.
+
+### Terms of sale page (/terms-of-sale)
+- Linked from the footer, next to "Contact us"; not in the menu bar.
+- Text column (68ch): H1 "Terms of Sale", a one-line `--ink-2` intro, then H2 sections 40px apart: Authenticity · Prints on approval · Packing and shipping · Payment · Canadian clients. Ends, after a `--rule` hairline, with "Questions about a purchase? Contact us".
+- Wording rewritten from the original site's terms; Payment adds that credit cards are expected during 2026.
 
 ### Favicon
 - The triton's head from the header engraving in a round medallion on a `--dusk` square.
