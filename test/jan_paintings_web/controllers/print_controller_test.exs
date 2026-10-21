@@ -102,6 +102,18 @@ defmodule JanPaintingsWeb.PrintControllerTest do
     assert html =~ ~r/<p[^>]*class="type-artist print-detail-artist"/
   end
 
+  test "the back link returns to the print's place in its category list", %{conn: conn} do
+    print = hd(Catalog.list_prints("old-masters"))
+    html = conn |> get(~p"/prints/old-masters/#{print.slug}") |> html_response(200)
+    anchor = "print-#{print.slug}"
+
+    assert html =~
+             ~r/<a(?=[^>]*class="link-more")[^>]*href="\/prints\/old-masters##{anchor}"/
+
+    list = conn |> get(~p"/prints/old-masters") |> html_response(200)
+    assert list =~ ~r/<a(?=[^>]*id="#{anchor}")[^>]*href="\/prints\/old-masters\/#{print.slug}"/
+  end
+
   test "shows the print description", %{conn: conn} do
     print = Catalog.get_print("dusart-fiddler-in-an-inn")
     html = conn |> get(~p"/prints/old-masters/#{print.slug}") |> html_response(200)
@@ -132,7 +144,9 @@ defmodule JanPaintingsWeb.PrintControllerTest do
     assert notes_row =~ "First thought."
 
     # That row is for phones; from md the notes sit under the images, unlabelled.
-    assert html =~ ~r/<div[^>]*class="[^"]*md:hidden[^"]*"[^>]*>\s*<dt[^>]*>Additional notes<\/dt>/
+    assert html =~
+             ~r/<div[^>]*class="[^"]*md:hidden[^"]*"[^>]*>\s*<dt[^>]*>Additional notes<\/dt>/
+
     [_, under_images] = String.split(html, ~s(id="print-notes"), parts: 2)
     [under_images, _] = String.split(under_images, "</div>", parts: 2)
     assert under_images =~ ~r/class="[^"]*hidden[^"]*md:block/

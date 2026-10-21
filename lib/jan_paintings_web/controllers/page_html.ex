@@ -111,9 +111,12 @@ defmodule JanPaintingsWeb.PageHTML do
 
   def print_card(assigns) do
     ~H"""
+    <%!-- The id is the anchor the print page's back link returns to; the
+         scroll margin keeps the card clear of the sticky menu bar. --%>
     <.link
+      id={"print-#{@print.slug}"}
       navigate={~p"/prints/#{@print.category}/#{@print.slug}"}
-      class="group flex min-w-0 flex-col"
+      class="group flex min-w-0 scroll-mt-20 flex-col"
     >
       <div class="mat flex aspect-[4/5] items-center justify-center p-4">
         <img
