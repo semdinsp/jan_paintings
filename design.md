@@ -147,7 +147,7 @@ Use `text-wrap: pretty` on paragraphs and `text-wrap: balance` on headings.
 - **Sold**: small uppercase "Sold" in `--sold` above the artist line; image at 85% opacity. No red, no banners.
 
 ### Print detail page
-- Back link ("← Old Master Prints") above, in rose "more" style.
+- Back link ("← Old Master Prints") above, in rose "more" style. It returns to this print's place in the category list: each card in a list has the id `print-<slug>` (with an 80px scroll margin to clear the sticky menu bar), and the link goes to `/prints/<category>#print-<slug>` with a full page load, so the browser scrolls to the card and focuses it (the rose focus ring marks where you were).
 - Two columns desktop: image 7/12 on a `--paper-2` mat, details 5/12. Stacked on mobile.
 - When a print has a larger image or extra views, a small secondary button "View larger" with a `hero-magnifying-glass-plus` icon sits under the image, right-aligned, and the image itself links to the larger view (zoom-in cursor). Both open it in a new tab and follow the selected gallery view.
 - Details: artist line, H1 title, medium/date, definition list (eyebrow labels, `--rule` hairlines between rows), price 20px/600, primary Enquire button.

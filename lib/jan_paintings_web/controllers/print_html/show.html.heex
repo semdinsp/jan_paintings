@@ -1,6 +1,7 @@
 <Layouts.app flash={@flash} current_scope={@current_scope} active={@category.slug}>
+  <%!-- Back to this print's place in the list (a full load, so the browser jumps to it). --%>
   <.link
-    navigate={~p"/prints/#{@category.slug}"}
+    href={~p"/prints/#{@category.slug}" <> "#print-#{@print.slug}"}
     class="link-more"
   >
     ← {@category.name}
