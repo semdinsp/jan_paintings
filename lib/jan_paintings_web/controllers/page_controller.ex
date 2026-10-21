@@ -4,7 +4,7 @@ defmodule JanPaintingsWeb.PageController do
   import Phoenix.Component, only: [to_form: 1]
 
   alias JanPaintings.{Catalog, Inquiries}
-  alias JanPaintings.Inquiries.ContactMessage
+  alias JanPaintings.Inquiries.{ContactMessage, Subscriber}
   alias JanPaintingsWeb.SEO
 
   def home(conn, _params) do
@@ -49,7 +49,22 @@ defmodule JanPaintingsWeb.PageController do
         else: %{}
 
     form = %ContactMessage{} |> Inquiries.change_contact_message(attrs) |> to_form()
-    render(conn, :about, [form: form] ++ about_meta())
+    render_about(conn, form: form)
+  end
+
+  # The About page has the contact form and the mailing list form; a failed
+  # submission re-renders it with that form's errors and a blank other one.
+  defp render_about(conn, forms) do
+    forms =
+      Keyword.merge(
+        [
+          form: %ContactMessage{} |> Inquiries.change_contact_message() |> to_form(),
+          subscriber_form: %Subscriber{} |> Inquiries.change_subscriber() |> to_form()
+        ],
+        forms
+      )
+
+    render(conn, :about, forms ++ about_meta())
   end
 
   defp about_meta do
@@ -84,8 +99,31 @@ defmodule JanPaintingsWeb.PageController do
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)
-        |> render(:about, [form: to_form(changeset)] ++ about_meta())
+        |> render_about(form: to_form(changeset))
     end
+  end
+
+  # Same spam trap as the contact form.
+  def subscribe(conn, %{"subscriber" => %{"website" => trap}}) when trap != "" do
+    subscribed(conn)
+  end
+
+  def subscribe(conn, %{"subscriber" => params}) do
+    case Inquiries.subscribe(params) do
+      {:ok, _subscriber} ->
+        subscribed(conn)
+
+      {:error, changeset} ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> render_about(subscriber_form: to_form(changeset))
+    end
+  end
+
+  defp subscribed(conn) do
+    conn
+    |> put_flash(:info, "Thank you, you're on our mailing list.")
+    |> redirect(to: ~p"/about" <> "#mailing-list")
   end
 
   defp message_sent(conn) do
