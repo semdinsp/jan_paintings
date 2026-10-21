@@ -113,7 +113,7 @@ Use `text-wrap: pretty` on paragraphs and `text-wrap: balance` on headings.
 - Only All Prints (/prints) has a search box under the heading, since the menu search and the More by this artist button open there. The category pages (Old Master, Modern, Canadian) have none.
 
 ### Nationality filter (listing pages)
-- Under the search box: one button per nationality (Dutch/Flemish · Italian · German · French · British · Canadian · Other) in the filter button style, with no label in front: the country names say what they are, and screen readers hear "Filter by nationality" from the group. On phones the row scrolls sideways.
+- Under the search box: one button per nationality (Dutch/Flemish · Italian · German · French · British · Canadian · Other) in the filter button style, with no label in front: the country names say what they are, and screen readers hear "Filter by nationality" from the group. The buttons wrap onto a second line rather than scrolling sideways: two rows on phones (360–430px), one row from tablet width.
 - Only nationalities that have prints in the current category and search are offered; the row is hidden when there would be just one (e.g. Canadian Prints). A selected nationality always stays visible so it can be cleared.
 - Clicking one shows only that nationality, selected in rose; clicking it again shows all. The choice is kept in the URL (`?nationality=french`) and through searches; the menu bar's category links start fresh.
 - Nationality is set per print in the admin form; `priv/repo/seeds/print_nationalities.json` holds the drafted value for each artist, loaded by `JanPaintings.Catalog.Seed.load_nationalities/1`.
