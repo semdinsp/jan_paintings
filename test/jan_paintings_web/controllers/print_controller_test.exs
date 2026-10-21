@@ -43,6 +43,10 @@ defmodule JanPaintingsWeb.PrintControllerTest do
     test "offers only nationalities that have prints, and no sort buttons", %{conn: conn} do
       html = conn |> get(~p"/prints") |> html_response(200)
       assert html =~ ~s(aria-label="Filter by nationality")
+      # The buttons wrap onto more rows rather than scrolling sideways on phones.
+      [group] = Regex.run(~r/<div[^>]*aria-label="Filter by nationality"[^>]*>/, html)
+      assert group =~ "flex-wrap"
+      refute group =~ "overflow-x-auto"
       # No visible label: the country names speak for themselves.
       refute html =~ ~r/>\s*Nationality\s*</
       assert html =~ ~s(href="/prints?nationality=german")
