@@ -149,7 +149,7 @@ Use `text-wrap: pretty` on paragraphs and `text-wrap: balance` on headings.
 ### Print detail page
 - Back link ("← Old Master Prints") above, in rose "more" style.
 - Two columns desktop: image 7/12 on a `--paper-2` mat, details 5/12. Stacked on mobile.
-- When a print has a larger image or extra views, a small secondary button "View larger" with a `hero-magnifying-glass-plus` icon sits under the image, right-aligned, and the image itself links to the larger view (zoom-in cursor). Both open it in a new tab and follow the selected gallery view.
+- When a print has a larger image or extra views, a small secondary button "View larger" with a `hero-magnifying-glass-plus` icon sits under the image, right-aligned, and the image itself links to the larger view (zoom-in cursor). Both open it in a full-screen view on `--paper` (a native `<dialog>`, not a new tab, so it works on phones): the image as large as fits, with a primary "Close" button (`hero-x-mark`) at the top right. Esc or a tap beside the image also closes it, and the page behind doesn't scroll. Both follow the selected gallery view. Without JS the links open the image itself.
 - Details: artist line, H1 title, medium/date, definition list (eyebrow labels, `--rule` hairlines between rows), price 20px/600, primary Enquire button.
 - Additional notes (commentary that was set in italics on the original site), when present, each paragraph in Source Sans italic, `--ink-2`. From `md` (768px, the two-column layout) they sit under the images with no label, 24px below the image (or gallery). On phones they are instead a row of the definition list labelled "Additional notes", straight after Condition (so before Provenance, Watermark and Price).
 

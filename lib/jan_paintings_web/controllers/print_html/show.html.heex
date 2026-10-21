@@ -14,8 +14,7 @@
           :if={@enlargeable?}
           id="print-main-link"
           href={hd(@views).large}
-          target="_blank"
-          rel="noopener"
+          data-lightbox
           class="cursor-zoom-in"
           title="View larger"
         >
@@ -45,14 +44,36 @@
         <a
           id="print-view-larger"
           href={hd(@views).large}
-          target="_blank"
-          rel="noopener"
+          data-lightbox
           class="btn btn-sm btn-secondary-rose ml-auto"
         >
           <.icon name="hero-magnifying-glass-plus" class="size-4" /> View larger
-          <span class="sr-only">(opens in a new tab)</span>
         </a>
       </div>
+
+      <%!--
+        The larger view opens here, full screen (see app.js). Without JS the
+        links above open the image itself.
+      --%>
+      <dialog
+        :if={@enlargeable?}
+        id="print-lightbox"
+        class="print-lightbox"
+        aria-label={"#{@print.artist}, #{@print.title}: larger view"}
+      >
+        <form method="dialog" class="print-lightbox-bar">
+          <button id="print-lightbox-close" class="btn btn-primary" autofocus>
+            <.icon name="hero-x-mark" class="size-5" /> Close
+          </button>
+        </form>
+        <div class="print-lightbox-stage">
+          <img
+            id="print-lightbox-image"
+            alt={"#{@print.artist}, #{@print.title}"}
+            class="print-lightbox-image"
+          />
+        </div>
+      </dialog>
 
       <div
         :if={@print.gallery != []}
@@ -62,8 +83,6 @@
         <a
           :for={{view, index} <- Enum.with_index(@views)}
           href={view.large}
-          target="_blank"
-          rel="noopener"
           data-gallery-src={view.src}
           data-gallery-large={view.large}
           aria-current={if index == 0, do: "true", else: "false"}
