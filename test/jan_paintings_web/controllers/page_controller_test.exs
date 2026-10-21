@@ -74,9 +74,34 @@ defmodule JanPaintingsWeb.PageControllerTest do
     assert footer =~ ~r{<a[^>]*href="/terms-of-sale"[^>]*>Terms of sale</a>}
   end
 
+  test "the menu bar and phone drawer have Contact Us, going to the contact section", %{
+    conn: conn
+  } do
+    for path <- [~p"/", ~p"/about", ~p"/prints/modern"] do
+      html = conn |> get(path) |> html_response(200)
+      [nav] = Regex.run(~r{<nav[^>]*aria-label="Main".*?</nav>}s, html)
+
+      # Once in the desktop bar and once in the drawer, never marked current.
+      contact = Regex.scan(~r{<a[^>]*href="/about#contact"[^>]*>\s*Contact Us\s*</a>}, nav)
+      assert length(contact) == 2
+      refute Enum.any?(contact, fn [tag] -> tag =~ "aria-current" end)
+    end
+
+    assert conn |> get(~p"/about") |> html_response(200) =~ ~s(id="contact")
+  end
+
   test "GET /about", %{conn: conn} do
     html = conn |> get(~p"/about") |> html_response(200)
     assert html =~ "International Fine Print Dealers"
+
+    # The museum clients, in alphabetical order.
+    [clients] = Regex.run(~r{<section[^>]*id="about-clients".*?</section>}s, html)
+    names = Regex.scan(~r{<li>\s*(.*?)\s*</li>}s, clients, capture: :all_but_first)
+    assert length(names) == 43
+    assert ["Agnes Etherington Art Centre" <> _] = hd(names)
+    assert ["Zimmerli Art Museum" <> _] = List.last(names)
+    assert clients =~ "British Museum"
+    assert html =~ ~r/<h1[^>]*>About Us<\/h1>/
     assert html =~ ~s(href="/about#contact")
     assert html =~ ~s(src="/images/jan-johnson.jpg")
     # Shown at every screen size, not only beside the text on wide screens.

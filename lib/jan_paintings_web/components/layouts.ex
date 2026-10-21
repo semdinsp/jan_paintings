@@ -45,7 +45,11 @@ defmodule JanPaintingsWeb.Layouts do
             JanPaintings.Catalog.categories(),
             &{&1.slug, &1.name, ~p"/prints/#{&1.slug}"}
           ),
-        about_menu: [{"about", "About Us", ~p"/about"}]
+        # Contact Us jumps to the contact details and form on the About page.
+        about_menu: [
+          {"about", "About Us", ~p"/about"},
+          {"contact", "Contact Us", ~p"/about" <> "#contact"}
+        ]
       )
 
     ~H"""

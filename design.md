@@ -83,8 +83,8 @@ Use `text-wrap: pretty` on paragraphs and `text-wrap: balance` on headings.
 - Items: `--ink`, 15px/500, 28px gap; full bar height as hit area. Hover: text `--rose`.
 - Active page: text `--rose`, weight 600, 2px `--rose` bottom border.
 - Icon item (Home): always `--rose` (hover `--rose-2`), 20px, with the label as tooltip and screen-reader text; the rose underline marks the current page.
-- Order: a home icon (`hero-home`), then Old Master Prints · Modern Prints · Canadian Prints on the left; About Us right-aligned (the contact details and form are on the About page, linked from print enquiry buttons and the "ask us" note on listings).
-- Search: from `lg` (1024px), a 240px search box (36px tall, gold field border, "Artist or title" placeholder, magnifier submit button) sits right-aligned before About Us; Enter opens the matches on /prints. On tablets (768–1023px) there is no room for the box, so a magnifier icon links to /prints and its search box instead.
+- Order: a home icon (`hero-home`), then Old Master Prints · Modern Prints · Canadian Prints on the left; About Us · Contact Us right-aligned (Contact Us goes to `/about#contact`, the contact details and form on the About page, which are also linked from print enquiry buttons and the "ask us" note on listings).
+- Search: from `lg` (1024px), a 240px search box (36px tall, gold field border, "Artist or title" placeholder, magnifier submit button) sits right-aligned before About Us and Contact Us; Enter opens the matches on /prints. On tablets (768–1023px) there is no room for the box, so a magnifier icon links to /prints and its search box instead.
 - Mobile (< 768px): "Menu" + hamburger on the left, the home icon at the right end of the bar; the menu opens a `--paper` drawer with the search box at the top, then stacked 48px rows separated by `--rule` hairlines, active row in rose.
 
 ### Links
@@ -155,7 +155,10 @@ Use `text-wrap: pretty` on paragraphs and `text-wrap: balance` on headings.
 
 ### About page
 - Text column (68ch). Jan's portrait (`images/jan-johnson.jpg`) on a `--paper-2` mat with "Jan Johnson" below: beside the text from `lg` (1024px); below the text on phones and tablets, at most 320px wide.
+- Text (in the gallery's own words, "we"): founding and history; the stock; focused stock lists and the mailing list (links to email and the contact form); auction and appraisal services; print fairs and IFPDA.
+- Museum clients: a full-width section under the text and portrait (`--rule` hairline above), H2 "Museum clients", a one-line `--ink-2` intro, then the 43 museums in alphabetical order, 15px, one column on phones, two from `sm`, three from `lg`.
 - Contact section below: details on the left, the "Send a message" form on a `--paper-2` panel on the right (stacked on mobile).
+- Mailing list: a second `--paper-2` panel under "Send a message" (right column, 32px gap), `id="mailing-list"` (linked from the text above), styled like it: H2 "Join our mailing list", a one-line meta note, then Email and Name (optional) side by side from `sm`, Interests (optional) below, and a primary "Join the mailing list" button, with the same hidden spam trap as the contact form. Signups go to the `mailing_list_subscribers` table, one row per email (lowercased); signing up again keeps the first entry. Success redirects back to `#mailing-list` with a thank-you flash.
 
 ### Footer
 - Full-width `--dusk` band, 48px vertical padding, `--ink` text, 15px.
