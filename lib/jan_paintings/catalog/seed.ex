@@ -14,9 +14,9 @@ defmodule JanPaintings.Catalog.Seed do
       it corrects.
 
   `load_nationalities/1` fills in each artist's nationality,
-  `load_additional_notes/1` each print's additional notes, and
+  `load_additional_notes/1` each print's additional notes,
   `load_catalogue_entries/1` each print's catalogue details and provenance,
-  the same way.
+  and `load_mediums/1` each print's medium, the same way.
 
   Run them all with `mix run priv/repo/seeds.exs` locally, or
   `bin/jan_paintings eval "JanPaintings.Release.seed()"` in a release.
@@ -34,6 +34,9 @@ defmodule JanPaintings.Catalog.Seed do
 
   def nationalities_path,
     do: Path.join(:code.priv_dir(:jan_paintings), "repo/seeds/print_nationalities.json")
+
+  def mediums_path,
+    do: Path.join(:code.priv_dir(:jan_paintings), "repo/seeds/print_mediums.json")
 
   def catalogue_entries_path,
     do: Path.join(:code.priv_dir(:jan_paintings), "repo/seeds/print_catalogue_entries.json")
@@ -139,6 +142,15 @@ defmodule JanPaintings.Catalog.Seed do
     end)
     |> Map.update!(:missing, &Enum.reverse/1)
   end
+
+  @doc """
+  Fills in each print's medium from `priv/repo/seeds/print_mediums.json`
+  (the opening of its catalogue block on the original site), and corrects
+  any that were wrong. Same file format, rules and summary as
+  `load_catalogue_details/1`: blanks are filled, and a correction applies
+  only while the medium still holds the value it corrects.
+  """
+  def load_mediums(path \\ mediums_path()), do: load_catalogue_details(path)
 
   @doc """
   Applies the seed file. Returns a summary map: how many prints were updated,

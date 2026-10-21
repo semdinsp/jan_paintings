@@ -27,3 +27,8 @@ JanPaintings.Catalog.Seed.load_additional_notes() |> IO.inspect(label: "Addition
 # Each print's catalogue details (the catalogue block of its page on the
 # original site) and provenance. Also fills blanks only.
 JanPaintings.Catalog.Seed.load_catalogue_entries() |> IO.inspect(label: "Catalogue entries")
+
+# Each print's medium (the opening of its catalogue block on the original
+# site), with corrections for any that were wrong. Fills blanks only, and a
+# correction applies only while the old value is still there.
+JanPaintings.Catalog.Seed.load_mediums() |> IO.inspect(label: "Mediums")
