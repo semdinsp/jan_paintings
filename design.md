@@ -158,6 +158,7 @@ Use `text-wrap: pretty` on paragraphs and `text-wrap: balance` on headings.
 - Text (in the gallery's own words, "we"): founding and history; the stock; focused stock lists and the mailing list (links to email and the contact form); auction and appraisal services; print fairs and IFPDA.
 - Museum clients: a full-width section under the text and portrait (`--rule` hairline above), H2 "Museum clients", a one-line `--ink-2` intro, then the 43 museums in alphabetical order, 15px, one column on phones, two from `sm`, three from `lg`.
 - Contact section below: details on the left, the "Send a message" form on a `--paper-2` panel on the right (stacked on mobile).
+- Mailing list: under the contact details (left column), after a `--rule` hairline, `id="mailing-list"` (linked from the text above): H2 "Join our mailing list", one line of text, then Email, Name (optional) and Interests (optional) and a secondary "Join the mailing list" button, with the same hidden spam trap as the contact form. Signups go to the `mailing_list_subscribers` table, one row per email (lowercased); signing up again keeps the first entry. Success redirects back to `#mailing-list` with a thank-you flash.
 
 ### Footer
 - Full-width `--dusk` band, 48px vertical padding, `--ink` text, 15px.

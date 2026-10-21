@@ -18,8 +18,8 @@
       <p>
         This website shows only part of our stock, so please tell us about your interests and we will
         send you a focused list. You can <a href="mailto:jan@janjohnsonprints.com" class="link">email us</a>,
-        or use the <.link href={~p"/about" <> "#contact"} class="link">contact form</.link>
-        below to ask to join our mailing list.
+        or <.link href={~p"/about" <> "#mailing-list"} class="link">join our mailing list</.link>
+        below.
       </p>
       <p>
         Other services include bidding at auction on behalf of clients and appraisals. Visitors are
@@ -112,6 +112,53 @@
         touch directly. Prices are in US dollars, and Canadian prints in Canadian dollars.
       </p>
       <.contact_details class="mt-8" />
+
+      <section id="mailing-list" class="mt-12 scroll-mt-16 border-t border-rule pt-8">
+        <h2 class="type-h2">Join our mailing list</h2>
+        <p class="mt-3">
+          Hear about new stock and print fairs. Tell us what you collect and we'll send lists to
+          match.
+        </p>
+
+        <.form
+          for={@subscriber_form}
+          action={~p"/mailing-list"}
+          id="mailing-list-form"
+          class="mt-6"
+        >
+          <.input
+            field={@subscriber_form[:email]}
+            type="email"
+            label="Email"
+            autocomplete="email"
+            required
+          />
+          <.input field={@subscriber_form[:name]} label="Name (optional)" autocomplete="name" />
+          <.input
+            field={@subscriber_form[:interests]}
+            label="Interests (optional)"
+            placeholder="e.g. Rembrandt etchings, Canadian wood-engravings"
+          />
+
+          <%!-- Spam trap: hidden from people, often filled in by bots. --%>
+          <div class="hidden" aria-hidden="true">
+            <label>
+              Leave this empty
+              <input
+                type="text"
+                name="subscriber[website]"
+                value=""
+                tabindex="-1"
+                autocomplete="off"
+              />
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn-secondary-rose mt-2 w-full sm:w-auto">
+            Join the mailing list
+          </button>
+        </.form>
+      </section>
     </section>
 
     <section class="bg-paper-2 p-6 sm:p-8">
