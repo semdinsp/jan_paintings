@@ -134,21 +134,12 @@ if config_env() == :prod do
   #
   # Check `Plug.SSL` for all available options in `force_ssl`.
 
-  # ## Configuring the mailer
-  #
-  # In production you need to configure the mailer to use a different adapter.
-  # Here is an example configuration for Mailgun:
-  #
-  #     config :jan_paintings, JanPaintings.Mailer,
-  #       adapter: Swoosh.Adapters.Mailgun,
-  #       api_key: System.get_env("MAILGUN_API_KEY"),
-  #       domain: System.get_env("MAILGUN_DOMAIN")
-  #
-  # Most non-SMTP adapters require an API client. Swoosh supports Req, Hackney,
-  # and Finch out-of-the-box. This configuration is typically done at
-  # compile-time in your config/prod.exs:
-  #
-  #     config :swoosh, :api_client, Swoosh.ApiClient.Req
-  #
-  # See https://swoosh.hexdocs.pm/Swoosh.html#module-installation for details.
+  # Send email (contact form notifications, log in links) through Amazon SES.
+  # The from addresses in config.exs must be verified SES identities. The API
+  # client (Req) is set in prod.exs.
+  config :jan_paintings, JanPaintings.Mailer,
+    adapter: Swoosh.Adapters.AmazonSES,
+    access_key: System.get_env("AWS_ACCESS_KEY_ID"),
+    secret: System.get_env("AWS_SECRET_ACCESS_KEY"),
+    region: System.get_env("AWS_REGION", "us-east-1")
 end

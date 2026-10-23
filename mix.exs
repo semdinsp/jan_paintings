@@ -67,6 +67,8 @@ defmodule JanPaintings.MixProject do
        compile: false,
        depth: 1},
       {:swoosh, "~> 1.16"},
+      # Amazon SES adapter builds the MIME message with gen_smtp.
+      {:gen_smtp, "~> 1.0"},
       {:req, "~> 0.5"},
       {:telemetry_metrics, "~> 1.0"},
       {:telemetry_poller, "~> 1.0"},
