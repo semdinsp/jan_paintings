@@ -40,6 +40,12 @@ config :phoenix_live_view,
   # the attribute set on all root tags. Used for Phoenix.LiveView.ColocatedCSS.
   root_tag_attribute: "phx-r"
 
+# Background jobs. The customer_contact queue sends campaign emails; keep its
+# concurrency at or below the SES account's maximum send rate.
+config :jan_paintings, Oban,
+  repo: JanPaintings.Repo,
+  queues: [default: 10, customer_contact: 5]
+
 # Configure the mailer
 #
 # By default it uses the "Local" adapter which stores the emails
@@ -53,6 +59,19 @@ config :jan_paintings, JanPaintings.Mailer, adapter: Swoosh.Adapters.Local
 config :jan_paintings, JanPaintings.Inquiries.Notifier,
   to: {"Jan Johnson", "jan@janjohnsonprints.com"},
   from: {"Jan Johnson Prints website", "website@janjohnsonprints.com"}
+
+# Campaign email (the customer_contact library, at /admin/contact). The from
+# address must be a verified SES identity.
+config :jan_paintings, :campaign_from, {"Jan Johnson Prints", "website@janjohnsonprints.com"}
+
+config :customer_contact,
+  repo: JanPaintings.Repo,
+  mailer: JanPaintings.Mailer,
+  host: JanPaintings.CustomerContactHost,
+  endpoint: JanPaintingsWeb.Endpoint,
+  public_path: "/cc",
+  oban: Oban,
+  queue: :customer_contact
 
 # Where images uploaded from the admin pages are stored (see JanPaintings.Uploads).
 # Production sets this from UPLOADS_DIR in runtime.exs.

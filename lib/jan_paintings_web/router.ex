@@ -2,6 +2,7 @@ defmodule JanPaintingsWeb.Router do
   use JanPaintingsWeb, :router
 
   import JanPaintingsWeb.UserAuth
+  import CustomerContact.Web.Router
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -23,6 +24,12 @@ defmodule JanPaintingsWeb.Router do
   pipeline :api do
     plug :accepts, ["json"]
   end
+
+  # Campaign email links (open pixel, click redirect, unsubscribe) and the
+  # Amazon SNS webhook. Outside every pipeline: no CSRF check (signed tokens
+  # and AWS signatures authorize them) and no site password, so links in
+  # emails work while the site is private.
+  forward "/cc", CustomerContact.Web.PublicPlug
 
   scope "/", JanPaintingsWeb do
     pipe_through :crawler_files
@@ -90,6 +97,14 @@ defmodule JanPaintingsWeb.Router do
       live "/prints/new", PrintLive.Form, :new
       live "/prints/:id/edit", PrintLive.Form, :edit
     end
+  end
+
+  # Campaign email admin pages (CustomerContact). Its own scope, without the
+  # JanPaintingsWeb.Admin alias; the same admin plugs and on_mount as above.
+  scope "/admin" do
+    pipe_through [:browser, :require_authenticated_user, :require_admin_user]
+
+    customer_contact_admin("/contact", on_mount: [{JanPaintingsWeb.UserAuth, :require_admin}])
   end
 
   ## Authentication routes
