@@ -142,4 +142,14 @@ if config_env() == :prod do
     access_key: System.get_env("AWS_ACCESS_KEY_ID"),
     secret: System.get_env("AWS_SECRET_ACCESS_KEY"),
     region: System.get_env("AWS_REGION", "us-east-1")
+
+  # Campaign email delivery, bounce and complaint events: SES configuration
+  # set -> SNS topic -> POST /cc/sns. Only the listed topics are accepted.
+  config :customer_contact,
+    ses_configuration_set: System.get_env("CC_SES_CONFIGURATION_SET"),
+    sns_topic_arns:
+      "CC_SNS_TOPIC_ARNS"
+      |> System.get_env("")
+      |> String.split(",", trim: true)
+      |> Enum.map(&String.trim/1)
 end

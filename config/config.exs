@@ -60,6 +60,19 @@ config :jan_paintings, JanPaintings.Inquiries.Notifier,
   to: {"Jan Johnson", "jan@janjohnsonprints.com"},
   from: {"Jan Johnson Prints website", "website@janjohnsonprints.com"}
 
+# Campaign email (the customer_contact library, at /admin/contact). The from
+# address must be a verified SES identity.
+config :jan_paintings, :campaign_from, {"Jan Johnson Prints", "website@janjohnsonprints.com"}
+
+config :customer_contact,
+  repo: JanPaintings.Repo,
+  mailer: JanPaintings.Mailer,
+  host: JanPaintings.CustomerContactHost,
+  endpoint: JanPaintingsWeb.Endpoint,
+  public_path: "/cc",
+  oban: Oban,
+  queue: :customer_contact
+
 # Where images uploaded from the admin pages are stored (see JanPaintings.Uploads).
 # Production sets this from UPLOADS_DIR in runtime.exs.
 config :jan_paintings, :uploads_dir, Path.expand("../priv/uploads", __DIR__)
