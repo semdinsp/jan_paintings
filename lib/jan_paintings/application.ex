@@ -10,6 +10,7 @@ defmodule JanPaintings.Application do
     children = [
       JanPaintingsWeb.Telemetry,
       JanPaintings.Repo,
+      {Oban, Application.fetch_env!(:jan_paintings, Oban)},
       {DNSCluster, query: Application.get_env(:jan_paintings, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: JanPaintings.PubSub},
       # Start a worker by calling: JanPaintings.Worker.start_link(arg)

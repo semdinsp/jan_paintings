@@ -25,6 +25,9 @@ config :jan_paintings, JanPaintingsWeb.Endpoint,
   secret_key_base: "2nkvNTjHDbbDcd0/3rrvSyQ6EfLY+9dzskh1llrtGeY2BbCwqg7K6CxHfv3IYkB6",
   server: false
 
+# Jobs are only run when a test asks (Oban.Testing).
+config :jan_paintings, Oban, testing: :manual
+
 # In test we don't send emails
 config :jan_paintings, JanPaintings.Mailer, adapter: Swoosh.Adapters.Test
 

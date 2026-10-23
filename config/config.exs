@@ -40,6 +40,12 @@ config :phoenix_live_view,
   # the attribute set on all root tags. Used for Phoenix.LiveView.ColocatedCSS.
   root_tag_attribute: "phx-r"
 
+# Background jobs. The customer_contact queue sends campaign emails; keep its
+# concurrency at or below the SES account's maximum send rate.
+config :jan_paintings, Oban,
+  repo: JanPaintings.Repo,
+  queues: [default: 10, customer_contact: 5]
+
 # Configure the mailer
 #
 # By default it uses the "Local" adapter which stores the emails
