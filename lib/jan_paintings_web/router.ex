@@ -104,7 +104,9 @@ defmodule JanPaintingsWeb.Router do
   scope "/admin" do
     pipe_through [:browser, :require_authenticated_user, :require_admin_user]
 
-    customer_contact_admin("/contact", on_mount: [{JanPaintingsWeb.UserAuth, :require_admin}])
+    customer_contact_admin "/contact",
+      on_mount: [{JanPaintingsWeb.UserAuth, :require_admin}],
+      home_path: "/admin/prints"
   end
 
   ## Authentication routes

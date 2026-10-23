@@ -22,7 +22,9 @@ defmodule JanPaintingsWeb.Admin.CustomerContactTest do
     conn = log_in_user(conn, admin)
 
     for path <- @pages do
-      assert {:ok, _view, _html} = live(conn, path)
+      assert {:ok, _view, html} = live(conn, path)
+      # The header's home icon goes back to the admin prints page.
+      assert html =~ ~s(href="/admin/prints")
     end
   end
 
