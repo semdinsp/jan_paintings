@@ -62,7 +62,7 @@ config :jan_paintings, JanPaintings.Inquiries.Notifier,
 
 # Campaign email (the customer_contact library, at /admin/contact). The from
 # address must be a verified SES identity.
-config :jan_paintings, :campaign_from, {"Jan Johnson Prints", "website@janjohnsonprints.com"}
+config :jan_paintings, :campaign_from, {"Jan Johnson Prints", "jan@janjohnsonprints.com"}
 
 config :customer_contact,
   repo: JanPaintings.Repo,
