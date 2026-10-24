@@ -49,7 +49,7 @@ defmodule JanPaintingsWeb.Admin.CustomerContactTest do
 
   test "the brand uses the gallery's name, address and email colours" do
     brand = CustomerContactHost.brand()
-    assert {"Jan Johnson Prints", "website@janjohnsonprints.com"} = brand.from
+    assert {"Jan Johnson Prints", "jan@janjohnsonprints.com"} = brand.from
     assert brand.postal_address =~ "J3L 1L8"
     assert brand.primary_color == "#a8436a"
   end
