@@ -1,6 +1,13 @@
 <Layouts.app flash={@flash} current_scope={@current_scope} active="contact">
   <h1 class="type-h1">Contact Us</h1>
-  <div id="contact" class="mt-8 grid gap-12 lg:grid-cols-[2fr_3fr] lg:gap-16">
+  <%!--
+    From lg the terms sit in the left column under the details, beside the
+    forms; on phones they come last, after the forms.
+  --%>
+  <div
+    id="contact"
+    class="mt-8 grid gap-12 lg:grid-cols-[2fr_3fr] lg:grid-rows-[auto_1fr] lg:gap-x-16"
+  >
     <section>
       <p>
         To ask about a print, request a stock list or book a viewing, send a message or get in
@@ -9,7 +16,7 @@
       <.contact_details class="mt-8" />
     </section>
 
-    <div class="space-y-8">
+    <div class="space-y-8 lg:col-start-2 lg:row-span-2 lg:row-start-1">
       <section class="bg-paper-2 p-6 sm:p-8">
         <h2 class="type-h2">Send a message</h2>
         <p class="type-meta mt-1">
@@ -100,5 +107,10 @@
         </.form>
       </section>
     </div>
+
+    <section id="contact-terms" class="border-t border-rule pt-8 lg:col-start-1">
+      <h2 class="type-h2">Terms of sale</h2>
+      <.terms_of_sale heading="h3" class="mt-5" />
+    </section>
   </div>
 </Layouts.app>

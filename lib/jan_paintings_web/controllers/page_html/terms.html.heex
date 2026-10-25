@@ -1,52 +1,13 @@
 <Layouts.app flash={@flash} current_scope={@current_scope}>
   <article id="terms" class="max-w-[68ch]">
     <h1 class="type-h1">Terms of Sale</h1>
-    <p class="mt-3 text-ink-2">
+    <p class="mt-2 text-ink-2">
       For prints bought from Jan Johnson, Old Master &amp; Modern Prints Inc.
     </p>
 
-    <section class="mt-10">
-      <h2 class="type-h2">Authenticity</h2>
-      <p class="mt-3">
-        Every print is guaranteed authentic and as described. We take great care to describe each
-        print accurately, including its condition. If, when your purchase arrives, you can show that
-        a print is not as described, we will refund your payment in full.
-      </p>
-    </section>
+    <.terms_of_sale class="mt-7" />
 
-    <section class="mt-10">
-      <h2 class="type-h2">Prints on approval</h2>
-      <p class="mt-3">
-        We are happy to send prints on approval to clients we know, or who can give us references.
-        You then have ten days from receiving a print to decide.
-      </p>
-    </section>
-
-    <section class="mt-10">
-      <h2 class="type-h2">Packing and shipping</h2>
-      <p class="mt-3">
-        Packing and shipping are charged in addition to the price of the print. Packages are usually
-        sent by Federal Express.
-      </p>
-    </section>
-
-    <section class="mt-10">
-      <h2 class="type-h2">Payment</h2>
-      <p class="mt-3">
-        We accept cheques or bank drafts in US dollars, and wire transfers. We expect to begin
-        accepting credit cards during 2026.
-      </p>
-    </section>
-
-    <section class="mt-10">
-      <h2 class="type-h2">Canadian clients</h2>
-      <p class="mt-3">
-        Prices can be converted to Canadian dollars for immediate payment. HST, or GST and provincial
-        sales tax, will be added.
-      </p>
-    </section>
-
-    <p class="mt-12 border-t border-rule pt-6">
+    <p class="mt-10 border-t border-rule pt-5 text-[1rem]">
       Questions about a purchase? <.link href={~p"/contact"} class="link">Contact us</.link>
     </p>
   </article>

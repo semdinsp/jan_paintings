@@ -30,6 +30,61 @@ defmodule JanPaintingsWeb.PageHTML do
     """
   end
 
+  @doc """
+  The terms of sale, one short section each, shown on the Terms of Sale page
+  and under the contact details on the Contact page. `heading` is the tag for
+  the section headings, so they nest under the page's own headings.
+  """
+  attr :heading, :string, default: "h2"
+  attr :class, :any, default: nil
+
+  def terms_of_sale(assigns) do
+    ~H"""
+    <div class={["terms-of-sale space-y-7 text-[1rem]", @class]}>
+      <section>
+        <.dynamic_tag tag_name={@heading} class="terms-heading">Authenticity</.dynamic_tag>
+        <p class="mt-1.5">
+          Every print is guaranteed authentic and as described. We take great care to describe each
+          print accurately, including its condition. If, when your purchase arrives, you can show that
+          a print is not as described, we will refund your payment in full.
+        </p>
+      </section>
+
+      <section>
+        <.dynamic_tag tag_name={@heading} class="terms-heading">Prints on approval</.dynamic_tag>
+        <p class="mt-1.5">
+          We are happy to send prints on approval to clients we know, or who can give us references,
+          for a period of ten days after receipt.
+        </p>
+      </section>
+
+      <section>
+        <.dynamic_tag tag_name={@heading} class="terms-heading">Packing and shipping</.dynamic_tag>
+        <p class="mt-1.5">
+          Packing, shipping, and Customs fees or duties, if any, are charged in addition to the price of
+          the print. Packages are usually sent by Federal Express.
+        </p>
+      </section>
+
+      <section>
+        <.dynamic_tag tag_name={@heading} class="terms-heading">Payment</.dynamic_tag>
+        <p class="mt-1.5">
+          We accept cheques and wire transfers in US dollars. We expect to begin accepting credit cards
+          during 2027.
+        </p>
+      </section>
+
+      <section>
+        <.dynamic_tag tag_name={@heading} class="terms-heading">Canadian clients</.dynamic_tag>
+        <p class="mt-1.5">
+          Prices can be converted to Canadian dollars for immediate payments. HST, or GST and provincial
+          sales tax, will be added.
+        </p>
+      </section>
+    </div>
+    """
+  end
+
   @doc "Search box for artist names and print titles; submits to the print list."
   attr :value, :string, default: ""
   attr :class, :any, default: nil

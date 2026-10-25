@@ -161,6 +161,7 @@ Use `text-wrap: pretty` on paragraphs and `text-wrap: balance` on headings.
 
 ### Contact page (/contact)
 - H1 "Contact Us", then (`id="contact"`) details on the left: a one-line intro and the contact details list; the "Send a message" form on a `--paper-2` panel on the right (stacked on mobile). Print enquiry buttons open it as `/contact?print=<slug>`, which fills in the subject; old `/about?print=` links redirect here. Sent messages return to `/contact` with a thank-you flash.
+- Terms of sale (`id="contact-terms"`, `--rule` hairline above, H2 "Terms of sale"): the same sections as the Terms of Sale page (one shared component, `terms_of_sale/1`, with H3 headings here). From `lg` they fill the left column under the contact details, beside the two form panels; on phones they come last, after the forms.
 - Mailing list: a second `--paper-2` panel under "Send a message" (right column, 32px gap), `id="mailing-list"` (linked from the text above), styled like it: H2 "Join our mailing list", a one-line meta note, then Email and Name (optional) side by side from `sm`, Interests (optional) below, and a primary "Join the mailing list" button, with the same hidden spam trap as the contact form. Signups go to the `mailing_list_subscribers` table, one row per email (lowercased); signing up again keeps the first entry. Success redirects back to `/contact#mailing-list` with a thank-you flash.
 - Admins see the signups at `/admin/mailing-list` (a "Mailing list" button with `hero-envelope` beside Guides on the admin prints page): newest first, each with a mailto link, name, interests, signup date and a Remove link (asks to confirm; for unsubscribe requests). "Download CSV" gives `email, name, interests, signed_up`; values a spreadsheet would treat as formulas get a leading apostrophe.
 - Campaign email to the mailing list comes from the shared `customer_contact` library at `/admin/contact` (a "Customer contact" button with `hero-paper-airplane` after Mailing list). Its pages use the library's own daisyUI styling; campaign emails use the email brand colours (`#a8436a` primary, `#f1ede6` background) and the ink logo. Email links go to `/cc/*`, which skips the site password.
@@ -171,8 +172,8 @@ Use `text-wrap: pretty` on paragraphs and `text-wrap: balance` on headings.
 
 ### Terms of sale page (/terms-of-sale)
 - Linked from the footer, next to "Contact us"; not in the menu bar.
-- Text column (68ch): H1 "Terms of Sale", a one-line `--ink-2` intro, then H2 sections 40px apart: Authenticity · Prints on approval · Packing and shipping · Payment · Canadian clients. Ends, after a `--rule` hairline, with "Questions about a purchase? Contact us".
-- Wording rewritten from the original site's terms; Payment adds that credit cards are expected during 2026.
+- Text column (68ch): H1 "Terms of Sale", a one-line `--ink-2` intro, then compact sections 28px apart (21px EB Garamond headings 6px above 16px text, rather than the usual 26px H2 and 17px body, since each section is only a sentence or two): Authenticity · Prints on approval · Packing and shipping · Payment · Canadian clients. Ends, after a `--rule` hairline, with "Questions about a purchase? Contact us".
+- Wording rewritten from the original site's terms; Payment adds that credit cards are expected during 2027; Packing and shipping includes Customs fees or duties.
 
 ### Favicon
 - The triton's head from the header engraving in a round medallion on a `--dusk` square.
