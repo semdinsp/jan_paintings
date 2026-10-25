@@ -16,7 +16,8 @@ defmodule JanPaintings.Accounts.UserNotifierTest do
     assert email.html_body =~ "Log in to Jan Johnson Prints"
     assert email.html_body =~ ~s(href="#{@url}")
     assert email.html_body =~ "/images/jan-johnson-logo-ink.png"
-    assert email.html_body =~ "#8f5550"
+    assert email.html_body =~ "background-color:#c2918d"
+    assert email.html_body =~ "color:#9b464d"
     assert email.text_body =~ "Log in to Jan Johnson Prints"
     assert email.text_body =~ @url
     refute email.text_body =~ "<"
