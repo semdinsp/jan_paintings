@@ -10,7 +10,7 @@ defmodule JanPaintingsWeb.EmailHTML do
   """
   use Phoenix.Component
 
-  @primary "#a8436a"
+  @primary "#8f5550"
   @page "#f1ede6"
   @paper "#faf8f4"
   @ink "#1f1d1a"

@@ -25,14 +25,14 @@ Defined as CSS custom properties in `assets/css/app.css` (light and dark), expos
 | `--rule` | `#DDD6CB` | `#3D3832` | Hairlines, dividers |
 | `--ink` | `#1F1D1A` | `#EDE8E0` | Headings, body text, text on dusk |
 | `--ink-2` | `#5C5650` | `#B3ABA1` | Secondary text: dates, medium, captions, labels |
-| `--rose` | `#A8436A` | `#D9809F` | Links, buttons, focus rings, active menu item |
-| `--rose-2` | `#86324F` | `#E8A3BB` | Link/button hover and pressed |
-| `--rose-tint` | `#F6E9EE` | `#3A2630` | Selected filter button background |
+| `--rose` | `#8F5550` | `#CF958E` | Links, buttons, focus rings, active menu item. A deeper shade of `--dusk` (same hue, about 5°), so buttons belong with the header and footer |
+| `--rose-2` | `#6E3F3B` | `#E6BAB4` | Link/button hover and pressed |
+| `--rose-tint` | `#F4E9E7` | `#3A2A28` | Selected filter button background |
 | `--dusk` | `#C2918D` | `#3B2B2D` | Header and footer background |
 | `--gold` | `#A9851F` | `#C9A84C` | Menu bar bottom rule, form field and filter button outlines |
 | `--sold` | `#5C5650` | `#B3ABA1` | "Sold" label (neutral, not red) |
 
-Contrast (WCAG AA): `--ink` on `--paper` ≈ 16:1, `--ink-2` on `--paper` ≈ 7:1, `--rose` on `--paper` ≈ 5.3:1, white on `--rose` ≈ 5.6:1, `--ink` on `--dusk` ≈ 6:1.
+Contrast (WCAG AA): `--ink` on `--paper` ≈ 16:1, `--ink-2` on `--paper` ≈ 7:1, `--rose` on `--paper` ≈ 5.5:1, white on `--rose` ≈ 5.9:1, dark `--rose` on dark `--paper` ≈ 6.9:1, `--ink` on `--dusk` ≈ 6:1.
 
 Rules:
 - On `--dusk`, all text and links are `--ink` (links keep their underline). Rose and `--ink-2` are too faint on the pink.
@@ -164,7 +164,7 @@ Use `text-wrap: pretty` on paragraphs and `text-wrap: balance` on headings.
 - Terms of sale (`id="contact-terms"`, `--rule` hairline above, H2 "Terms of sale"): the same sections as the Terms of Sale page (one shared component, `terms_of_sale/1`, with H3 headings here). From `lg` they fill the left column under the contact details, beside the two form panels; on phones they come last, after the forms.
 - Mailing list: a second `--paper-2` panel under "Send a message" (right column, 32px gap), `id="mailing-list"` (linked from the text above), styled like it: H2 "Join our mailing list", a one-line meta note, then Email and Name (optional) side by side from `sm`, Interests (optional) below, and a primary "Join the mailing list" button, with the same hidden spam trap as the contact form. Signups go to the `mailing_list_subscribers` table, one row per email (lowercased); signing up again keeps the first entry. Success redirects back to `/contact#mailing-list` with a thank-you flash.
 - Admins see the signups at `/admin/mailing-list` (a "Mailing list" button with `hero-envelope` beside Guides on the admin prints page): newest first, each with a mailto link, name, interests, signup date and a Remove link (asks to confirm; for unsubscribe requests). "Download CSV" gives `email, name, interests, signed_up`; values a spreadsheet would treat as formulas get a leading apostrophe.
-- Campaign email to the mailing list comes from the shared `customer_contact` library at `/admin/contact` (a "Customer contact" button with `hero-paper-airplane` after Mailing list). Its pages use the library's own daisyUI styling; campaign emails use the email brand colours (`#a8436a` primary, `#f1ede6` background) and the ink logo. Email links go to `/cc/*`, which skips the site password.
+- Campaign email to the mailing list comes from the shared `customer_contact` library at `/admin/contact` (a "Customer contact" button with `hero-paper-airplane` after Mailing list). Its pages use the library's own daisyUI styling; campaign emails use the email brand colours (`#8f5550` primary, `#f1ede6` background) and the ink logo. Email links go to `/cc/*`, which skips the site password.
 
 ### Footer
 - Full-width `--dusk` band, 48px vertical padding, `--ink` text, 15px.

@@ -27,7 +27,7 @@ defmodule JanPaintings.CustomerContactHost do
       postal_address: "189 rue Saint-Pierre, Chambly, QC, Canada J3L 1L8",
       website_url: base,
       logo_url: base <> "/images/jan-johnson-logo-ink.png",
-      primary_color: "#a8436a",
+      primary_color: "#8f5550",
       accent_color: "#1f1d1a",
       background_color: "#f1ede6"
     }

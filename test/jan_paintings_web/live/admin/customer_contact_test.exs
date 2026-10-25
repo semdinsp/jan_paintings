@@ -51,7 +51,7 @@ defmodule JanPaintingsWeb.Admin.CustomerContactTest do
     brand = CustomerContactHost.brand()
     assert {"Jan Johnson Prints", "jan@janjohnsonprints.com"} = brand.from
     assert brand.postal_address =~ "J3L 1L8"
-    assert brand.primary_color == "#a8436a"
+    assert brand.primary_color == "#8f5550"
   end
 
   test "the open pixel works without a session or the site password", %{conn: conn} do
