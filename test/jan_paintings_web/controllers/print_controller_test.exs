@@ -118,13 +118,13 @@ defmodule JanPaintingsWeb.PrintControllerTest do
     assert list =~ ~r/<a(?=[^>]*id="#{anchor}")[^>]*href="\/prints\/old-masters\/#{print.slug}"/
   end
 
-  test "available prints have a Request more information button to the contact page", %{
+  test "available prints have a More information button to the contact page", %{
     conn: conn
   } do
     html = conn |> get(~p"/prints/old-masters/beham-leda-and-the-swan") |> html_response(200)
 
     assert html =~
-             ~r{<a[^>]*href="/contact\?print=beham-leda-and-the-swan"[^>]*>\s*Request more information\s*</a>}
+             ~r{<a[^>]*href="/contact\?print=beham-leda-and-the-swan"[^>]*>\s*More information\s*</a>}
 
     refute html =~ "Enquire about this print"
   end
@@ -232,7 +232,7 @@ defmodule JanPaintingsWeb.PrintControllerTest do
     detail = conn |> get(~p"/prints/canadian/#{sold.slug}") |> html_response(200)
     assert detail =~ ~r/>\s*sold\s*</
     assert detail =~ "Ask about similar prints"
-    refute detail =~ "Request more information"
+    refute detail =~ "More information"
     # No price. Match a price, not bare "CAD", which the random CSRF token can contain.
     refute detail =~ ~r/\d CAD\b/
   end
