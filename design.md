@@ -171,7 +171,7 @@ Use `text-wrap: pretty` on paragraphs and `text-wrap: balance` on headings.
 
 ### Terms of sale page (/terms-of-sale)
 - Linked from the footer, next to "Contact us"; not in the menu bar.
-- Text column (68ch): H1 "Terms of Sale", a one-line `--ink-2` intro, then H2 sections 40px apart: Authenticity · Prints on approval · Packing and shipping · Payment · Canadian clients. Ends, after a `--rule` hairline, with "Questions about a purchase? Contact us".
+- Text column (68ch): H1 "Terms of Sale", a one-line `--ink-2` intro, then compact sections 28px apart (21px EB Garamond headings 6px above 16px text, rather than the usual 26px H2 and 17px body, since each section is only a sentence or two): Authenticity · Prints on approval · Packing and shipping · Payment · Canadian clients. Ends, after a `--rule` hairline, with "Questions about a purchase? Contact us".
 - Wording rewritten from the original site's terms; Payment adds that credit cards are expected during 2027; Packing and shipping includes Customs fees or duties.
 
 ### Favicon

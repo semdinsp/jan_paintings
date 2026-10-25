@@ -201,6 +201,8 @@ p { text-wrap: pretty; }
   line-height: 1.25;
   font-weight: 400;
 }
+/* Terms of sale: short sections, so smaller headings than other H2s. */
+#terms .type-h2 { font-size: 1.3125rem; }
 /* "BEHAM, Hans Sebald (1500–1550)" */
 .type-artist {
   font-size: 0.8125rem;
