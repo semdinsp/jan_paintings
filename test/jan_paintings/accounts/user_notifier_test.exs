@@ -12,6 +12,7 @@ defmodule JanPaintings.Accounts.UserNotifierTest do
     {:ok, email} = UserNotifier.deliver_login_instructions(user, @url)
 
     assert email.subject == "Your Jan Johnson Prints log in link"
+    assert email.from == {"Jan Johnson Prints", "jan@janjohnsonprints.com"}
     assert email.html_body =~ "<!DOCTYPE html>"
     assert email.html_body =~ "Log in to Jan Johnson Prints"
     assert email.html_body =~ ~s(href="#{@url}")
