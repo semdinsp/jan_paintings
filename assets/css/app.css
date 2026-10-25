@@ -359,6 +359,18 @@ body:has(.print-lightbox[open]) {
   color: var(--ink-2);
   opacity: 1;
 }
+/* In the admin print form the placeholders are only examples ("Bartsch 96;
+   New Hollstein 12"), so make them light grey and italic, clearly not saved
+   values. */
+#print-form input::placeholder,
+#print-form textarea::placeholder {
+  color: #a39b92;
+  font-style: italic;
+}
+[data-theme="dark"] #print-form input::placeholder,
+[data-theme="dark"] #print-form textarea::placeholder {
+  color: #7a736b;
+}
 .input,
 .select,
 .textarea,
