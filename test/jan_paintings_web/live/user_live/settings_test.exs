@@ -95,6 +95,18 @@ defmodule JanPaintingsWeb.UserLive.SettingsTest do
       %{conn: log_in_user(conn, user), user: user}
     end
 
+    test "a Show passwords checkbox switches both fields to plain text", %{conn: conn} do
+      {:ok, lv, _html} = live(conn, ~p"/users/settings")
+
+      assert has_element?(lv, ~s(#user_password[type="password"]))
+      assert has_element?(lv, ~s(#user_password_confirmation[type="password"]))
+
+      toggle = lv |> element("#show-new-password") |> render()
+      assert toggle =~ "toggle_attr"
+      assert toggle =~ "#user_password, #user_password_confirmation"
+      refute toggle =~ ~s(name=)
+    end
+
     test "updates the user password", %{conn: conn, user: user} do
       new_password = valid_user_password()
 

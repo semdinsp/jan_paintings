@@ -19,6 +19,22 @@ defmodule JanPaintingsWeb.UserLive.LoginTest do
     end
   end
 
+  describe "show password" do
+    test "a checkbox under the password switches it to plain text", %{conn: conn} do
+      {:ok, lv, _html} = live(conn, ~p"/users/log-in")
+
+      assert has_element?(lv, ~s(#user_password[type="password"]))
+      assert has_element?(lv, "label", "Show password")
+
+      # The checkbox toggles the field's type in the browser (JS command);
+      # it has no name, so it is never sent with the form.
+      toggle = lv |> element("#show-password") |> render()
+      assert toggle =~ "toggle_attr"
+      assert toggle =~ "#user_password"
+      refute toggle =~ ~s(name=)
+    end
+  end
+
   describe "user login - magic link" do
     test "sends magic link email when user exists", %{conn: conn} do
       user = user_fixture()
