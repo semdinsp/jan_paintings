@@ -100,6 +100,7 @@ Use `text-wrap: pretty` on paragraphs and `text-wrap: balance` on headings.
 
 ### Form fields and search
 - 2px `--gold` border, `--paper` background, 16px text, 44px tall, placeholder in `--ink-2`.
+- In the admin print form, placeholders are only examples, so they are light grey (`#a39b92`, dark mode `#7a736b`) and italic, clearly different from saved values.
 - Focus: border `--ink` plus the 2px rose ring. For a daisyUI `.input` wrapper (the search box), the ring is drawn on the wrapper and the inner `<input>` has no outline, so there is one complete ring.
 - Search: "Search" button attached on the right, styled like a selected filter button (2px `--rose` border, `--rose-tint` background, `--rose` text, weight 600; hover `--rose-2`), so it matches the filters beneath it in both light and dark mode. As you type on the homepage, up to six matches drop down below the box; Enter opens the full results on /prints.
 
