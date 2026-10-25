@@ -22,13 +22,14 @@ defmodule JanPaintings.Release do
   def seed do
     load_app()
 
-    {:ok, {details, nationalities, notes, entries, mediums}, _} =
+    {:ok, {details, nationalities, notes, entries, mediums, references}, _} =
       Ecto.Migrator.with_repo(JanPaintings.Repo, fn _repo ->
         {JanPaintings.Catalog.Seed.load_catalogue_details(),
          JanPaintings.Catalog.Seed.load_nationalities(),
          JanPaintings.Catalog.Seed.load_additional_notes(),
          JanPaintings.Catalog.Seed.load_catalogue_entries(),
-         JanPaintings.Catalog.Seed.load_mediums()}
+         JanPaintings.Catalog.Seed.load_mediums(),
+         JanPaintings.Catalog.Seed.load_catalogue_references()}
       end)
 
     IO.inspect(details, label: "Catalogue details")
@@ -36,6 +37,7 @@ defmodule JanPaintings.Release do
     IO.inspect(notes, label: "Additional notes")
     IO.inspect(entries, label: "Catalogue entries")
     IO.inspect(mediums, label: "Mediums")
+    IO.inspect(references, label: "Catalogue references")
   end
 
   def rollback(repo, version) do

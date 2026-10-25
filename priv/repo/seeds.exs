@@ -32,3 +32,8 @@ JanPaintings.Catalog.Seed.load_catalogue_entries() |> IO.inspect(label: "Catalog
 # site), with corrections for any that were wrong. Fills blanks only, and a
 # correction applies only while the old value is still there.
 JanPaintings.Catalog.Seed.load_mediums() |> IO.inspect(label: "Mediums")
+
+# Catalogue references still blank, taken from each print's full catalogue
+# entry. Fills blanks only.
+JanPaintings.Catalog.Seed.load_catalogue_references()
+|> IO.inspect(label: "Catalogue references")
