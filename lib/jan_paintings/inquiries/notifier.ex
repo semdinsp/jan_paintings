@@ -52,11 +52,15 @@ defmodule JanPaintings.Inquiries.Notifier do
       """)
 
     case Mailer.deliver(email) do
-      {:ok, _} = ok ->
+      {:ok, metadata} = ok ->
+        Logger.info("Contact message #{message.id} notification sent: #{inspect(metadata)}")
         ok
 
       {:error, reason} = error ->
-        Logger.error("Contact message #{message.id} notification failed: #{inspect(reason)}")
+        Logger.error(
+          "Contact message #{message.id} notification from #{inspect(email.from)} failed: #{inspect(reason)}"
+        )
+
         error
     end
   end

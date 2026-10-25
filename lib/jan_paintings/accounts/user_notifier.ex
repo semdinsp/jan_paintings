@@ -8,11 +8,14 @@ defmodule JanPaintings.Accounts.UserNotifier do
   """
   import Swoosh.Email
 
+  require Logger
+
   alias JanPaintings.Mailer
   alias JanPaintings.Accounts.User
   alias JanPaintingsWeb.EmailHTML
 
-  # Delivers the email using the application mailer.
+  # Delivers the email using the application mailer, logging the result (the
+  # recipient is left out of the log).
   defp deliver(recipient, subject, content) do
     email =
       new()
@@ -22,8 +25,17 @@ defmodule JanPaintings.Accounts.UserNotifier do
       |> html_body(EmailHTML.action_email(content))
       |> text_body(text(content))
 
-    with {:ok, _metadata} <- Mailer.deliver(email) do
-      {:ok, email}
+    case Mailer.deliver(email) do
+      {:ok, metadata} ->
+        Logger.info("Account email #{inspect(subject)} sent: #{inspect(metadata)}")
+        {:ok, email}
+
+      {:error, reason} = error ->
+        Logger.error(
+          "Account email #{inspect(subject)} from #{inspect(email.from)} failed: #{inspect(reason)}"
+        )
+
+        error
     end
   end
 
