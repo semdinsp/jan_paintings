@@ -118,7 +118,7 @@ defmodule JanPaintingsWeb.PrintControllerTest do
     assert list =~ ~r/<a(?=[^>]*id="#{anchor}")[^>]*href="\/prints\/old-masters\/#{print.slug}"/
   end
 
-  test "lists the details in the gallery's order", %{conn: conn} do
+  test "lists the details in the gallery's order, without the state", %{conn: conn} do
     print = Catalog.get_print("dusart-fiddler-in-an-inn")
 
     {:ok, _} =
@@ -137,7 +137,10 @@ defmodule JanPaintingsWeb.PrintControllerTest do
     labels = Regex.scan(~r{<dt[^>]*>([^<]+)</dt>}, html, capture: :all_but_first) |> List.flatten()
 
     assert labels ==
-             ~w(Medium References State Watermark Provenance Condition Size Sheet Price)
+             ~w(Medium References Watermark Provenance Condition Size Sheet Price)
+
+    # The state is kept (admin form, seeds) but not shown to visitors.
+    refute html =~ "Only state"
   end
 
   test "shows the print description", %{conn: conn} do
