@@ -60,7 +60,7 @@ document.addEventListener("click", event => {
 
 // Print detail "View larger" (the button or the main image): shows the larger
 // image in a full-screen dialog, closed with its Close button, Esc, or a tap
-// beside the image. Without JS the links open the image itself.
+// on or beside the image. Without JS the links open the image itself.
 document.addEventListener("click", event => {
   const dialog = document.getElementById("print-lightbox")
   if (!dialog) return
@@ -70,7 +70,7 @@ document.addEventListener("click", event => {
     event.preventDefault()
     document.getElementById("print-lightbox-image").src = opener.href
     dialog.showModal()
-  } else if (event.target === dialog || event.target.matches(".print-lightbox-stage")) {
+  } else if (event.target === dialog || event.target.matches(".print-lightbox-stage, .print-lightbox-image")) {
     dialog.close()
   }
 })

@@ -305,18 +305,24 @@ defmodule JanPaintingsWeb.PrintControllerTest do
     refute html =~ ~s(id="print-gallery")
   end
 
-  test "has no larger view or image link when there is no larger image", %{conn: conn} do
-    html = conn |> get(~p"/prints/old-masters/dusart-fiddler-in-an-inn") |> html_response(200)
-    refute html =~ "View larger"
-    refute html =~ ~s(id="print-main-link")
-    assert html =~ ~s(id="print-main-image")
-    refute html =~ ~s(id="print-lightbox")
+  test "without a larger image, View larger zooms the page image", %{conn: conn} do
+    print = Catalog.get_print("dusart-fiddler-in-an-inn")
+    assert print.large_image == "" and print.gallery == []
+
+    html = conn |> get(~p"/prints/old-masters/#{print.slug}") |> html_response(200)
+    image = Regex.escape(print.image)
+
+    assert html =~
+             ~r/<a(?=[^>]*id="print-view-larger")(?=[^>]*data-lightbox)[^>]*href="#{image}"/
+
+    assert html =~ ~r/<a(?=[^>]*id="print-main-link")(?=[^>]*data-lightbox)[^>]*href="#{image}"/
+    assert html =~ ~s(id="print-lightbox")
   end
 
   test "prints without extra views have no gallery", %{conn: conn} do
     html = conn |> get(~p"/prints/old-masters/dusart-fiddler-in-an-inn") |> html_response(200)
-    refute html =~ "View larger"
     refute html =~ ~s(id="print-gallery")
+    refute html =~ "views. Select one"
   end
 
   test "404s for unknown category or mismatched print", %{conn: conn} do

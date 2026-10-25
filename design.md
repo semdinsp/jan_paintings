@@ -45,10 +45,10 @@ Rules:
 | Role | Font | Size / line-height | Weight |
 |---|---|---|---|
 | H1 (page title) | EB Garamond | 36px / 1.2 (mobile 28px) | 400 |
-| Print title on its detail page | EB Garamond | 32px / 1.2 (mobile 24px) | 400 |
+| Print title on its detail page | EB Garamond | 25px / 1.2 (mobile 19px) | 400 |
 | H2 (section heads) | EB Garamond | 26px / 1.25 | 400 |
 | Tile label (homepage) | EB Garamond | 32px / 1.25, white | 400 |
-| Artist line (`BEHAM, Hans Sebald (1500–1550)`) | Source Sans 3 | 13px / 1.4 (14px on the print detail page), uppercase, letter-spacing 0.06em | 600 |
+| Artist line (`BEHAM, Hans Sebald (1500–1550)`) | Source Sans 3 | 13px / 1.4 (15px on the print detail page), uppercase, letter-spacing 0.06em | 600 |
 | Body | Source Sans 3 | 17px / 1.6 | 400 |
 | Small / captions / metadata | Source Sans 3 | 14px / 1.5 | 400 |
 | Menu items | Source Sans 3 | 15px, letter-spacing 0.02em | 500 |
@@ -149,7 +149,7 @@ Use `text-wrap: pretty` on paragraphs and `text-wrap: balance` on headings.
 ### Print detail page
 - Back link ("← Old Master Prints") above, in rose "more" style. It returns to this print's place in the category list: each card in a list has the id `print-<slug>` (with an 80px scroll margin to clear the sticky menu bar), and the link goes to `/prints/<category>#print-<slug>` with a full page load, so the browser scrolls to the card and focuses it (the rose focus ring marks where you were).
 - Two columns desktop: image 7/12 on a `--paper-2` mat, details 5/12. Stacked on mobile.
-- When a print has a larger image or extra views, a small secondary button "View larger" with a `hero-magnifying-glass-plus` icon sits under the image, right-aligned, and the image itself links to the larger view (zoom-in cursor). Both open it in a full-screen view on `--paper` (a native `<dialog>`, not a new tab, so it works on phones): the image as large as fits, with a primary "Close" button (`hero-x-mark`) at the top right. Esc or a tap beside the image also closes it, and the page behind doesn't scroll. Both follow the selected gallery view. Without JS the links open the image itself.
+- Every print has a small secondary button "View larger" with a `hero-magnifying-glass-plus` icon under the image, right-aligned, and the image itself links to the larger view (zoom-in cursor). Both open it in a full-screen view on `--paper` (a native `<dialog>`, not a new tab, so it works on phones): the separate larger photo when there is one (otherwise the page image), scaled to fill the screen, with a primary "Close" button (`hero-x-mark`) at the top right. Esc or a tap on or beside the image also closes it, and the page behind doesn't scroll. Both follow the selected gallery view. Without JS the links open the image itself.
 - Details: artist line, H1 title, the description, then a definition list (eyebrow labels, `--rule` hairlines between rows) in the gallery's order: Medium (with date) · References · Watermark · Provenance · Condition · Size · Sheet, each only when filled in, then Price (20px/600) and the primary Enquire button. The admin form lists these fields in the same order, plus State (after References), which is kept in the database and admin form but hidden from visitors. Every print's medium (the opening of its catalogue block on the original site) is in `priv/repo/seeds/print_mediums.json`, loaded by `JanPaintings.Catalog.Seed.load_mediums/1`, which fills blanks and corrects known mistakes.
 - Additional notes (commentary that was set in italics on the original site), when present, each paragraph in Source Sans italic, `--ink-2`. From `md` (768px, the two-column layout) they sit under the images with no label, 24px below the image (or gallery). On phones they are instead a row of the definition list labelled "Additional notes", after Size and Sheet, just before Price.
 

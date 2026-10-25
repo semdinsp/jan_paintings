@@ -20,7 +20,6 @@ defmodule JanPaintingsWeb.PrintController do
       category: category,
       print: print,
       views: Catalog.views(print),
-      enlargeable?: print.large_image != "" or print.gallery != [],
       # One paragraph per blank-line-separated block of the additional notes.
       notes: String.split(print.additional_notes, ~r/\n\s*\n/, trim: true),
       more_by_artist?: Catalog.more_by_artist(print) != []
