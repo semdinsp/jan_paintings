@@ -55,10 +55,12 @@ config :jan_paintings, Oban,
 # at the `config/runtime.exs`.
 config :jan_paintings, JanPaintings.Mailer, adapter: Swoosh.Adapters.Local
 
-# Where contact form notifications are sent, and who they come from.
+# Where contact form notifications are sent, and who they come from. Every
+# from address must be a verified SES identity: jan@ is verified on its own
+# (website@ is not, until the whole domain is verified in SES).
 config :jan_paintings, JanPaintings.Inquiries.Notifier,
   to: {"Jan Johnson", "jan@janjohnsonprints.com"},
-  from: {"Jan Johnson Prints website", "website@janjohnsonprints.com"}
+  from: {"Jan Johnson Prints website", "jan@janjohnsonprints.com"}
 
 # Campaign email (the customer_contact library, at /admin/contact). The from
 # address must be a verified SES identity.
@@ -79,7 +81,7 @@ config :jan_paintings, :uploads_dir, Path.expand("../priv/uploads", __DIR__)
 
 # Sender for account emails (log in links, confirmations).
 config :jan_paintings, JanPaintings.Accounts.UserNotifier,
-  from: {"Jan Johnson Prints", "website@janjohnsonprints.com"}
+  from: {"Jan Johnson Prints", "jan@janjohnsonprints.com"}
 
 # Configure esbuild (the version is required)
 config :esbuild,

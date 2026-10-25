@@ -32,6 +32,8 @@ defmodule JanPaintings.Inquiries.NotifierTest do
     assert_received {:email, email}
     assert email.subject == "Website enquiry: Neilson etching"
     assert email.reply_to == {"Ada Collector", "ada@example.com"}
+    # jan@ is the verified SES identity.
+    assert email.from == {"Jan Johnson Prints website", "jan@janjohnsonprints.com"}
 
     html = email.html_body
     assert html =~ "New enquiry from Ada Collector"
