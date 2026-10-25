@@ -83,6 +83,15 @@ defmodule JanPaintingsWeb.UserLive.Login do
             autocomplete="current-password"
             spellcheck="false"
           />
+          <%!-- Shows the password as plain text; not part of the form (no name). --%>
+          <label class="-mt-1 mb-3 flex w-fit cursor-pointer items-center gap-2 text-sm text-ink-2">
+            <input
+              type="checkbox"
+              id="show-password"
+              class="checkbox checkbox-sm"
+              phx-click={JS.toggle_attribute({"type", "text", "password"}, to: "#user_password")}
+            /> Show password
+          </label>
           <.button class="btn btn-primary w-full" name={@form[:remember_me].name} value="true">
             Log in and stay logged in <span aria-hidden="true">→</span>
           </.button>
