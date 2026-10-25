@@ -10,20 +10,18 @@ defmodule JanPaintingsWeb.PageHTML do
 
   embed_templates "page_html/*"
 
-  @doc "The gallery's address, email and phone numbers."
+  @doc "The gallery's email and phone numbers, and visits by appointment."
   attr :class, :any, default: nil
 
   def contact_details(assigns) do
     ~H"""
-    <dl class={["grid gap-x-6 gap-y-3 sm:grid-cols-[6rem_1fr]", @class]}>
+    <dl id="contact-details" class={["grid gap-x-6 gap-y-3 sm:grid-cols-[6rem_1fr]", @class]}>
       <dt class="type-eyebrow sm:pt-0.5">Email</dt>
       <dd><a href="mailto:jan@janjohnsonprints.com" class="link">jan@janjohnsonprints.com</a></dd>
       <dt class="type-eyebrow sm:pt-0.5">Phone</dt>
       <dd><a href="tel:+14506582752" class="link">450.658.2752</a></dd>
       <dt class="type-eyebrow sm:pt-0.5">Cell</dt>
       <dd><a href="tel:+15146086959" class="link">514.608.6959</a></dd>
-      <dt class="type-eyebrow sm:pt-0.5">Address</dt>
-      <dd>189 rue Saint-Pierre<br />Chambly, QC, Canada J3L 1L8</dd>
       <dt class="type-eyebrow sm:pt-0.5">Visits</dt>
       <dd>By appointment</dd>
     </dl>
