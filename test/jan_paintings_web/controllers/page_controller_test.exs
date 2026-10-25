@@ -74,20 +74,24 @@ defmodule JanPaintingsWeb.PageControllerTest do
     assert footer =~ ~r{<a[^>]*href="/terms-of-sale"[^>]*>Terms of sale</a>}
   end
 
-  test "the menu bar and phone drawer have Contact Us, going to the contact section", %{
+  test "the menu bar and phone drawer have Contact Us, going to the contact page", %{
     conn: conn
   } do
     for path <- [~p"/", ~p"/about", ~p"/prints/modern"] do
       html = conn |> get(path) |> html_response(200)
       [nav] = Regex.run(~r{<nav[^>]*aria-label="Main".*?</nav>}s, html)
 
-      # Once in the desktop bar and once in the drawer, never marked current.
-      contact = Regex.scan(~r{<a[^>]*href="/about#contact"[^>]*>\s*Contact Us\s*</a>}, nav)
+      # Once in the desktop bar and once in the drawer, not current here.
+      contact = Regex.scan(~r{<a[^>]*href="/contact"[^>]*>\s*Contact Us\s*</a>}, nav)
       assert length(contact) == 2
       refute Enum.any?(contact, fn [tag] -> tag =~ "aria-current" end)
     end
 
-    assert conn |> get(~p"/about") |> html_response(200) =~ ~s(id="contact")
+    # Marked current on the contact page itself.
+    html = conn |> get(~p"/contact") |> html_response(200)
+    [nav] = Regex.run(~r{<nav[^>]*aria-label="Main".*?</nav>}s, html)
+    contact = Regex.scan(~r{<a[^>]*href="/contact"[^>]*>\s*Contact Us\s*</a>}, nav)
+    assert Enum.all?(contact, fn [tag] -> tag =~ ~s(aria-current="page") end)
   end
 
   test "GET /about", %{conn: conn} do
@@ -108,8 +112,8 @@ defmodule JanPaintingsWeb.PageControllerTest do
 
     assert clients =~
              ~r/<button(?=[^>]*id="about-clients-toggle")(?=[^>]*aria-expanded="false")[^>]*>[\s\S]*?Show all 43 museums/
+
     assert html =~ ~r/<h1[^>]*>About Us<\/h1>/
-    assert html =~ ~s(href="/about#contact")
     assert html =~ ~s(src="/images/jan-johnson.jpg")
     # Shown at every screen size, not only beside the text on wide screens.
     [figure_class] =

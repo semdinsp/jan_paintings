@@ -5,21 +5,23 @@ defmodule JanPaintingsWeb.MailingListControllerTest do
 
   @valid %{"email" => "collector@example.com", "name" => "A Collector", "interests" => "Dürer"}
 
-  test "the Contact section has the mailing list form", %{conn: conn} do
-    html = conn |> get(~p"/about") |> html_response(200)
+  test "the Contact page has the mailing list form", %{conn: conn} do
+    html = conn |> get(~p"/contact") |> html_response(200)
     assert html =~ ~s(id="mailing-list")
 
     assert html =~
              ~r/<form[^>]*action="\/mailing-list"[^>]*method="post"|<form[^>]*method="post"[^>]*action="\/mailing-list"/
 
     assert html =~ ~s(name="subscriber[email]")
-    assert html =~ ~s(href="/about#mailing-list")
+
+    # The About page text links to it.
+    assert conn |> get(~p"/about") |> html_response(200) =~ ~s(href="/contact#mailing-list")
   end
 
   test "signing up saves the subscriber and thanks them", %{conn: conn} do
     conn = post(conn, ~p"/mailing-list", subscriber: @valid)
 
-    assert redirected_to(conn) == "/about#mailing-list"
+    assert redirected_to(conn) == "/contact#mailing-list"
     assert Phoenix.Flash.get(conn.assigns.flash, :info) =~ "mailing list"
 
     assert [subscriber] = Inquiries.list_subscribers()
@@ -32,7 +34,7 @@ defmodule JanPaintingsWeb.MailingListControllerTest do
     post(conn, ~p"/mailing-list", subscriber: @valid)
     conn = post(conn, ~p"/mailing-list", subscriber: %{"email" => " Collector@Example.com "})
 
-    assert redirected_to(conn) == "/about#mailing-list"
+    assert redirected_to(conn) == "/contact#mailing-list"
     assert [%{name: "A Collector"}] = Inquiries.list_subscribers()
   end
 
@@ -49,12 +51,12 @@ defmodule JanPaintingsWeb.MailingListControllerTest do
   test "a filled-in spam trap pretends to work but saves nothing", %{conn: conn} do
     conn = post(conn, ~p"/mailing-list", subscriber: Map.put(@valid, "website", "http://spam"))
 
-    assert redirected_to(conn) == "/about#mailing-list"
+    assert redirected_to(conn) == "/contact#mailing-list"
     assert Inquiries.list_subscribers() == []
   end
 
   test "a contact form error still shows the mailing list form", %{conn: conn} do
-    conn = post(conn, ~p"/about", contact_message: %{"email" => "nope"})
+    conn = post(conn, ~p"/contact", contact_message: %{"email" => "nope"})
     assert html_response(conn, 422) =~ ~s(id="mailing-list-form")
   end
 end

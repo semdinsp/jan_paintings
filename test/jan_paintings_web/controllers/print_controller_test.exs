@@ -358,7 +358,7 @@ defmodule JanPaintingsWeb.PrintControllerTest do
       refute conn |> get(path) |> response(200) =~ draft.slug
     end
 
-    enquiry = conn |> get(~p"/about?#{[print: draft.slug]}") |> html_response(200)
+    enquiry = conn |> get(~p"/contact?#{[print: draft.slug]}") |> html_response(200)
     refute enquiry =~ draft.title
   end
 end

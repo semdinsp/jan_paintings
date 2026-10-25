@@ -44,10 +44,12 @@ defmodule JanPaintingsWeb.Router do
 
     get "/", PageController, :home
     get "/about", PageController, :about
+    get "/contact", PageController, :contact
+    post "/contact", PageController, :create_message
+    # Contact forms on pages loaded before the move to /contact.
     post "/about", PageController, :create_message
     post "/mailing-list", PageController, :subscribe
     get "/terms-of-sale", PageController, :terms
-    get "/contact", PageController, :contact_redirect
 
     live_session :public, on_mount: [{JanPaintingsWeb.UserAuth, :mount_current_scope}] do
       live "/prints", PrintLive.Index, :index
