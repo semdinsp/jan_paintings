@@ -209,13 +209,13 @@ p { text-wrap: pretty; }
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
-/* On a print's own page the title is 2px smaller (34px, 26px on phones) and
-   the artist line 1px larger (14px) than elsewhere. */
-.print-detail-title { font-size: 1.5rem; }
+/* On a print's own page the title is smaller than other H1s (25px, 19px on
+   phones) and the artist line larger (15px) than elsewhere. */
+.print-detail-title { font-size: 1.1875rem; }
 @media (min-width: 768px) {
-  .print-detail-title { font-size: 2rem; }
+  .print-detail-title { font-size: 1.5625rem; }
 }
-.print-detail-artist { font-size: 0.875rem; }
+.print-detail-artist { font-size: 0.9375rem; }
 /* "Fine prints since 1979", and definition-list labels. */
 .type-eyebrow {
   font-family: var(--font-sans);
