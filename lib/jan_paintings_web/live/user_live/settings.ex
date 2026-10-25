@@ -62,6 +62,19 @@ defmodule JanPaintingsWeb.UserLive.Settings do
             autocomplete="new-password"
             spellcheck="false"
           />
+          <%!-- Shows both passwords as plain text; not part of the form (no name). --%>
+          <label class="-mt-1 mb-3 flex w-fit cursor-pointer items-center gap-2 text-sm text-ink-2">
+            <input
+              type="checkbox"
+              id="show-new-password"
+              class="checkbox checkbox-sm"
+              phx-click={
+                JS.toggle_attribute({"type", "text", "password"},
+                  to: "#user_password, #user_password_confirmation"
+                )
+              }
+            /> Show passwords
+          </label>
           <.button variant="primary" phx-disable-with="Saving…">
             Save password
           </.button>
