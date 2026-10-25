@@ -76,6 +76,9 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Form do
             <.input field={@form[:dates]} label="Dates" placeholder="1864–1955" />
           </div>
           <.input field={@form[:title]} type="textarea" label="Title" rows="2" phx-debounce="300" />
+          <p id="title-italics-hint" class="-mt-1 text-xs text-base-content/60">
+            Put *asterisks* around a book or series title to show it in italics.
+          </p>
           <div class="grid gap-x-4 sm:grid-cols-2">
             <.input field={@form[:medium]} label="Medium" placeholder="Etching" />
             <div>
@@ -196,7 +199,7 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Form do
             :if={@print.id}
             type="button"
             phx-click="delete"
-            data-confirm={"Delete #{@print.title}? This cannot be undone."}
+            data-confirm={"Delete #{Catalog.plain_title(@print.title)}? This cannot be undone."}
             class="btn btn-ghost ml-auto text-error"
           >
             <.icon name="hero-trash" class="size-4" /> Delete print
@@ -404,7 +407,7 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Form do
 
     {:noreply,
      socket
-     |> put_flash(:info, "Deleted #{print.title}.")
+     |> put_flash(:info, "Deleted #{Catalog.plain_title(print.title)}.")
      |> push_navigate(to: ~p"/admin/prints")}
   end
 
@@ -414,11 +417,11 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Form do
         saved(
           socket,
           print,
-          "Added #{print.title} as a draft. Add an image and choose a status to put it on the site."
+          "Added #{Catalog.plain_title(print.title)} as a draft. Add an image and choose a status to put it on the site."
         )
 
       {:ok, print} ->
-        saved(socket, print, "Added #{print.title}.")
+        saved(socket, print, "Added #{Catalog.plain_title(print.title)}.")
 
       {:error, changeset} ->
         {:noreply, assign_form(socket, changeset)}
@@ -427,7 +430,7 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Form do
 
   defp save(socket, :edit, params) do
     case Catalog.update_print(socket.assigns.print, params) do
-      {:ok, print} -> saved(socket, print, "Saved #{print.title}.")
+      {:ok, print} -> saved(socket, print, "Saved #{Catalog.plain_title(print.title)}.")
       {:error, changeset} -> {:noreply, assign_form(socket, changeset)}
     end
   end

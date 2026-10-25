@@ -129,6 +129,23 @@ defmodule JanPaintingsWeb.PrintControllerTest do
     refute html =~ "Enquire about this print"
   end
 
+  test "a series title marked with asterisks is shown in italics", %{conn: conn} do
+    print = Catalog.get_print("isabey-souvenir-de-bretagne-plate-4-from-souvenirs")
+
+    {:ok, print} =
+      Catalog.update_print(print, %{"title" => "Souvenir de Bretagne, plate 4 from *Souvenirs*"})
+
+    html = conn |> get(~p"/prints/#{print.category}/#{print.slug}") |> html_response(200)
+    assert html =~ ~r{<h1[^>]*>\s*Souvenir de Bretagne, plate 4 from <em>Souvenirs</em></h1>}
+    # Plain text elsewhere: the browser title and the image alt text.
+    assert html =~ ~r{<title[^>]*>[^<]*plate 4 from Souvenirs}
+    assert html =~ ~s(alt="ISABEY, Eugene, Souvenir de Bretagne, plate 4 from Souvenirs")
+    refute html =~ "*Souvenirs*"
+
+    list = conn |> get(~p"/prints/#{print.category}") |> html_response(200)
+    assert list =~ "plate 4 from <em>Souvenirs</em>"
+  end
+
   test "lists the details in the gallery's order, without the state", %{conn: conn} do
     print = Catalog.get_print("dusart-fiddler-in-an-inn")
 

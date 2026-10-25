@@ -17,8 +17,9 @@ defmodule JanPaintings.Catalog.Seed do
   `load_additional_notes/1` each print's additional notes,
   `load_catalogue_entries/1` each print's catalogue details and provenance,
   `load_mediums/1` each print's medium, `load_catalogue_references/1`
-  the catalogue references still missing, and `load_sizes/1` the sizes left
-  at the end of the details text, the same way.
+  the catalogue references still missing, `load_sizes/1` the sizes left at
+  the end of the details text, and `load_title_italics/1` the book and series
+  titles shown in italics, the same way.
 
   Run them all with `mix run priv/repo/seeds.exs` locally, or
   `bin/jan_paintings eval "JanPaintings.Release.seed()"` in a release.
@@ -42,6 +43,9 @@ defmodule JanPaintings.Catalog.Seed do
 
   def catalogue_references_path,
     do: Path.join(:code.priv_dir(:jan_paintings), "repo/seeds/print_catalogue_references.json")
+
+  def title_italics_path,
+    do: Path.join(:code.priv_dir(:jan_paintings), "repo/seeds/print_title_italics.json")
 
   def sizes_path,
     do: Path.join(:code.priv_dir(:jan_paintings), "repo/seeds/print_sizes.json")
@@ -177,6 +181,14 @@ defmodule JanPaintings.Catalog.Seed do
   print whose size or details were edited in the admin pages is left alone.
   """
   def load_sizes(path \\ sizes_path()), do: load_catalogue_details(path)
+
+  @doc """
+  Marks the book and series titles that the original site set in italics,
+  from `priv/repo/seeds/print_title_italics.json`, with asterisks (see
+  `JanPaintings.Catalog.title_parts/1`). Each title is a correction, applied
+  only while the title still reads exactly as before.
+  """
+  def load_title_italics(path \\ title_italics_path()), do: load_catalogue_details(path)
 
   @doc """
   Applies the seed file. Returns a summary map: how many prints were updated,

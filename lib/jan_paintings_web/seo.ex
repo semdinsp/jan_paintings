@@ -137,7 +137,7 @@ defmodule JanPaintingsWeb.SEO do
               "@type" => "ListItem",
               "position" => position,
               "url" => url(print_path(print)),
-              "name" => "#{artist_name(print.artist)}, #{print.title}"
+              "name" => "#{artist_name(print.artist)}, #{Catalog.plain_title(print.title)}"
             }
           end)
       }
@@ -153,7 +153,7 @@ defmodule JanPaintingsWeb.SEO do
   missing parts. The site name is appended by the layout.
   """
   def print_title(print) do
-    [artist_name(print.artist), print.title, print.medium]
+    [artist_name(print.artist), Catalog.plain_title(print.title), print.medium]
     |> Enum.reject(&(&1 in [nil, ""]))
     |> Enum.join(", ")
   end
@@ -164,7 +164,7 @@ defmodule JanPaintingsWeb.SEO do
       [print.details, print.condition]
       |> Enum.find("", &(&1 not in [nil, ""]))
 
-    truncate("#{artist_name(print.artist)}, #{print.title}. #{body}", 155)
+    truncate("#{artist_name(print.artist)}, #{Catalog.plain_title(print.title)}. #{body}", 155)
   end
 
   @doc "schema.org VisualArtwork + Product node for a print's page."
@@ -175,7 +175,7 @@ defmodule JanPaintingsWeb.SEO do
       "@context" => "https://schema.org",
       "@type" => ["VisualArtwork", "Product"],
       "@id" => url(print_path(print)) <> "#print",
-      "name" => print.title,
+      "name" => Catalog.plain_title(print.title),
       "url" => url(print_path(print)),
       "image" => url(Catalog.image_url(print.image)),
       "description" => print_description(print),

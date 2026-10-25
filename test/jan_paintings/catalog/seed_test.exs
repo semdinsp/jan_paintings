@@ -268,6 +268,31 @@ defmodule JanPaintings.Catalog.SeedTest do
     end
   end
 
+  describe "load_title_italics/1" do
+    test "marks the series titles and fixes défense, once" do
+      assert %{missing: []} = Seed.load_title_italics()
+
+      assert Catalog.get_print("isabey-souvenir-de-bretagne-plate-4-from-souvenirs").title ==
+               "Souvenir de Bretagne, plate 4 from *Souvenirs*"
+
+      bonnet =
+        Enum.find(Catalog.list_all_prints(), &String.contains?(&1.title, "petites postes"))
+
+      assert bonnet.title =~ "from *La défense et l’attaque des petites postes*, published"
+      assert %{updated: 0} = Seed.load_title_italics()
+    end
+
+    test "cuts the catalogue entry off the end of a run-on title" do
+      weirotter =
+        Enum.find(Catalog.list_all_prints(), &String.starts_with?(&1.title, "Nella venuta"))
+
+      Seed.load_title_italics()
+      title = Catalog.get_print(weirotter.slug).title
+      assert String.ends_with?(title, "by various hands in the original booklet")
+      refute title =~ "Etchings, 1764"
+    end
+  end
+
   describe "load_catalogue_entries/1" do
     test "the shipped file covers every print, once" do
       first = Seed.load_catalogue_entries()

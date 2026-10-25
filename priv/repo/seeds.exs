@@ -41,3 +41,7 @@ JanPaintings.Catalog.Seed.load_catalogue_references()
 # Sizes left at the end of the details text: moved into the size field.
 # Each change applies only while the old value is still there.
 JanPaintings.Catalog.Seed.load_sizes() |> IO.inspect(label: "Sizes")
+
+# Book and series titles set in italics on the original site, marked with
+# asterisks. Each title changes only while it still reads as before.
+JanPaintings.Catalog.Seed.load_title_italics() |> IO.inspect(label: "Title italics")

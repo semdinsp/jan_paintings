@@ -132,7 +132,7 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Index do
               navigate={~p"/admin/prints/#{print.id}/edit"}
               class="block truncate font-medium hover:text-accent"
             >
-              {print.title}
+              <.print_title title={print.title} />
             </.link>
             <p class="truncate text-xs uppercase tracking-wider text-base-content/60">
               {print.artist} · {category_short(@categories, print.category)}
@@ -149,7 +149,7 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Index do
             <input type="hidden" name="print_id" value={print.id} />
             <select
               name="status"
-              aria-label={"Status of #{print.title}"}
+              aria-label={"Status of #{Catalog.plain_title(print.title)}"}
               class={["select select-sm w-full", status_class(print.status)]}
             >
               {Phoenix.HTML.Form.options_for_select(
@@ -233,13 +233,14 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Index do
       {:ok, print} ->
         {:noreply,
          socket
-         |> put_flash(:info, "#{print.title} is now #{print.status}.")
+         |> put_flash(:info, "#{Catalog.plain_title(print.title)} is now #{print.status}.")
          |> load_prints()}
 
       {:error, changeset} ->
         message =
           if Keyword.has_key?(changeset.errors, :image),
-            do: "#{print.title} needs an image before it can go on the site.",
+            do:
+              "#{Catalog.plain_title(print.title)} needs an image before it can go on the site.",
             else: "Could not change the status."
 
         {:noreply, socket |> put_flash(:error, message) |> load_prints()}

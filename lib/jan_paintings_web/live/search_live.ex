@@ -68,7 +68,7 @@ defmodule JanPaintingsWeb.SearchLive do
                   {print.artist}
                 </span>
                 <span class="block truncate font-serif text-lg group-hover:text-rose">
-                  {print.title}
+                  <.print_title title={print.title} />
                 </span>
               </span>
             </a>
