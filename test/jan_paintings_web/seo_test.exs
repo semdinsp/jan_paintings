@@ -98,7 +98,7 @@ defmodule JanPaintingsWeb.SEOTest do
         })
 
       html = conn |> get(SEO.print_path(print)) |> html_response(200)
-      assert html =~ "References"
+      assert html =~ ~r{>Catalogue reference</dt>}
       assert html =~ "Hollstein 106"
       refute html =~ "Second state of two"
       assert html =~ "Sheet"
