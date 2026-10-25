@@ -269,4 +269,19 @@ defmodule JanPaintings.CatalogTest do
       refute Catalog.get_print(print.slug)
     end
   end
+
+  describe "italic titles" do
+    test "title_parts/1 splits out the parts between asterisks" do
+      assert Catalog.title_parts("Plate 4 from *Souvenirs*, 1830") ==
+               [{:plain, "Plate 4 from "}, {:italic, "Souvenirs"}, {:plain, ", 1830"}]
+
+      assert Catalog.title_parts("No italics") == [{:plain, "No italics"}]
+      assert Catalog.title_parts("A lone * star") == [{:plain, "A lone * star"}]
+    end
+
+    test "plain_title/1 drops the asterisks" do
+      assert Catalog.plain_title("From *Vedute di Roma*") == "From Vedute di Roma"
+      assert Catalog.plain_title("A lone * star") == "A lone * star"
+    end
+  end
 end

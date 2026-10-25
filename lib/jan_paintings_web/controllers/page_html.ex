@@ -174,7 +174,7 @@ defmodule JanPaintingsWeb.PageHTML do
       <div class="mat flex aspect-[4/5] items-center justify-center p-4">
         <img
           src={Catalog.image_url(@print.image)}
-          alt={"#{@print.artist}, #{@print.title}"}
+          alt={"#{@print.artist}, #{Catalog.plain_title(@print.title)}"}
           loading="lazy"
           class={[
             "max-h-full max-w-full object-contain",
@@ -190,7 +190,7 @@ defmodule JanPaintingsWeb.PageHTML do
         {@print.artist}
       </p>
       <p class="mt-1 line-clamp-3 font-serif text-lg leading-snug decoration-rose decoration-1 underline-offset-3 group-hover:underline">
-        {@print.title}
+        <.print_title title={@print.title} />
       </p>
       <p :if={@print.medium != ""} class="type-meta mt-1">{@print.medium}</p>
     </.link>

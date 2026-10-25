@@ -84,7 +84,11 @@ defmodule JanPaintings.Catalog do
   # Sorted in Elixir so accented names ("DORÉ") sort with their plain letters.
   defp sort(prints) do
     order = @categories |> Enum.map(& &1.slug) |> Enum.with_index() |> Map.new()
-    Enum.sort_by(prints, &{Map.get(order, &1.category, 99), fold(&1.artist), fold(&1.title)})
+
+    Enum.sort_by(
+      prints,
+      &{Map.get(order, &1.category, 99), fold(&1.artist), fold(plain_title(&1.title))}
+    )
   end
 
   ## Admin
@@ -185,7 +189,7 @@ defmodule JanPaintings.Catalog do
 
       terms ->
         Enum.filter(prints, fn print ->
-          haystack = fold(print.artist <> " " <> print.title)
+          haystack = fold(print.artist <> " " <> plain_title(print.title))
           Enum.all?(terms, &String.contains?(haystack, &1))
         end)
     end
@@ -219,6 +223,36 @@ defmodule JanPaintings.Catalog do
   defp first_with_medium(prints, category_slug) do
     Enum.find(prints, &(&1.category == category_slug && &1.medium != ""))
   end
+
+  @italic ~r/\*([^*\n]+)\*/
+
+  @doc """
+  A print title split into plain and italic parts. In the stored title a book
+  or series title is marked with asterisks, as in `plate VIII from *La défense
+  et l'attaque des petites postes*`; a lone asterisk is kept as it is.
+
+      iex> JanPaintings.Catalog.title_parts("Plate 4 from *Souvenirs*, 1830")
+      [{:plain, "Plate 4 from "}, {:italic, "Souvenirs"}, {:plain, ", 1830"}]
+  """
+  def title_parts(title) do
+    @italic
+    |> Regex.split(title, include_captures: true, trim: true)
+    |> Enum.map(fn part ->
+      case Regex.run(@italic, part) do
+        [^part, inner] -> {:italic, inner}
+        _ -> {:plain, part}
+      end
+    end)
+  end
+
+  @doc """
+  A print title without its italic markers, for places that can only show plain
+  text: page titles, image alt text, emails, structured data and sorting.
+
+      iex> JanPaintings.Catalog.plain_title("Plate 4 from *Souvenirs*")
+      "Plate 4 from Souvenirs"
+  """
+  def plain_title(title), do: Regex.replace(@italic, title, "\\1")
 
   @doc "URL for an image path stored in the catalogue. All images are served by this site."
   def image_url("/" <> _ = path), do: path

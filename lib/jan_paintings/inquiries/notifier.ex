@@ -15,7 +15,9 @@ defmodule JanPaintings.Inquiries.Notifier do
   """
   def deliver_new_message(%ContactMessage{} = message) do
     print = message.print_slug && Catalog.get_print(message.print_slug)
-    print_link = print && {"#{print.artist}, #{print.title}", print_url(print)}
+
+    print_link =
+      print && {"#{print.artist}, #{Catalog.plain_title(print.title)}", print_url(print)}
 
     email =
       new()
@@ -45,7 +47,7 @@ defmodule JanPaintings.Inquiries.Notifier do
       Email:   #{message.email}
       Phone:   #{message.phone || "-"}
       Subject: #{message.subject || "-"}
-      #{if print, do: "Print:   #{print.artist}, #{print.title}\n         #{print_url(print)}\n", else: ""}
+      #{if print, do: "Print:   #{print.artist}, #{Catalog.plain_title(print.title)}\n         #{print_url(print)}\n", else: ""}
       #{message.message}
       """)
 

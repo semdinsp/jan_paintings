@@ -61,7 +61,10 @@ defmodule JanPaintingsWeb.PageController do
 
     attrs =
       if print,
-        do: %{"subject" => "#{print.artist}, #{print.title}", "print_slug" => print.slug},
+        do: %{
+          "subject" => "#{print.artist}, #{Catalog.plain_title(print.title)}",
+          "print_slug" => print.slug
+        },
         else: %{}
 
     form = %ContactMessage{} |> Inquiries.change_contact_message(attrs) |> to_form()

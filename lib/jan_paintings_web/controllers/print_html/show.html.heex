@@ -21,7 +21,7 @@
           <img
             id="print-main-image"
             src={JanPaintings.Catalog.image_url(@print.image)}
-            alt={"#{@print.artist}, #{@print.title}"}
+            alt={"#{@print.artist}, #{JanPaintings.Catalog.plain_title(@print.title)}"}
             class="max-h-[75vh] max-w-full object-contain"
           />
         </a>
@@ -48,7 +48,7 @@
       <dialog
         id="print-lightbox"
         class="print-lightbox"
-        aria-label={"#{@print.artist}, #{@print.title}: larger view"}
+        aria-label={"#{@print.artist}, #{JanPaintings.Catalog.plain_title(@print.title)}: larger view"}
       >
         <form method="dialog" class="print-lightbox-bar">
           <button id="print-lightbox-close" class="btn btn-primary" autofocus>
@@ -58,7 +58,7 @@
         <div class="print-lightbox-stage">
           <img
             id="print-lightbox-image"
-            alt={"#{@print.artist}, #{@print.title}"}
+            alt={"#{@print.artist}, #{JanPaintings.Catalog.plain_title(@print.title)}"}
             class="print-lightbox-image"
           />
         </div>
@@ -93,7 +93,7 @@
       <p class="type-artist print-detail-artist">
         {@print.artist}<span :if={@print.dates != ""}> ({@print.dates})</span>
       </p>
-      <h1 class="type-h1 print-detail-title mt-2">{@print.title}</h1>
+      <h1 class="type-h1 print-detail-title mt-2"><.print_title title={@print.title} /></h1>
       <p :if={@print.details != ""} class="mt-6 max-w-[68ch]">{@print.details}</p>
 
       <dl class="mt-6 border-t border-rule">

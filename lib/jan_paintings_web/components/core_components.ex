@@ -426,6 +426,27 @@ defmodule JanPaintingsWeb.CoreComponents do
   end
 
   @doc """
+  A print title with its marked book or series titles in italics (see
+  `JanPaintings.Catalog.title_parts/1`).
+  """
+  attr :title, :string, required: true
+
+  def print_title(assigns) do
+    ~H"{title_html(@title)}"
+  end
+
+  # Built as one string, so no whitespace creeps in around the <em>.
+  defp title_html(title) do
+    html =
+      for {kind, text} <- JanPaintings.Catalog.title_parts(title) do
+        escaped = text |> Phoenix.HTML.html_escape() |> Phoenix.HTML.safe_to_string()
+        if kind == :italic, do: ["<em>", escaped, "</em>"], else: escaped
+      end
+
+    {:safe, html}
+  end
+
+  @doc """
   Renders a [Heroicon](https://heroicons.com).
 
   Heroicons come in three styles – outline, solid, and mini.
