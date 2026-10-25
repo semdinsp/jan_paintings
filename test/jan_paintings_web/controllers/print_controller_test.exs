@@ -134,10 +134,21 @@ defmodule JanPaintingsWeb.PrintControllerTest do
       })
 
     html = conn |> get(~p"/prints/old-masters/#{print.slug}") |> html_response(200)
-    labels = Regex.scan(~r{<dt[^>]*>([^<]+)</dt>}, html, capture: :all_but_first) |> List.flatten()
+
+    labels =
+      Regex.scan(~r{<dt[^>]*>([^<]+)</dt>}, html, capture: :all_but_first) |> List.flatten()
 
     assert labels ==
-             ~w(Medium References Watermark Provenance Condition Size Sheet Price)
+             [
+               "Medium",
+               "Catalogue reference",
+               "Watermark",
+               "Provenance",
+               "Condition",
+               "Size",
+               "Sheet",
+               "Price"
+             ]
 
     # The state is kept (admin form, seeds) but not shown to visitors.
     refute html =~ "Only state"
@@ -300,7 +311,10 @@ defmodule JanPaintingsWeb.PrintControllerTest do
     # ...in a full-screen dialog with a Close button, not a new tab.
     refute html =~ ~s(target="_blank")
     assert html =~ ~r/<dialog[^>]*id="print-lightbox"/
-    assert html =~ ~r/<form method="dialog"[^>]*>\s*<button[^>]*id="print-lightbox-close"[^>]*>[\s\S]*?Close/
+
+    assert html =~
+             ~r/<form method="dialog"[^>]*>\s*<button[^>]*id="print-lightbox-close"[^>]*>[\s\S]*?Close/
+
     assert html =~ ~s(id="print-lightbox-image")
     refute html =~ ~s(id="print-gallery")
   end
