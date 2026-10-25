@@ -87,7 +87,7 @@ defmodule JanPaintingsWeb.SEOTest do
       assert String.length(description) <= 155
     end
 
-    test "show references, state and sheet size when present", %{conn: conn} do
+    test "show references and sheet size when present, but not the state", %{conn: conn} do
       print = Catalog.get_print("beham-leda-and-the-swan")
 
       {:ok, print} =
@@ -100,7 +100,7 @@ defmodule JanPaintingsWeb.SEOTest do
       html = conn |> get(SEO.print_path(print)) |> html_response(200)
       assert html =~ "References"
       assert html =~ "Hollstein 106"
-      assert html =~ "Second state of two"
+      refute html =~ "Second state of two"
       assert html =~ "Sheet"
       assert html =~ "55 × 68mm"
       assert json_ld(html)["citation"] == "Hollstein 106"
