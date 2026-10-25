@@ -32,11 +32,11 @@
   --color-base-200: #f1ede6;
   --color-base-300: #ddd6cb;
   --color-base-content: #1f1d1a;
-  --color-primary: #8f5550;
-  --color-primary-content: #ffffff;
+  --color-primary: #c2918d;
+  --color-primary-content: #1f1d1a;
   --color-secondary: #f1ede6;
   --color-secondary-content: #1f1d1a;
-  --color-accent: #8f5550;
+  --color-accent: #9b464d;
   --color-accent-content: #ffffff;
   --color-neutral: #1f1d1a;
   --color-neutral-content: #faf8f4;
@@ -117,10 +117,11 @@
   --rule: #ddd6cb;
   --ink: #1f1d1a;
   --ink-2: #5c5650;
-  --rose: #8f5550;
-  --rose-2: #6e3f3b;
-  --rose-tint: #f4e9e7;
+  --rose: #9b464d;
+  --rose-2: #7a3239;
+  --rose-tint: #f5e8e9;
   --dusk: #c2918d;
+  --dusk-2: #b47974;
   --gold: #a9851f;
   --sold: #5c5650;
 }
@@ -134,6 +135,7 @@
   --rose-2: #e6bab4;
   --rose-tint: #3a2a28;
   --dusk: #3b2b2d;
+  --dusk-2: #4b3739;
   --gold: #c9a84c;
   --sold: #b3aba1;
 }
@@ -270,9 +272,16 @@ p { text-wrap: pretty; }
   padding-inline: 1.25rem;
   text-shadow: none;
 }
+/* Primary buttons are the header's own colour (--dusk) with ink text; white
+   would be too faint on it. A shade deeper on hover. */
+.btn-primary {
+  --btn-bg: var(--dusk);
+  --btn-border: var(--dusk);
+  --btn-fg: var(--ink);
+}
 .btn-primary:hover {
-  --btn-bg: var(--rose-2);
-  --btn-border: var(--rose-2);
+  --btn-bg: var(--dusk-2);
+  --btn-border: var(--dusk-2);
 }
 .btn-secondary-rose {
   --btn-bg: transparent;
