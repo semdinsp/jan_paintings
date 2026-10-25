@@ -67,7 +67,10 @@ defmodule JanPaintingsWeb.PageControllerTest do
     end
 
     assert html =~ "refund your payment in full"
-    assert html =~ "credit cards during 2026"
+    text = String.replace(html, ~r/\s+/, " ")
+    assert text =~ "credit cards during 2027"
+    assert text =~ "Customs fees or duties, if any"
+    assert text =~ "for a period of ten days after receipt"
     assert html =~ ~r{<link[^>]*rel="canonical"[^>]*href="[^"]*/terms-of-sale"}
 
     [footer] = Regex.run(~r{<footer.*?</footer>}s, html)
