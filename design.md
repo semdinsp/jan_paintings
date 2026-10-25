@@ -45,7 +45,7 @@ Rules:
 | Role | Font | Size / line-height | Weight |
 |---|---|---|---|
 | H1 (page title) | EB Garamond | 36px / 1.2 (mobile 28px) | 400 |
-| Print title on its detail page | EB Garamond | 30px / 1.2 (mobile 22px) | 400 |
+| Print title on its detail page | EB Garamond | 25px / 1.2 (mobile 19px) | 400 |
 | H2 (section heads) | EB Garamond | 26px / 1.25 | 400 |
 | Tile label (homepage) | EB Garamond | 32px / 1.25, white | 400 |
 | Artist line (`BEHAM, Hans Sebald (1500–1550)`) | Source Sans 3 | 13px / 1.4 (15px on the print detail page), uppercase, letter-spacing 0.06em | 600 |

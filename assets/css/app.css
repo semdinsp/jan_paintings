@@ -209,11 +209,11 @@ p { text-wrap: pretty; }
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
-/* On a print's own page the title is smaller than other H1s (30px, 22px on
+/* On a print's own page the title is smaller than other H1s (25px, 19px on
    phones) and the artist line larger (15px) than elsewhere. */
-.print-detail-title { font-size: 1.375rem; }
+.print-detail-title { font-size: 1.1875rem; }
 @media (min-width: 768px) {
-  .print-detail-title { font-size: 1.875rem; }
+  .print-detail-title { font-size: 1.5625rem; }
 }
 .print-detail-artist { font-size: 0.9375rem; }
 /* "Fine prints since 1979", and definition-list labels. */
