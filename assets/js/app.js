@@ -75,6 +75,18 @@ document.addEventListener("click", event => {
   }
 })
 
+// About page museum clients: the button shows the rest of the list, or only
+// the first three again.
+document.addEventListener("click", event => {
+  const toggle = event.target.closest("#about-clients-toggle")
+  if (!toggle) return
+
+  const list = document.getElementById("about-clients-list")
+  const expand = list.hasAttribute("data-collapsed")
+  list.toggleAttribute("data-collapsed", !expand)
+  toggle.setAttribute("aria-expanded", String(expand))
+})
+
 // expose liveSocket on window for web console debug logs and latency simulation:
 // >> liveSocket.enableDebug()
 // >> liveSocket.enableLatencySim(1000)  // enabled for duration of browser session

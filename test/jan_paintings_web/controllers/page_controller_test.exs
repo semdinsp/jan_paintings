@@ -96,11 +96,18 @@ defmodule JanPaintingsWeb.PageControllerTest do
 
     # The museum clients, in alphabetical order.
     [clients] = Regex.run(~r{<section[^>]*id="about-clients".*?</section>}s, html)
-    names = Regex.scan(~r{<li>\s*(.*?)\s*</li>}s, clients, capture: :all_but_first)
+    names = Regex.scan(~r{<li[^>]*>\s*(.*?)\s*</li>}s, clients, capture: :all_but_first)
     assert length(names) == 43
     assert ["Agnes Etherington Art Centre" <> _] = hd(names)
     assert ["Zimmerli Art Museum" <> _] = List.last(names)
     assert clients =~ "British Museum"
+
+    # Only the first three show until the button opens the rest.
+    assert clients =~ ~r/<ul[^>]*id="about-clients-list"[^>]*data-collapsed/
+    assert length(Regex.scan(~r/<li class="client-more">/, clients)) == 40
+
+    assert clients =~
+             ~r/<button(?=[^>]*id="about-clients-toggle")(?=[^>]*aria-expanded="false")[^>]*>[\s\S]*?Show all 43 museums/
     assert html =~ ~r/<h1[^>]*>About Us<\/h1>/
     assert html =~ ~s(href="/about#contact")
     assert html =~ ~s(src="/images/jan-johnson.jpg")
