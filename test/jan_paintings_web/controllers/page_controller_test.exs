@@ -105,6 +105,7 @@ defmodule JanPaintingsWeb.PageControllerTest do
     assert ["Agnes Etherington Art Centre" <> _] = hd(names)
     assert ["Zimmerli Art Museum" <> _] = List.last(names)
     assert clients =~ "British Museum"
+    assert clients =~ "Some of the museums we have worked with:"
 
     # Only the first three show until the button opens the rest.
     assert clients =~ ~r/<ul[^>]*id="about-clients-list"[^>]*data-collapsed/
