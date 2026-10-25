@@ -18,8 +18,7 @@
       <p>
         This website shows only part of our stock, so please tell us about your interests and we will
         send you a focused list. You can <a href="mailto:jan@janjohnsonprints.com" class="link">email us</a>,
-        or <.link href={~p"/about" <> "#mailing-list"} class="link">join our mailing list</.link>
-        below.
+        or <.link href={~p"/contact" <> "#mailing-list"} class="link">join our mailing list</.link>.
       </p>
       <p>
         Other services include bidding at auction on behalf of clients and appraisals. Visitors are
@@ -116,110 +115,4 @@
       <.icon name="hero-chevron-down" class="clients-chevron size-4" />
     </button>
   </section>
-
-  <div
-    id="contact"
-    class="mt-12 grid scroll-mt-16 gap-12 border-t border-rule pt-12 md:mt-16 lg:grid-cols-[2fr_3fr] lg:gap-16"
-  >
-    <section>
-      <h2 class="type-h2">Contact</h2>
-      <p class="mt-4">
-        To ask about a print, request a stock list or book a viewing, send a message or get in
-        touch directly. Prices are in US dollars, and Canadian prints in Canadian dollars.
-      </p>
-      <.contact_details class="mt-8" />
-    </section>
-
-    <div class="space-y-8">
-      <section class="bg-paper-2 p-6 sm:p-8">
-        <h2 class="type-h2">Send a message</h2>
-        <p class="type-meta mt-1">
-          We'll reply by email, usually within a few days.
-        </p>
-
-        <.form for={@form} action={~p"/about" <> "#contact"} id="contact-form" class="mt-6">
-          <div class="grid gap-x-4 sm:grid-cols-2">
-            <.input field={@form[:name]} label="Name" autocomplete="name" required />
-            <.input
-              field={@form[:email]}
-              type="email"
-              label="Email"
-              autocomplete="email"
-              required
-            />
-          </div>
-          <div class="grid gap-x-4 sm:grid-cols-2">
-            <.input field={@form[:phone]} type="tel" label="Phone (optional)" autocomplete="tel" />
-            <.input field={@form[:subject]} label="Subject (optional)" />
-          </div>
-          <.input field={@form[:message]} type="textarea" label="Message" rows="6" required />
-          <.input field={@form[:print_slug]} type="hidden" />
-
-          <%!-- Spam trap: hidden from people, often filled in by bots. --%>
-          <div class="hidden" aria-hidden="true">
-            <label>
-              Leave this empty
-              <input
-                type="text"
-                name="contact_message[website]"
-                value=""
-                tabindex="-1"
-                autocomplete="off"
-              />
-            </label>
-          </div>
-
-          <button type="submit" class="btn btn-primary mt-2 w-full sm:w-auto">Send message</button>
-        </.form>
-      </section>
-
-      <section id="mailing-list" class="scroll-mt-16 bg-paper-2 p-6 sm:p-8">
-        <h2 class="type-h2">Join our mailing list</h2>
-        <p class="type-meta mt-1">
-          Hear about new stock and print fairs. Tell us what you collect and we'll send lists to match.
-        </p>
-
-        <.form
-          for={@subscriber_form}
-          action={~p"/mailing-list"}
-          id="mailing-list-form"
-          class="mt-6"
-        >
-          <div class="grid gap-x-4 sm:grid-cols-2">
-            <.input
-              field={@subscriber_form[:email]}
-              type="email"
-              label="Email"
-              autocomplete="email"
-              required
-            />
-            <.input field={@subscriber_form[:name]} label="Name (optional)" autocomplete="name" />
-          </div>
-          <.input
-            field={@subscriber_form[:interests]}
-            label="Interests (optional)"
-            placeholder="e.g. Rembrandt etchings"
-          />
-
-          <%!-- Spam trap: hidden from people, often filled in by bots. --%>
-          <div class="hidden" aria-hidden="true">
-            <label>
-              Leave this empty
-              <input
-                type="text"
-                name="subscriber[website]"
-                value=""
-                tabindex="-1"
-                autocomplete="off"
-              />
-            </label>
-          </div>
-
-          <button type="submit" class="btn btn-primary mt-2 w-full sm:w-auto">
-            Join the mailing list
-          </button>
-        </.form>
-      </section>
-    </div>
-  </div>
 </Layouts.app>

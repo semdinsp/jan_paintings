@@ -33,7 +33,7 @@ defmodule JanPaintingsWeb.Layouts do
 
   attr :active, :string,
     default: nil,
-    doc: ~s(menu item for the current page: "home", a category slug, or "about")
+    doc: ~s(menu item for the current page: "home", a category slug, "about" or "contact")
 
   slot :inner_block, required: true
 
@@ -45,10 +45,9 @@ defmodule JanPaintingsWeb.Layouts do
             JanPaintings.Catalog.categories(),
             &{&1.slug, &1.name, ~p"/prints/#{&1.slug}"}
           ),
-        # Contact Us jumps to the contact details and form on the About page.
         about_menu: [
           {"about", "About Us", ~p"/about"},
-          {"contact", "Contact Us", ~p"/about" <> "#contact"}
+          {"contact", "Contact Us", ~p"/contact"}
         ]
       )
 
@@ -188,7 +187,7 @@ defmodule JanPaintingsWeb.Layouts do
             <a href="mailto:jan@janjohnsonprints.com" class="link">jan@janjohnsonprints.com</a>
             <br /> Phone <a href="tel:+14506582752" class="link">450.658.2752</a>
             · Cell <a href="tel:+15146086959" class="link">514.608.6959</a>
-            <br /> <.link href={~p"/about" <> "#contact"} class="link">Contact us</.link>
+            <br /> <.link href={~p"/contact"} class="link">Contact us</.link>
             · <.link href={~p"/terms-of-sale"} class="link">Terms of sale</.link>
           </p>
           <div class="flex items-start gap-5 md:col-span-2 lg:col-span-1 lg:justify-end">

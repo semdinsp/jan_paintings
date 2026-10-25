@@ -40,7 +40,23 @@ defmodule JanPaintingsWeb.PageController do
     ]
   end
 
-  def about(conn, params) do
+  # Print enquiries used to go to the About page; send them to Contact.
+  def about(conn, %{"print" => slug}) do
+    redirect(conn, to: ~p"/contact?#{[print: slug]}")
+  end
+
+  def about(conn, _params) do
+    render(conn, :about,
+      page_title: "About the gallery",
+      meta_description:
+        "Jan Johnson has dealt in fine prints since 1979, first in London and from 1982 in Montreal. Our museum clients and services.",
+      canonical_path: "/about",
+      og_image: "/images/jan-johnson.jpg",
+      json_ld: SEO.gallery_json_ld()
+    )
+  end
+
+  def contact(conn, params) do
     print = params["print"] && Catalog.get_public_print(params["print"])
 
     attrs =
@@ -49,12 +65,12 @@ defmodule JanPaintingsWeb.PageController do
         else: %{}
 
     form = %ContactMessage{} |> Inquiries.change_contact_message(attrs) |> to_form()
-    render_about(conn, form: form)
+    render_contact(conn, form: form)
   end
 
-  # The About page has the contact form and the mailing list form; a failed
+  # The Contact page has the contact form and the mailing list form; a failed
   # submission re-renders it with that form's errors and a blank other one.
-  defp render_about(conn, forms) do
+  defp render_contact(conn, forms) do
     forms =
       Keyword.merge(
         [
@@ -64,16 +80,15 @@ defmodule JanPaintingsWeb.PageController do
         forms
       )
 
-    render(conn, :about, forms ++ about_meta())
+    render(conn, :contact, forms ++ contact_meta())
   end
 
-  defp about_meta do
+  defp contact_meta do
     [
-      page_title: "About the gallery",
+      page_title: "Contact us",
       meta_description:
-        "Jan Johnson has dealt in fine prints since 1979, first in London and from 1982 in Montreal. Visit by appointment in Chambly, Quebec, or send an enquiry.",
-      canonical_path: "/about",
-      og_image: "/images/jan-johnson.jpg",
+        "Ask about a print, request a stock list or book a viewing by appointment in Chambly, Quebec, near Montreal. Or join our mailing list.",
+      canonical_path: "/contact",
       json_ld: SEO.gallery_json_ld()
     ]
   end
@@ -85,12 +100,6 @@ defmodule JanPaintingsWeb.PageController do
         "Every print is guaranteed authentic and as described, with a full refund if not. Prints on approval, shipping, payment and Canadian taxes.",
       canonical_path: "/terms-of-sale"
     )
-  end
-
-  # The old contact page now lives on the about page; keep links working.
-  def contact_redirect(conn, params) do
-    query = Map.take(params, ["print"])
-    redirect(conn, to: ~p"/about?#{query}" <> "#contact")
   end
 
   # Bots tend to fill every field, so a filled-in hidden "website" field
@@ -108,7 +117,7 @@ defmodule JanPaintingsWeb.PageController do
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)
-        |> render_about(form: to_form(changeset))
+        |> render_contact(form: to_form(changeset))
     end
   end
 
@@ -125,19 +134,19 @@ defmodule JanPaintingsWeb.PageController do
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)
-        |> render_about(subscriber_form: to_form(changeset))
+        |> render_contact(subscriber_form: to_form(changeset))
     end
   end
 
   defp subscribed(conn) do
     conn
     |> put_flash(:info, "Thank you, you're on our mailing list.")
-    |> redirect(to: ~p"/about" <> "#mailing-list")
+    |> redirect(to: ~p"/contact" <> "#mailing-list")
   end
 
   defp message_sent(conn) do
     conn
     |> put_flash(:info, "Thank you, your message has been sent. We'll be in touch soon.")
-    |> redirect(to: ~p"/about" <> "#contact")
+    |> redirect(to: ~p"/contact")
   end
 end

@@ -129,8 +129,8 @@ defmodule JanPaintingsWeb.SEOTest do
     end
   end
 
-  test "home and about pages describe the gallery", %{conn: conn} do
-    for path <- ["/", "/about"] do
+  test "home, about and contact pages describe the gallery", %{conn: conn} do
+    for path <- ["/", "/about", "/contact"] do
       data = conn |> get(path) |> html_response(200) |> json_ld()
 
       assert data["@type"] == "ArtGallery"
@@ -140,8 +140,8 @@ defmodule JanPaintingsWeb.SEOTest do
       assert data["telephone"] =~ "450"
     end
 
-    html = conn |> get("/about?print=beham-leda-and-the-swan") |> html_response(200)
-    assert html =~ ~s(rel="canonical" href="#{base()}/about")
+    html = conn |> get("/contact?print=beham-leda-and-the-swan") |> html_response(200)
+    assert html =~ ~s(rel="canonical" href="#{base()}/contact")
   end
 
   test "category pages list their prints in a CollectionPage", %{conn: conn} do
@@ -169,11 +169,12 @@ defmodule JanPaintingsWeb.SEOTest do
       assert xml =~ "<loc>#{base()}/</loc>"
       assert xml =~ "<loc>#{base()}/prints/old-masters</loc>"
       assert xml =~ "<loc>#{base()}/terms-of-sale</loc>"
+      assert xml =~ "<loc>#{base()}/contact</loc>"
       assert xml =~ "<loc>#{base()}/prints/old-masters/beham-leda-and-the-swan</loc><lastmod>"
 
       sold = Enum.find(Catalog.list_prints(), &(&1.status == "sold"))
       assert xml =~ base() <> SEO.print_path(sold)
-      assert length(Regex.scan(~r/<url>/, xml)) == 7 + length(Catalog.list_prints())
+      assert length(Regex.scan(~r/<url>/, xml)) == 8 + length(Catalog.list_prints())
     end
 
     test "robots.txt allows crawlers and points at the sitemap", %{conn: conn} do

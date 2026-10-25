@@ -21,7 +21,13 @@ defmodule JanPaintingsWeb.SEOController do
     latest = prints |> Enum.map(& &1.updated_at) |> Enum.max(DateTime, fn -> nil end)
 
     pages =
-      [{"/", latest}, {"/about", nil}, {"/terms-of-sale", nil}, {"/prints", latest}] ++
+      [
+        {"/", latest},
+        {"/about", nil},
+        {"/contact", nil},
+        {"/terms-of-sale", nil},
+        {"/prints", latest}
+      ] ++
         Enum.map(Catalog.categories(), fn category ->
           {"/prints/#{category.slug}",
            prints |> Enum.filter(&(&1.category == category.slug)) |> latest_update()}
@@ -106,6 +112,7 @@ defmodule JanPaintingsWeb.SEOController do
     - [All prints](#{SEO.url("/prints")})
     #{categories}
     - [About the gallery](#{SEO.url("/about")})
+    - [Contact us](#{SEO.url("/contact")}): enquiries, viewings by appointment and the mailing list.
     - [Terms of sale](#{SEO.url("/terms-of-sale")}): authenticity guarantee, approval, shipping and payment.
     - [Sitemap](#{SEO.url("/sitemap.xml")}): every print page, with last-updated dates.
 
@@ -116,7 +123,7 @@ defmodule JanPaintingsWeb.SEOController do
     - Email: jan@janjohnsonprints.com
     - Phone: +1 450 658 2752 · Cell: +1 514 608 6959
     - Address: 189 rue Saint-Pierre, Chambly, QC J3L 1L8, Canada
-    - Visits by appointment. Enquiries: #{SEO.url("/about#contact")}
+    - Visits by appointment. Enquiries: #{SEO.url("/contact")}
     """)
   end
 end
