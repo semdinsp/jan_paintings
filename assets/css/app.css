@@ -321,6 +321,16 @@ body:has(.print-lightbox[open]) {
   overflow: hidden;
 }
 
+/* About page museum clients: the first three, then the rest on request. */
+#about-clients-list[data-collapsed] .client-more,
+#about-clients-toggle[aria-expanded="false"] .clients-hide,
+#about-clients-toggle[aria-expanded="true"] .clients-show {
+  display: none;
+}
+#about-clients-toggle[aria-expanded="true"] .clients-chevron {
+  transform: rotate(180deg);
+}
+
 /* Every interactive element gets the same rose focus ring. */
 :where(a, button, summary, input, select, textarea, [tabindex]):focus-visible {
   outline: 2px solid var(--rose);

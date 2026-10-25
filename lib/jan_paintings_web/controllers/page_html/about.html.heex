@@ -54,51 +54,67 @@
     <p class="mt-3 max-w-[68ch] text-ink-2">
       Among the museums and collections we have supplied:
     </p>
-    <ul class="mt-6 gap-x-12 text-[0.9375rem] sm:columns-2 lg:columns-3 [&>li]:break-inside-avoid [&>li]:py-1.5">
+    <%!-- The first three, then the rest behind the button below (app.js). --%>
+    <ul
+      id="about-clients-list"
+      data-collapsed
+      class="mt-6 grid gap-x-12 text-[0.9375rem] sm:grid-cols-2 lg:grid-cols-3 [&>li]:py-1.5"
+    >
       <li>Agnes Etherington Art Centre, Queen's University, Kingston</li>
       <li>Art Gallery of Ontario</li>
       <li>Art Institute of Chicago</li>
-      <li>Baltimore Museum of Art</li>
-      <li>Blanton Museum of Art, University of Texas at Austin</li>
-      <li>British Museum</li>
-      <li>Cantor Center for Visual Arts, Stanford University</li>
-      <li>Carleton University Art Gallery, Ottawa</li>
-      <li>Chazen Museum of Art, University of Wisconsin–Madison</li>
-      <li>Cleveland Museum of Art</li>
-      <li>Detroit Institute of Arts</li>
-      <li>Fine Arts Museums of San Francisco</li>
-      <li>Fondation Custodia, Paris</li>
-      <li>Grunwald Center for the Graphic Arts, UCLA</li>
-      <li>Harvard Art Museums</li>
-      <li>Hood Museum of Art, Dartmouth</li>
-      <li>J. Paul Getty Museum</li>
-      <li>Los Angeles County Museum of Art</li>
-      <li>McMaster Museum of Art, Hamilton</li>
-      <li>Metropolitan Museum of Art</li>
-      <li>Michael C. Carlos Museum, Emory University, Atlanta</li>
-      <li>Minneapolis Institute of Art</li>
-      <li>Musée des beaux-arts de Montréal</li>
-      <li>Musée national des beaux-arts du Québec</li>
-      <li>Museum of Fine Arts, Boston</li>
-      <li>National Gallery of Art, Washington</li>
-      <li>National Gallery of Canada, Ottawa</li>
-      <li>New York Public Library</li>
-      <li>Philadelphia Museum of Art</li>
-      <li>Portland Art Museum</li>
-      <li>Princeton University Art Museum</li>
-      <li>Rhode Island School of Design Museum</li>
-      <li>Rijksmuseum, Amsterdam</li>
-      <li>Saint Louis Art Museum</li>
-      <li>Sarah Campbell Blaffer Foundation, Houston</li>
-      <li>Snite Research Center, University of Notre Dame</li>
-      <li>Speed Art Museum, Louisville</li>
-      <li>Spencer Museum of Art, University of Kansas</li>
-      <li>University of San Diego</li>
-      <li>Vassar College, Poughkeepsie</li>
-      <li>Worcester Art Museum</li>
-      <li>Yale University Art Gallery</li>
-      <li>Zimmerli Art Museum, Rutgers University, New Jersey</li>
+      <li class="client-more">Baltimore Museum of Art</li>
+      <li class="client-more">Blanton Museum of Art, University of Texas at Austin</li>
+      <li class="client-more">British Museum</li>
+      <li class="client-more">Cantor Center for Visual Arts, Stanford University</li>
+      <li class="client-more">Carleton University Art Gallery, Ottawa</li>
+      <li class="client-more">Chazen Museum of Art, University of Wisconsin–Madison</li>
+      <li class="client-more">Cleveland Museum of Art</li>
+      <li class="client-more">Detroit Institute of Arts</li>
+      <li class="client-more">Fine Arts Museums of San Francisco</li>
+      <li class="client-more">Fondation Custodia, Paris</li>
+      <li class="client-more">Grunwald Center for the Graphic Arts, UCLA</li>
+      <li class="client-more">Harvard Art Museums</li>
+      <li class="client-more">Hood Museum of Art, Dartmouth</li>
+      <li class="client-more">J. Paul Getty Museum</li>
+      <li class="client-more">Los Angeles County Museum of Art</li>
+      <li class="client-more">McMaster Museum of Art, Hamilton</li>
+      <li class="client-more">Metropolitan Museum of Art</li>
+      <li class="client-more">Michael C. Carlos Museum, Emory University, Atlanta</li>
+      <li class="client-more">Minneapolis Institute of Art</li>
+      <li class="client-more">Musée des beaux-arts de Montréal</li>
+      <li class="client-more">Musée national des beaux-arts du Québec</li>
+      <li class="client-more">Museum of Fine Arts, Boston</li>
+      <li class="client-more">National Gallery of Art, Washington</li>
+      <li class="client-more">National Gallery of Canada, Ottawa</li>
+      <li class="client-more">New York Public Library</li>
+      <li class="client-more">Philadelphia Museum of Art</li>
+      <li class="client-more">Portland Art Museum</li>
+      <li class="client-more">Princeton University Art Museum</li>
+      <li class="client-more">Rhode Island School of Design Museum</li>
+      <li class="client-more">Rijksmuseum, Amsterdam</li>
+      <li class="client-more">Saint Louis Art Museum</li>
+      <li class="client-more">Sarah Campbell Blaffer Foundation, Houston</li>
+      <li class="client-more">Snite Research Center, University of Notre Dame</li>
+      <li class="client-more">Speed Art Museum, Louisville</li>
+      <li class="client-more">Spencer Museum of Art, University of Kansas</li>
+      <li class="client-more">University of San Diego</li>
+      <li class="client-more">Vassar College, Poughkeepsie</li>
+      <li class="client-more">Worcester Art Museum</li>
+      <li class="client-more">Yale University Art Gallery</li>
+      <li class="client-more">Zimmerli Art Museum, Rutgers University, New Jersey</li>
     </ul>
+    <button
+      type="button"
+      id="about-clients-toggle"
+      class="btn btn-sm btn-secondary-rose mt-4"
+      aria-controls="about-clients-list"
+      aria-expanded="false"
+    >
+      <span class="clients-show">Show all 43 museums</span>
+      <span class="clients-hide">Show fewer</span>
+      <.icon name="hero-chevron-down" class="clients-chevron size-4" />
+    </button>
   </section>
 
   <div
