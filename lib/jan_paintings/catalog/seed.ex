@@ -16,8 +16,9 @@ defmodule JanPaintings.Catalog.Seed do
   `load_nationalities/1` fills in each artist's nationality,
   `load_additional_notes/1` each print's additional notes,
   `load_catalogue_entries/1` each print's catalogue details and provenance,
-  `load_mediums/1` each print's medium, and `load_catalogue_references/1`
-  the catalogue references still missing, the same way.
+  `load_mediums/1` each print's medium, `load_catalogue_references/1`
+  the catalogue references still missing, and `load_sizes/1` the sizes left
+  at the end of the details text, the same way.
 
   Run them all with `mix run priv/repo/seeds.exs` locally, or
   `bin/jan_paintings eval "JanPaintings.Release.seed()"` in a release.
@@ -41,6 +42,9 @@ defmodule JanPaintings.Catalog.Seed do
 
   def catalogue_references_path,
     do: Path.join(:code.priv_dir(:jan_paintings), "repo/seeds/print_catalogue_references.json")
+
+  def sizes_path,
+    do: Path.join(:code.priv_dir(:jan_paintings), "repo/seeds/print_sizes.json")
 
   def catalogue_entries_path,
     do: Path.join(:code.priv_dir(:jan_paintings), "repo/seeds/print_catalogue_entries.json")
@@ -164,6 +168,15 @@ defmodule JanPaintings.Catalog.Seed do
   """
   def load_catalogue_references(path \\ catalogue_references_path()),
     do: load_catalogue_details(path)
+
+  @doc """
+  Moves sizes that were left at the end of a print's details text into its
+  size field, from `priv/repo/seeds/print_sizes.json`: each entry has two
+  corrections, the blank size to the size and the details to the details
+  without it. Same rules and summary as `load_catalogue_details/1`, so a
+  print whose size or details were edited in the admin pages is left alone.
+  """
+  def load_sizes(path \\ sizes_path()), do: load_catalogue_details(path)
 
   @doc """
   Applies the seed file. Returns a summary map: how many prints were updated,

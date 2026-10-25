@@ -228,6 +228,46 @@ defmodule JanPaintings.Catalog.SeedTest do
     end
   end
 
+  describe "load_sizes/1" do
+    @berchem "berchem-shepherd-playing-a-flute"
+
+    # Puts the print back as the original import left it: no size, and the
+    # size at the end of the details.
+    defp unmove_size(slug, details) do
+      print = Catalog.get_print(slug)
+      {:ok, _} = Catalog.update_print(print, %{"dimensions" => "", "details" => details})
+    end
+
+    defp seed_details(slug) do
+      %{"prints" => prints} = Seed.sizes_path() |> File.read!() |> Jason.decode!()
+      %{"corrections" => corrections} = Enum.find(prints, &(&1["slug"] == slug))
+      Enum.find(corrections, &(&1["field"] == "details"))
+    end
+
+    test "moves the size from the end of the details into the size field" do
+      %{"from" => old, "to" => new} = seed_details(@berchem)
+      unmove_size(@berchem, old)
+
+      assert %{missing: []} = Seed.load_sizes()
+      print = Catalog.get_print(@berchem)
+      assert print.dimensions == "196 × 147mm"
+      assert print.details == new
+      refute print.details =~ "147mm"
+
+      assert %{updated: 0, missing: []} = Seed.load_sizes()
+    end
+
+    test "leaves a print alone once its details were edited in the admin pages" do
+      %{"from" => old} = seed_details(@berchem)
+      unmove_size(@berchem, old <> " Edited by Jan.")
+
+      Seed.load_sizes()
+      print = Catalog.get_print(@berchem)
+      assert print.details =~ "Edited by Jan."
+      assert print.details =~ "147mm"
+    end
+  end
+
   describe "load_catalogue_entries/1" do
     test "the shipped file covers every print, once" do
       first = Seed.load_catalogue_entries()
