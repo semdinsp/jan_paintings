@@ -18,7 +18,11 @@ defmodule JanPaintingsWeb.ContactControllerTest do
     html = conn |> get(~p"/contact") |> html_response(200)
     assert html =~ ~r/<h1[^>]*>Contact Us<\/h1>/
     assert html =~ ~s(id="contact")
-    assert html =~ "189 rue Saint-Pierre"
+
+    # No address in the contact details (the footer still has it).
+    [details] = Regex.run(~r{<dl[^>]*id="contact-details".*?</dl>}s, html)
+    refute details =~ "Address"
+    refute details =~ "189 rue Saint-Pierre"
     assert html =~ "450.658.2752"
     assert html =~ ~s(href="tel:+15146086959")
     refute html =~ ~r/fax/i
