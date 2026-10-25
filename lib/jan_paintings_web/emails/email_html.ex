@@ -13,7 +13,7 @@ defmodule JanPaintingsWeb.EmailHTML do
   # Links in --rose; the button in the header colour (--dusk) with ink text,
   # as on the site.
   @primary "#9b464d"
-  @button "#c2918d"
+  @button_bg "#c2918d"
   @page "#f1ede6"
   @paper "#faf8f4"
   @ink "#1f1d1a"
@@ -22,7 +22,15 @@ defmodule JanPaintingsWeb.EmailHTML do
   @serif "Georgia, 'Times New Roman', Times, serif"
   @sans "'Helvetica Neue', Helvetica, Arial, sans-serif"
 
-  @colors %{primary: @primary, ink: @ink, muted: @muted, rule: @rule, serif: @serif, sans: @sans}
+  @colors %{
+    primary: @primary,
+    button_bg: @button_bg,
+    ink: @ink,
+    muted: @muted,
+    rule: @rule,
+    serif: @serif,
+    sans: @sans
+  }
 
   @doc """
   Renders an action email (a heading, some paragraphs and one button) to an
@@ -158,7 +166,7 @@ defmodule JanPaintingsWeb.EmailHTML do
     ~H"""
     <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:24px 0;">
       <tr>
-        <td style={"background-color:#{@button};border-radius:2px;"}>
+        <td style={"background-color:#{@button_bg};border-radius:2px;"}>
           <a
             href={@url}
             style={"display:inline-block;padding:12px 20px;font-family:#{@sans};font-size:15px;font-weight:bold;color:#{@ink};text-decoration:none;"}
