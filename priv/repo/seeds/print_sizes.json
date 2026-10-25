@@ -1,0 +1,231 @@
+{
+ "source": "Sizes found at the end of each print's details text (from janjohnsonprints.com) where the size field was still blank, 2026-10-25.",
+ "note": "Moves the size: fills the blank size and drops it from the details. Each change applies only while the field still holds the old value, so edits made in the admin pages are kept.",
+ "prints": [
+  {
+   "slug": "berchem-shepherd-playing-a-flute",
+   "corrections": [
+    {
+     "field": "dimensions",
+     "from": "",
+     "to": "196 × 147mm"
+    },
+    {
+     "field": "details",
+     "from": "A fine impression with the foreground contrasting well with the background, thread margins on three sides, the empty lower inscription space trimmed c.5mm. Thin spots along the left margin, slight cockling in the upper right corner, otherwise in very good condition. 196 x 147mm.",
+     "to": "A fine impression with the foreground contrasting well with the background, thread margins on three sides, the empty lower inscription space trimmed c.5mm. Thin spots along the left margin, slight cockling in the upper right corner, otherwise in very good condition."
+    }
+   ]
+  },
+  {
+   "slug": "della-bella-diverses-exercices-de-cavalerie-the-set-of-19-plates-including-title",
+   "corrections": [
+    {
+     "field": "dimensions",
+     "from": "",
+     "to": "83–89 × 65–71mm"
+    },
+    {
+     "field": "details",
+     "from": "Fine to very fine impressions. Most trimmed on the platemarks, five with small margins. 83-89 x 65-71mm.",
+     "to": "Fine to very fine impressions. Most trimmed on the platemarks, five with small margins."
+    }
+   ]
+  },
+  {
+   "slug": "della-bella-frontispiece-for-les-uvres-de-scarron",
+   "corrections": [
+    {
+     "field": "dimensions",
+     "from": "",
+     "to": "210 × 158mm"
+    },
+    {
+     "field": "details",
+     "from": "A good impression with small margins. Apart from light creases in three corners and old hinges on the verso in very good condition. 210 x 158mm.",
+     "to": "A good impression with small margins. Apart from light creases in three corners and old hinges on the verso in very good condition."
+    }
+   ]
+  },
+  {
+   "slug": "fontebasso-the-sacrifice-of-iphigeneia-from-varii-baccanali-et-istorie-a-set-of",
+   "corrections": [
+    {
+     "field": "dimensions",
+     "from": "",
+     "to": "288 × 395mm"
+    },
+    {
+     "field": "details",
+     "from": "A fine impression with small margins all round. Very pale foxing, otherwise in good condition. 288 x 395mm.",
+     "to": "A fine impression with small margins all round. Very pale foxing, otherwise in good condition."
+    }
+   ]
+  },
+  {
+   "slug": "grozer-mrs-h-mackenzie-lady-seaforth-and-child-after-sir-joshua-reynolds",
+   "corrections": [
+    {
+     "field": "dimensions",
+     "from": "",
+     "to": "505 × 353mm"
+    },
+    {
+     "field": "details",
+     "from": "A superb proof-state impression before all letters , printed in dark brown ink with narrow margins all round. Several printing creases in the margins, a little dust-marked in bottom margin, extremely pale foxing, otherwise in very good, unrubbed condition. 505 x 353mm.",
+     "to": "A superb proof-state impression before all letters , printed in dark brown ink with narrow margins all round. Several printing creases in the margins, a little dust-marked in bottom margin, extremely pale foxing, otherwise in very good, unrubbed condition."
+    }
+   ]
+  },
+  {
+   "slug": "huquier-second-livre-de-vases-inventes-par-edme-bouchardon-sculpteur-du-roy-the",
+   "corrections": [
+    {
+     "field": "dimensions",
+     "from": "",
+     "to": "198 × 132mm"
+    },
+    {
+     "field": "details",
+     "from": "Fine impressions with 50-60 mm margins. Apart from very occasional pale marks or foxing in the margins in excellent, fresh condition. 198 x 132mm. Rare complete.",
+     "to": "Fine impressions with 50-60 mm margins. Apart from very occasional pale marks or foxing in the margins in excellent, fresh condition. Rare complete."
+    }
+   ]
+  },
+  {
+   "slug": "le-notre-parterres-de-broderie-a-set-of-ten-etchings-reverse-copies-of-anonymous",
+   "corrections": [
+    {
+     "field": "dimensions",
+     "from": "",
+     "to": "308 × 223mm"
+    },
+    {
+     "field": "details",
+     "from": "Fine impressions on full sheets, all but two still stitched together. Pale foxing, most pronounced in the margins, otherwise in good condition. 308 x 223mm.",
+     "to": "Fine impressions on full sheets, all but two still stitched together. Pale foxing, most pronounced in the margins, otherwise in good condition."
+    }
+   ]
+  },
+  {
+   "slug": "pencz-the-triumph-of-love-from-the-six-triumphs-of-petrarch",
+   "corrections": [
+    {
+     "field": "dimensions",
+     "from": "",
+     "to": "151 × 209mm"
+    },
+    {
+     "field": "details",
+     "from": "A brilliant, rich impression, trimmed on the platemark all round. Inconspicuous small repairs in the upper right corner, a thin lower right corner, generally in very good condition. With hand-corrections to two letters in the inscription, as are also visible in Landau’s illustrated example. 151 x 209mm.",
+     "to": "A brilliant, rich impression, trimmed on the platemark all round. Inconspicuous small repairs in the upper right corner, a thin lower right corner, generally in very good condition. With hand-corrections to two letters in the inscription, as are also visible in Landau’s illustrated example."
+    }
+   ]
+  },
+  {
+   "slug": "pether-a-farriers-shop-after-joseph-wright-of-derby",
+   "corrections": [
+    {
+     "field": "dimensions",
+     "from": "",
+     "to": "507 × 354mm"
+    },
+    {
+     "field": "details",
+     "from": "A good impression printed in dark brown ink, with small margins all round. The verso of the top edge skinned, with one small break in the paper and the upper right margin corner made up. Slight cockling. Otherwise in good condition. 507 x 354mm.",
+     "to": "A good impression printed in dark brown ink, with small margins all round. The verso of the top edge skinned, with one small break in the paper and the upper right margin corner made up. Slight cockling. Otherwise in good condition."
+    }
+   ]
+  },
+  {
+   "slug": "potter-the-shepherd",
+   "corrections": [
+    {
+     "field": "dimensions",
+     "from": "",
+     "to": "179 × 267mm"
+    },
+    {
+     "field": "details",
+     "from": "A good, pleasing impression with reasonable contrast, though the clouds are faintly printed. Trimmed just outside the borderline all round. In very good condition. 179 x 267mm.",
+     "to": "A good, pleasing impression with reasonable contrast, though the clouds are faintly printed. Trimmed just outside the borderline all round. In very good condition."
+    }
+   ]
+  },
+  {
+   "slug": "stoop-a-youth-leading-a-reluctant-horse-from-a-set-of-12-horse-subjects",
+   "corrections": [
+    {
+     "field": "dimensions",
+     "from": "",
+     "to": "148 × 194mm"
+    },
+    {
+     "field": "details",
+     "from": "A fine impression trimmed on the platemark or with thread margins. A soft diagonal crease, otherwise in very good condition. 148 x 194mm.",
+     "to": "A fine impression trimmed on the platemark or with thread margins. A soft diagonal crease, otherwise in very good condition."
+    }
+   ]
+  },
+  {
+   "slug": "verboom-a-house-among-trees-or-the-hamlet",
+   "corrections": [
+    {
+     "field": "dimensions",
+     "from": "",
+     "to": "135 × 180mm"
+    },
+    {
+     "field": "details",
+     "from": "A fine impression of this delicately-etched print, with good margins on all sides and two deckle edges. Apart from pin-holes in the left margin and a few scattered fox-marks and edge discolouration in the lower margin, in impeccable condition. 135 x 180mm.",
+     "to": "A fine impression of this delicately-etched print, with good margins on all sides and two deckle edges. Apart from pin-holes in the left margin and a few scattered fox-marks and edge discolouration in the lower margin, in impeccable condition."
+    }
+   ]
+  },
+  {
+   "slug": "waterloo-two-men-seated-on-a-road-from-a-set-of-six-large-landscapes",
+   "corrections": [
+    {
+     "field": "dimensions",
+     "from": "",
+     "to": "291 × 240mm"
+    },
+    {
+     "field": "details",
+     "from": "A very good impression with thread margins most of the way round. Very pale, even time-staining, otherwise in very good condition. 291 x 240mm.",
+     "to": "A very good impression with thread margins most of the way round. Very pale, even time-staining, otherwise in very good condition."
+    }
+   ]
+  },
+  {
+   "slug": "dore-a-cleric-attacked-by-three-men-and-a-dog",
+   "corrections": [
+    {
+     "field": "dimensions",
+     "from": "",
+     "to": "74 × 84mm"
+    },
+    {
+     "field": "details",
+     "from": "Original box-wood block for a wood-engraved illustration. The upper left corner chipped. 74 x 84mm.",
+     "to": "Original box-wood block for a wood-engraved illustration. The upper left corner chipped."
+    }
+   ]
+  },
+  {
+   "slug": "roux-the-child-those-who-ignore-death-or-death-and-the-maiden-from-danse-macabre",
+   "corrections": [
+    {
+     "field": "dimensions",
+     "from": "",
+     "to": "244 × 163mm"
+    },
+    {
+     "field": "details",
+     "from": "A fine impression on cream laid Arches with margins all round, two deckle edges. Pale light burn, otherwise in very good condition. .244 x 163mm.",
+     "to": "A fine impression on cream laid Arches with margins all round, two deckle edges. Pale light burn, otherwise in very good condition."
+    }
+   ]
+  }
+ ]
+}

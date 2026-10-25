@@ -37,3 +37,7 @@ JanPaintings.Catalog.Seed.load_mediums() |> IO.inspect(label: "Mediums")
 # entry. Fills blanks only.
 JanPaintings.Catalog.Seed.load_catalogue_references()
 |> IO.inspect(label: "Catalogue references")
+
+# Sizes left at the end of the details text: moved into the size field.
+# Each change applies only while the old value is still there.
+JanPaintings.Catalog.Seed.load_sizes() |> IO.inspect(label: "Sizes")
