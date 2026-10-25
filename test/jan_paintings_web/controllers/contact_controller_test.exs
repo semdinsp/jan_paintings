@@ -33,7 +33,9 @@ defmodule JanPaintingsWeb.ContactControllerTest do
 
   test "the contact page shows the terms of sale under the contact section", %{conn: conn} do
     html = conn |> get(~p"/contact") |> html_response(200)
-    [terms] = Regex.run(~r{<section[^>]*id="contact-terms".*?</section>\s*</div>\s*</section>}s, html)
+
+    [terms] =
+      Regex.run(~r{<section[^>]*id="contact-terms".*?</section>\s*</div>\s*</section>}s, html)
 
     assert terms =~ ~r/<h2[^>]*>Terms of sale<\/h2>/
 
