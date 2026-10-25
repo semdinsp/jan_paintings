@@ -281,6 +281,16 @@ defmodule JanPaintings.Catalog.SeedTest do
       assert bonnet.title =~ "from *La défense et l’attaque des petites postes*, published"
       assert %{updated: 0} = Seed.load_title_italics()
     end
+
+    test "cuts the catalogue entry off the end of a run-on title" do
+      weirotter =
+        Enum.find(Catalog.list_all_prints(), &String.starts_with?(&1.title, "Nella venuta"))
+
+      Seed.load_title_italics()
+      title = Catalog.get_print(weirotter.slug).title
+      assert String.ends_with?(title, "by various hands in the original booklet")
+      refute title =~ "Etchings, 1764"
+    end
   end
 
   describe "load_catalogue_entries/1" do

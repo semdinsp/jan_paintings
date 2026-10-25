@@ -1,6 +1,6 @@
 {
- "source": "Book and series titles set in italics in the print titles on janjohnsonprints.com, 2026-10-25, marked with asterisks. Also corrects “La defense” to “La défense” in the Bonnet map.",
- "note": "Each title changes only while it still reads exactly as before, so titles edited in the admin pages are kept.",
+ "source": "Print titles: the book and series titles set in italics on janjohnsonprints.com, 2026-10-25, marked with asterisks; “La defense” corrected to “La défense”; and five titles that had their catalogue entry (medium, references, notes) run on at the end cut back to the title, with “Salvator Rose” corrected to “Rosa” and one watermark moved to its own field.",
+ "note": "Each change applies only while the field still reads exactly as before (a title may be listed both as imported and as already marked), so edits made in the admin pages are kept.",
  "prints": [
   {
    "slug": "bonnet-a-map-with-battle-positions-in-the-vicinity-of-lille-plate-viii-from-la-d",
@@ -48,7 +48,12 @@
     {
      "field": "title",
      "from": "Portraits of Artists Mattia Preti, Orazio Riminaldi, Carlo Maratta, Marco Benefial, Niccolò Ricciolini (in two quite different impressions), Salvator Rose, James Northcote, from Ritratti de’ Pittori esistenti nella Reale Galleria di Firenze…, published from 1789 Mezzotints printed in colours from four plates, with hand-touching. James Northcote printed on pale green paper",
-     "to": "Portraits of Artists Mattia Preti, Orazio Riminaldi, Carlo Maratta, Marco Benefial, Niccolò Ricciolini (in two quite different impressions), Salvator Rose, James Northcote, from *Ritratti de’ Pittori esistenti nella Reale Galleria di Firenze…*, published from 1789 Mezzotints printed in colours from four plates, with hand-touching. James Northcote printed on pale green paper"
+     "to": "Portraits of Artists Mattia Preti, Orazio Riminaldi, Carlo Maratta, Marco Benefial, Niccolò Ricciolini (in two quite different impressions), Salvator Rosa, James Northcote, from *Ritratti de’ Pittori esistenti nella Reale Galleria di Firenze…*, published from 1789"
+    },
+    {
+     "field": "title",
+     "from": "Portraits of Artists Mattia Preti, Orazio Riminaldi, Carlo Maratta, Marco Benefial, Niccolò Ricciolini (in two quite different impressions), Salvator Rose, James Northcote, from *Ritratti de’ Pittori esistenti nella Reale Galleria di Firenze…*, published from 1789 Mezzotints printed in colours from four plates, with hand-touching. James Northcote printed on pale green paper",
+     "to": "Portraits of Artists Mattia Preti, Orazio Riminaldi, Carlo Maratta, Marco Benefial, Niccolò Ricciolini (in two quite different impressions), Salvator Rosa, James Northcote, from *Ritratti de’ Pittori esistenti nella Reale Galleria di Firenze…*, published from 1789"
     }
    ]
   },
@@ -58,7 +63,17 @@
     {
      "field": "title",
      "from": "Parterres de Broderie, a set of ten Etchings, reverse copies of anonymous etchings originally published by N. Langlois as Jardins à la Française in L’Architecture à la mode, c. 1680. This version is in a French/German edition published by Joseph Friedrich Leopold, undated but on 17th C. paper. Compare to Berlin 359, 3461; Guimard p. 130 Watermark: Caduceus with letters MH",
-     "to": "Parterres de Broderie, a set of ten Etchings, reverse copies of anonymous etchings originally published by N. Langlois as *Jardins à la Française* in *L’Architecture à la mode*, c. 1680. This version is in a French/German edition published by Joseph Friedrich Leopold, undated but on 17th C. paper. Compare to Berlin 359, 3461; Guimard p. 130 Watermark: Caduceus with letters MH"
+     "to": "Parterres de Broderie, a set of ten Etchings, reverse copies of anonymous etchings originally published by N. Langlois as *Jardins à la Française* in *L’Architecture à la mode*, c. 1680"
+    },
+    {
+     "field": "title",
+     "from": "Parterres de Broderie, a set of ten Etchings, reverse copies of anonymous etchings originally published by N. Langlois as *Jardins à la Française* in *L’Architecture à la mode*, c. 1680. This version is in a French/German edition published by Joseph Friedrich Leopold, undated but on 17th C. paper. Compare to Berlin 359, 3461; Guimard p. 130 Watermark: Caduceus with letters MH",
+     "to": "Parterres de Broderie, a set of ten Etchings, reverse copies of anonymous etchings originally published by N. Langlois as *Jardins à la Française* in *L’Architecture à la mode*, c. 1680"
+    },
+    {
+     "field": "watermark",
+     "from": "",
+     "to": "Caduceus with letters MH"
     }
    ]
   },
@@ -68,7 +83,12 @@
     {
      "field": "title",
      "from": "An ornate Vase with serpentine forms in an Antique Setting (Fountains and Urns), from Collection de divers sujets de vases, a set of 25 Etching. Berlin Katalog 4182",
-     "to": "An ornate Vase with serpentine forms in an Antique Setting (Fountains and Urns), from *Collection de divers sujets de vases*, a set of 25 Etching. Berlin Katalog 4182"
+     "to": "An ornate Vase with serpentine forms in an Antique Setting (Fountains and Urns), from *Collection de divers sujets de vases*, a set of 25"
+    },
+    {
+     "field": "title",
+     "from": "An ornate Vase with serpentine forms in an Antique Setting (Fountains and Urns), from *Collection de divers sujets de vases*, a set of 25 Etching. Berlin Katalog 4182",
+     "to": "An ornate Vase with serpentine forms in an Antique Setting (Fountains and Urns), from *Collection de divers sujets de vases*, a set of 25"
     }
    ]
   },
@@ -169,6 +189,26 @@
      "field": "title",
      "from": "A travers champ (Across the fields), from the portfolio Paysages et Intérieures",
      "to": "A travers champ (Across the fields), from the portfolio *Paysages et Intérieures*"
+    }
+   ]
+  },
+  {
+   "slug": "huquier-second-livre-de-vases-inventes-par-edme-bouchardon-sculpteur-du-roy-the",
+   "corrections": [
+    {
+     "field": "title",
+     "from": "Second Livre de Vases inventés par Edmé Bouchardon, sculpteur du Roy, the complete set of twelve including the title-plate Etchings with engraving, 1737. Inventaire du fond français 549-60; Berlin Katalog 1060; Anne-Lise Desmas and Edouard Kopp et al, Edme Bouchardon(1698-1762) : une idée du beau, Paris, 2016, p. 292 ff.",
+     "to": "Second Livre de Vases inventés par Edmé Bouchardon, sculpteur du Roy, the complete set of twelve including the title-plate"
+    }
+   ]
+  },
+  {
+   "slug": "weirotter-nella-venuta-in-roma-di-madama-le-comte-e-dei-signori-watelet-e-copett",
+   "corrections": [
+    {
+     "field": "title",
+     "from": "Nella venuta in Roma di Madama Le Comte e dei Signori Watelet, e Copette, after E. de Lavallée Poussin, comprising the complete set of seven plates by Weirotter (including an inscription plate, Hofer’s “final curtain”), out of a total of 32 by various hands in the original booklet Etchings, 1764, printed three and four to a sheet. P. Hofer, A Visit to Rome in 1764, Harvard 1956; D. Becker, Regency to Empire, no.55",
+     "to": "Nella venuta in Roma di Madama Le Comte e dei Signori Watelet, e Copette, after E. de Lavallée Poussin, comprising the complete set of seven plates by Weirotter (including an inscription plate, Hofer’s “final curtain”), out of a total of 32 by various hands in the original booklet"
     }
    ]
   }
