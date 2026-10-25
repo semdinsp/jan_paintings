@@ -97,6 +97,7 @@ defmodule JanPaintingsWeb.PageControllerTest do
   test "GET /about", %{conn: conn} do
     html = conn |> get(~p"/about") |> html_response(200)
     assert html =~ "International Fine Print Dealers"
+    assert html =~ "acting at auction for clients and performing appraisals"
 
     # The museum clients, in alphabetical order.
     [clients] = Regex.run(~r{<section[^>]*id="about-clients".*?</section>}s, html)
