@@ -16,7 +16,8 @@ defmodule JanPaintings.Catalog.Seed do
   `load_nationalities/1` fills in each artist's nationality,
   `load_additional_notes/1` each print's additional notes,
   `load_catalogue_entries/1` each print's catalogue details and provenance,
-  and `load_mediums/1` each print's medium, the same way.
+  `load_mediums/1` each print's medium, and `load_catalogue_references/1`
+  the catalogue references still missing, the same way.
 
   Run them all with `mix run priv/repo/seeds.exs` locally, or
   `bin/jan_paintings eval "JanPaintings.Release.seed()"` in a release.
@@ -37,6 +38,9 @@ defmodule JanPaintings.Catalog.Seed do
 
   def mediums_path,
     do: Path.join(:code.priv_dir(:jan_paintings), "repo/seeds/print_mediums.json")
+
+  def catalogue_references_path,
+    do: Path.join(:code.priv_dir(:jan_paintings), "repo/seeds/print_catalogue_references.json")
 
   def catalogue_entries_path,
     do: Path.join(:code.priv_dir(:jan_paintings), "repo/seeds/print_catalogue_entries.json")
@@ -151,6 +155,15 @@ defmodule JanPaintings.Catalog.Seed do
   only while the medium still holds the value it corrects.
   """
   def load_mediums(path \\ mediums_path()), do: load_catalogue_details(path)
+
+  @doc """
+  Fills in blank catalogue references from
+  `priv/repo/seeds/print_catalogue_references.json`, taken from each print's
+  full catalogue entry. Same file format, rules and summary as
+  `load_catalogue_details/1`; a reference typed in the admin pages is kept.
+  """
+  def load_catalogue_references(path \\ catalogue_references_path()),
+    do: load_catalogue_details(path)
 
   @doc """
   Applies the seed file. Returns a summary map: how many prints were updated,

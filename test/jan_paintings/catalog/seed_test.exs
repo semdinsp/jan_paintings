@@ -207,6 +207,27 @@ defmodule JanPaintings.Catalog.SeedTest do
     end
   end
 
+  describe "load_catalogue_references/1" do
+    test "fills blank references from the shipped file" do
+      slug = "bonnet-premiere-feuille-darabesques-after-carle-first-name-unknown"
+      {:ok, _} = Catalog.update_print(Catalog.get_print(slug), %{"catalogue_references" => ""})
+
+      assert %{missing: []} = Seed.load_catalogue_references()
+      assert Catalog.get_print(slug).catalogue_references == "Hérold 967"
+      assert %{updated: 0, missing: []} = Seed.load_catalogue_references()
+    end
+
+    test "keeps a reference typed in the admin pages" do
+      slug = "bonnet-premiere-feuille-darabesques-after-carle-first-name-unknown"
+
+      {:ok, _} =
+        Catalog.update_print(Catalog.get_print(slug), %{"catalogue_references" => "Hérold 966"})
+
+      Seed.load_catalogue_references()
+      assert Catalog.get_print(slug).catalogue_references == "Hérold 966"
+    end
+  end
+
   describe "load_catalogue_entries/1" do
     test "the shipped file covers every print, once" do
       first = Seed.load_catalogue_entries()
