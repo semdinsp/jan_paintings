@@ -168,7 +168,7 @@ defmodule JanPaintingsWeb.PageHTML do
          scroll margin keeps the card clear of the sticky menu bar. --%>
     <.link
       id={"print-#{@print.slug}"}
-      navigate={~p"/prints/#{@print.category}/#{@print.slug}"}
+      href={~p"/prints/#{@print.category}/#{@print.slug}"}
       class="group flex min-w-0 scroll-mt-20 flex-col"
     >
       <div class="mat flex aspect-[4/5] items-center justify-center p-4">
