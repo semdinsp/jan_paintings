@@ -118,14 +118,27 @@
         </.detail>
       </dl>
 
-      <.link
-        href={~p"/contact?#{[print: @print.slug]}"}
-        class="btn btn-primary mt-8 w-full sm:w-auto"
-      >
-        {if @print.status == "available",
-          do: "Enquire",
-          else: "Ask about similar prints"}
-      </.link>
+      <div class="mt-8 flex gap-3">
+        <.link
+          href={~p"/contact?#{[print: @print.slug]}"}
+          class="btn btn-primary flex-1 sm:flex-none"
+        >
+          {if @print.status == "available",
+            do: "Enquire",
+            else: "Ask about similar prints"}
+        </.link>
+        <%!-- Admins only: straight to this print's edit form. --%>
+        <.link
+          :if={JanPaintings.Accounts.Scope.admin?(@current_scope)}
+          id="edit-print"
+          href={~p"/admin/prints/#{@print.id}/edit"}
+          class="btn btn-square btn-secondary-rose"
+          title="Edit this print"
+          aria-label="Edit this print"
+        >
+          <.icon name="hero-pencil-square" class="size-5" />
+        </.link>
+      </div>
       <.link
         :if={@more_by_artist?}
         navigate={~p"/prints?#{[q: JanPaintings.Catalog.artist_query(@print)]}"}

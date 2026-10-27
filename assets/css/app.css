@@ -272,6 +272,10 @@ p { text-wrap: pretty; }
   padding-inline: 1.25rem;
   text-shadow: none;
 }
+/* Icon-only square buttons: the padding above would squeeze the icon to nothing. */
+.btn-square {
+  padding-inline: 0;
+}
 /* Primary buttons are the header's own colour (--dusk) with ink text; white
    would be too faint on it. A shade deeper on hover. */
 .btn-primary {
