@@ -1,7 +1,9 @@
 defmodule JanPaintingsWeb.PrintControllerTest do
   use JanPaintingsWeb.ConnCase
 
-  alias JanPaintings.Catalog
+  import JanPaintings.AccountsFixtures
+
+  alias JanPaintings.{Accounts, Catalog}
 
   test "lists prints for each category", %{conn: conn} do
     for category <- Catalog.categories() do
@@ -127,6 +129,32 @@ defmodule JanPaintingsWeb.PrintControllerTest do
              ~r{<a[^>]*href="/contact\?print=beham-leda-and-the-swan"[^>]*>\s*Enquire\s*</a>}
 
     refute html =~ "Enquire about this print"
+  end
+
+  describe "edit button" do
+    test "admins get an edit button beside Enquire", %{conn: conn} do
+      print = Catalog.get_public_print("beham-leda-and-the-swan")
+      {:ok, admin} = Accounts.set_admin(user_fixture(), true)
+
+      html =
+        conn
+        |> log_in_user(admin)
+        |> get(~p"/prints/old-masters/beham-leda-and-the-swan")
+        |> html_response(200)
+
+      assert html =~ ~s(href="/admin/prints/#{print.id}/edit")
+      assert html =~ ~s(id="edit-print")
+    end
+
+    test "visitors and non-admin users do not see it", %{conn: conn} do
+      refute conn |> get(~p"/prints/old-masters/beham-leda-and-the-swan") |> html_response(200) =~
+               ~s(id="edit-print")
+
+      refute conn
+             |> log_in_user(user_fixture())
+             |> get(~p"/prints/old-masters/beham-leda-and-the-swan")
+             |> html_response(200) =~ ~s(id="edit-print")
+    end
   end
 
   test "a series title marked with asterisks is shown in italics", %{conn: conn} do
