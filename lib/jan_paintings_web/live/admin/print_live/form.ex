@@ -79,8 +79,14 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Form do
           <p id="title-italics-hint" class="-mt-1 text-xs text-base-content/60">
             Put *asterisks* around a book or series title to show it in italics.
           </p>
+          <.input
+            field={@form[:medium]}
+            type="textarea"
+            label="Medium"
+            rows="2"
+            placeholder="Etching"
+          />
           <div class="grid gap-x-4 sm:grid-cols-2">
-            <.input field={@form[:medium]} label="Medium" placeholder="Etching" />
             <div>
               <.input
                 field={@form[:price]}
