@@ -335,6 +335,32 @@ defmodule JanPaintingsWeb.Admin.PrintLiveTest do
       assert updated.gallery == print.gallery
     end
 
+    test "Save and view saves, then opens the print's page", %{conn: conn, print: print} do
+      {:ok, view, _html} = live(conn, ~p"/admin/prints/#{print.id}/edit")
+      assert has_element?(view, "#save-and-view[name=then][value=view]")
+
+      view
+      |> form("#print-form", print: %{price: "$5,000 USD"})
+      |> render_submit(%{"then" => "view"})
+
+      path = "/prints/#{print.category}/#{print.slug}"
+      flash = assert_redirect(view, path)
+      assert flash["info"] =~ "Saved"
+      assert Catalog.get_print(print.slug).price == "$5,000 USD"
+
+      assert conn |> get(path) |> html_response(200) =~ "$5,000 USD"
+    end
+
+    test "Save and view sends a draft back to the list", %{conn: conn, print: print} do
+      {:ok, view, _html} = live(conn, ~p"/admin/prints/#{print.id}/edit")
+
+      view
+      |> form("#print-form", print: %{status: "draft"})
+      |> render_submit(%{"then" => "view"})
+
+      assert_redirect(view, ~p"/admin/prints")
+    end
+
     test "edits the medium in a text block, with room for a long one", %{
       conn: conn,
       print: print
