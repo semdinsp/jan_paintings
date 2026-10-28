@@ -249,6 +249,12 @@ defmodule JanPaintingsWeb.PrintControllerTest do
     assert under_images =~ ~r/<p[^>]*italic[^>]*>\s*Second thought.\s*<\/p>/
     refute under_images =~ "Additional notes"
     assert String.split(html, ~s(id="print-notes")) |> hd() =~ ~s(id="print-main-image")
+
+    # Beside the magnifier button, in the same row.
+    [_, row] = String.split(html, ~s(id="print-under-image"), parts: 2)
+    [row, _] = String.split(row, "</a>", parts: 2)
+    assert row =~ "Second thought."
+    assert row =~ ~s(id="print-view-larger")
   end
 
   test "shows prices with their currency", %{conn: conn} do
@@ -361,6 +367,10 @@ defmodule JanPaintingsWeb.PrintControllerTest do
     # A button with a magnifier, and the image itself, both open the larger view...
     assert html =~
              ~r/<a(?=[^>]*id="print-view-larger")(?=[^>]*href="#{large}")(?=[^>]*data-lightbox)[^>]*class="btn[^"]*"[^>]*>\s*<span[^>]*hero-magnifying-glass-plus/
+
+    # The magnifier says it; the button has no words, only a label for screen readers.
+    assert html =~ ~r/<a(?=[^>]*id="print-view-larger")(?=[^>]*aria-label="View larger")/
+    refute html =~ ~r/hero-magnifying-glass-plus[^>]*><\/span>\s*View larger/
 
     assert html =~
              ~r/<a(?=[^>]*id="print-main-link")(?=[^>]*data-lightbox)[^>]*href="#{large}"/
