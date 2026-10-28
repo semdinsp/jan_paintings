@@ -335,6 +335,23 @@ defmodule JanPaintingsWeb.Admin.PrintLiveTest do
       assert updated.gallery == print.gallery
     end
 
+    test "edits the medium in a text block, with room for a long one", %{
+      conn: conn,
+      print: print
+    } do
+      {:ok, view, _html} = live(conn, ~p"/admin/prints/#{print.id}/edit")
+      assert has_element?(view, "textarea[name='print[medium]']")
+
+      medium = List.duplicate("Etching with drypoint, on laid paper.", 10) |> Enum.join(" ")
+
+      view
+      |> form("#print-form", print: %{medium: medium})
+      |> render_submit()
+
+      assert_redirect(view, ~p"/admin/prints")
+      assert Catalog.get_print(print.slug).medium == medium
+    end
+
     test "removes an extra view", %{conn: conn, print: print} do
       assert length(print.gallery) == 2
       {:ok, view, _html} = live(conn, ~p"/admin/prints/#{print.id}/edit")
