@@ -156,4 +156,13 @@
       </.link>
     </div>
   </div>
+
+  <%!-- Phones: the page is one long column, so the back link is repeated at its end. --%>
+  <.link
+    id="print-back-bottom"
+    href={~p"/prints/#{@category.slug}" <> "#print-#{@print.slug}"}
+    class="link-more mt-10 inline-block md:hidden"
+  >
+    ← {@category.name}
+  </.link>
 </Layouts.app>

@@ -116,6 +116,10 @@ defmodule JanPaintingsWeb.PrintControllerTest do
     assert html =~
              ~r/<a(?=[^>]*class="link-more")[^>]*href="\/prints\/old-masters##{anchor}"/
 
+    # Repeated at the bottom of the page on phones only.
+    assert html =~
+             ~r/<a(?=[^>]*id="print-back-bottom")(?=[^>]*class="[^"]*md:hidden)[^>]*href="\/prints\/old-masters##{anchor}"[^>]*>\s*← Old Master Prints\s*<\/a>/
+
     list = conn |> get(~p"/prints/old-masters") |> html_response(200)
     assert list =~ ~r/<a(?=[^>]*id="#{anchor}")[^>]*href="\/prints\/old-masters\/#{print.slug}"/
   end
