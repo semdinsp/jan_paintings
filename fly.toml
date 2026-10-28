@@ -28,7 +28,9 @@ kill_signal = 'SIGTERM'
   force_https = true
   auto_stop_machines = 'stop'
   auto_start_machines = true
-  min_machines_running = 0
+  # Keep the one machine running: it is tied to the volume's host, and a
+  # stopped machine can fail to come back if that host fills up.
+  min_machines_running = 1
   processes = ['app']
 
   [http_service.concurrency]
