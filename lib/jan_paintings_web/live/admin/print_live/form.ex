@@ -200,6 +200,16 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Form do
 
         <div class="sticky bottom-0 z-10 -mx-4 flex flex-wrap items-center gap-3 border-t border-rule bg-paper px-4 py-3 md:-mx-6 md:px-6 lg:col-span-2">
           <.button phx-disable-with="Saving…" class="btn btn-primary">Save print</.button>
+          <%!-- Saves, then opens the print's page on the site (drafts go back to the list). --%>
+          <.button
+            id="save-and-view"
+            name="then"
+            value="view"
+            phx-disable-with="Saving…"
+            class="btn btn-secondary-rose"
+          >
+            Save and view
+          </.button>
           <.link navigate={~p"/admin/prints"} class="btn btn-ghost">Cancel</.link>
           <button
             :if={@print.id}
@@ -390,9 +400,12 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Form do
     {:noreply, assign_form(socket, changeset)}
   end
 
-  def handle_event("save", %{"print" => params}, socket) do
+  def handle_event("save", %{"print" => params} = form_params, socket) do
     params = params |> Map.put("gallery", socket.assigns.gallery) |> put_uploads(socket)
-    save(socket, socket.assigns.live_action, params)
+
+    socket
+    |> assign(:view_after_save?, form_params["then"] == "view")
+    |> save(socket.assigns.live_action, params)
   end
 
   def handle_event("cancel_upload", %{"upload" => name, "ref" => ref}, socket) do
@@ -439,6 +452,16 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Form do
       {:ok, print} -> saved(socket, print, "Saved #{Catalog.plain_title(print.title)}.")
       {:error, changeset} -> {:noreply, assign_form(socket, changeset)}
     end
+  end
+
+  # "Save and view" opens the print's page, a controller page (so a full
+  # redirect); drafts are not on the site, so they go back to the list.
+  defp saved(%{assigns: %{view_after_save?: true}} = socket, %{status: status} = print, message)
+       when status != "draft" do
+    {:noreply,
+     socket
+     |> put_flash(:info, message)
+     |> redirect(to: JanPaintingsWeb.SEO.print_path(print))}
   end
 
   defp saved(socket, _print, message) do
