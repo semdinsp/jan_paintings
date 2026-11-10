@@ -113,11 +113,17 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Form do
             rows="2"
             placeholder="Bartsch 96; New Hollstein 12"
           />
+          <p class="-mt-1 text-xs text-base-content/60">
+            Put *asterisks* around a book title to show it in italics.
+          </p>
           <.input field={@form[:state]} label="State" placeholder="Second state of three" />
           <%!-- In the order the print page shows them. --%>
           <.input field={@form[:watermark]} label="Watermark" />
           <.input field={@form[:provenance]} type="textarea" label="Provenance" rows="2" />
           <.input field={@form[:condition]} type="textarea" label="Condition" rows="3" />
+          <p class="-mt-1 text-xs text-base-content/60">
+            Put *asterisks* around a book or series title to show it in italics.
+          </p>
           <div class="grid gap-x-4 sm:grid-cols-2">
             <div>
               <.input

@@ -163,6 +163,7 @@ defmodule JanPaintingsWeb.SEO do
     body =
       [print.details, print.condition]
       |> Enum.find("", &(&1 not in [nil, ""]))
+      |> Catalog.plain_title()
 
     truncate("#{artist_name(print.artist)}, #{Catalog.plain_title(print.title)}. #{body}", 155)
   end
@@ -301,7 +302,8 @@ defmodule JanPaintingsWeb.SEO do
   # Prefer the catalogue references field; older records may only have them
   # inside the details line.
   @catalogues ~r/Bartsch|Hollstein|TIB|Hind|Lugt|Delteil|Béraldi|Dodgson|Le ?Blanc|Nagler|Passavant|Heller|Andresen|Meyer|Wentworth|Godefroy|Guérin|Inventaire/u
-  defp catalogue_citation(%{catalogue_references: refs}) when refs not in [nil, ""], do: refs
+  defp catalogue_citation(%{catalogue_references: refs}) when refs not in [nil, ""],
+    do: Catalog.plain_title(refs)
 
   defp catalogue_citation(%{details: details}) do
     if details && Regex.match?(@catalogues, details), do: details
