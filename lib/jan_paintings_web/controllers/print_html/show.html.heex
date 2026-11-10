@@ -107,11 +107,13 @@
       <dl class="mt-6 border-t border-rule">
         <.detail :if={@print.medium != ""} label="Medium">{@print.medium}</.detail>
         <.detail :if={@print.catalogue_references != ""} label="Catalogue reference">
-          {@print.catalogue_references}
+          <.marked_text text={@print.catalogue_references} />
         </.detail>
         <.detail :if={@print.watermark != ""} label="Watermark">{@print.watermark}</.detail>
         <.detail :if={@print.provenance != ""} label="Provenance">{@print.provenance}</.detail>
-        <.detail :if={@print.condition != ""} label="Condition">{@print.condition}</.detail>
+        <.detail :if={@print.condition != ""} label="Condition">
+          <.marked_text text={@print.condition} />
+        </.detail>
         <.detail :if={@print.dimensions != ""} label="Size">{@print.dimensions}</.detail>
         <.detail :if={@print.sheet_size != ""} label="Sheet">{@print.sheet_size}</.detail>
         <.detail :if={@notes != []} label="Additional notes" class="md:hidden">

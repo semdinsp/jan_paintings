@@ -178,6 +178,31 @@ defmodule JanPaintingsWeb.PrintControllerTest do
     assert list =~ "plate 4 from <em>Souvenirs</em>"
   end
 
+  test "book titles marked with asterisks in the reference and condition are italic",
+       %{conn: conn} do
+    print = Catalog.get_print("dusart-fiddler-in-an-inn")
+
+    {:ok, print} =
+      Catalog.update_print(print, %{
+        "details" => "",
+        "catalogue_references" => "Hollstein 15; see *Dutch Etchings*",
+        "condition" => "As described in *Rembrandt's Mirror*, a fine impression"
+      })
+
+    html = conn |> get(~p"/prints/old-masters/#{print.slug}") |> html_response(200)
+    assert html =~ "Hollstein 15; see <em>Dutch Etchings</em>"
+    assert html =~ "As described in <em>Rembrandt&#39;s Mirror</em>, a fine impression"
+    refute html =~ "*Dutch Etchings*"
+    refute html =~ "*Rembrandt"
+
+    # Plain text in the meta description and structured data.
+    assert [_, description] = Regex.run(~r/name="description" content="([^"]*)"/, html)
+    assert description =~ "Rembrandt&#39;s Mirror, a fine"
+
+    [_, json] = Regex.run(~r{<script[^>]*type="application/ld\+json"[^>]*>(.*?)</script>}s, html)
+    assert Jason.decode!(json)["citation"] == "Hollstein 15; see Dutch Etchings"
+  end
+
   test "lists the details in the gallery's order, without the state", %{conn: conn} do
     print = Catalog.get_print("dusart-fiddler-in-an-inn")
 

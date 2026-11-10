@@ -435,6 +435,16 @@ defmodule JanPaintingsWeb.CoreComponents do
     ~H"{title_html(@title)}"
   end
 
+  @doc """
+  Catalogue text, such as a catalogue reference or condition note, with any
+  *asterisked* book or series titles in italics, as in `print_title/1`.
+  """
+  attr :text, :string, required: true
+
+  def marked_text(assigns) do
+    ~H"{title_html(@text)}"
+  end
+
   # Built as one string, so no whitespace creeps in around the <em>.
   defp title_html(title) do
     html =
