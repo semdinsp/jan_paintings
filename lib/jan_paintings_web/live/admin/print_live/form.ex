@@ -109,12 +109,15 @@ defmodule JanPaintingsWeb.Admin.PrintLive.Form do
           <.input
             field={@form[:catalogue_references]}
             type="textarea"
-            label="Catalogue references"
+            label="Catalogue references*"
             rows="2"
             placeholder="Bartsch 96; New Hollstein 12"
           />
           <p class="-mt-1 text-xs text-base-content/60">
             Put *asterisks* around a book title to show it in italics.
+          </p>
+          <p id="catalogue-references-canadian-hint" class="-mt-1 text-xs text-base-content/60">
+            * Shown as "Details" on Canadian prints.
           </p>
           <.input field={@form[:state]} label="State" placeholder="Second state of three" />
           <%!-- In the order the print page shows them. --%>

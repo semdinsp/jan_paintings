@@ -305,6 +305,8 @@ defmodule JanPaintingsWeb.Admin.PrintLiveTest do
     test "updates the description and keeps the images", %{conn: conn, print: print} do
       {:ok, view, html} = live(conn, ~p"/admin/prints/#{print.id}/edit")
       assert html =~ print.title
+      assert html =~ "Catalogue references*"
+      assert html =~ ~s(* Shown as &quot;Details&quot; on Canadian prints.)
 
       view
       |> form("#print-form",
