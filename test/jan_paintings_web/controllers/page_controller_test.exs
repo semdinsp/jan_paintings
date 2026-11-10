@@ -102,12 +102,26 @@ defmodule JanPaintingsWeb.PageControllerTest do
     assert html =~ "International Fine Print Dealers"
     assert html =~ "acting at auction for clients and performing appraisals"
 
-    # The museum clients, in alphabetical order.
+    # The museum clients: three featured, then the rest in alphabetical order.
     [clients] = Regex.run(~r{<section[^>]*id="about-clients".*?</section>}s, html)
-    names = Regex.scan(~r{<li[^>]*>\s*(.*?)\s*</li>}s, clients, capture: :all_but_first)
+
+    names =
+      Regex.scan(~r{<li[^>]*>\s*(.*?)\s*</li>}s, clients, capture: :all_but_first)
+      |> List.flatten()
+
     assert length(names) == 43
-    assert ["Agnes Etherington Art Centre" <> _] = hd(names)
-    assert ["Zimmerli Art Museum" <> _] = List.last(names)
+
+    assert Enum.take(names, 3) ==
+             [
+               "Metropolitan Museum of Art",
+               "Rijksmuseum, Amsterdam",
+               "National Gallery of Canada, Ottawa"
+             ]
+
+    rest = Enum.drop(names, 3)
+    assert "Agnes Etherington Art Centre" <> _ = hd(rest)
+    assert "Zimmerli Art Museum" <> _ = List.last(rest)
+    assert Regex.scan(~r/<li>([^<]*)<\/li>/, clients, capture: :all_but_first) |> length() == 3
     assert clients =~ "British Museum"
     assert clients =~ "Some of the museums we have worked with:"
 
