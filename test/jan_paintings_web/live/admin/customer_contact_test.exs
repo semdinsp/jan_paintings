@@ -6,7 +6,12 @@ defmodule JanPaintingsWeb.Admin.CustomerContactTest do
 
   alias JanPaintings.{Accounts, CustomerContactHost, Inquiries}
 
-  @pages ["/admin/contact", "/admin/contact/audience", "/admin/contact/campaigns/new"]
+  @pages [
+    "/admin/contact",
+    "/admin/contact/audience",
+    "/admin/contact/campaigns/new",
+    "/admin/contact/images"
+  ]
 
   test "visitors and non-admins are sent away from the campaign pages", %{conn: conn} do
     for path <- @pages do
@@ -61,5 +66,14 @@ defmodule JanPaintingsWeb.Admin.CustomerContactTest do
     conn = get(conn, "/cc/o/anything.gif")
     assert response(conn, 200)
     assert response_content_type(conn, :gif) =~ "image/gif"
+  end
+
+  test "campaign images are served without a session or the site password", %{conn: conn} do
+    Application.put_env(:jan_paintings, :basic_auth, username: "jan", password: "secret")
+    on_exit(fn -> Application.put_env(:jan_paintings, :basic_auth, []) end)
+
+    # An unknown image is a 404 from the dep, not a 401 from the site password.
+    conn = get(conn, "/cc/i/00000000-0000-0000-0000-000000000000/missing.png")
+    assert conn.status == 404
   end
 end
