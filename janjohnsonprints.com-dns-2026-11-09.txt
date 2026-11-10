@@ -1,0 +1,18 @@
+; DNS records for janjohnsonprints.com
+; Captured 2026-11-09 via Google Public DNS (dns.google)
+; Nameservers: Uniserve (ns1/ns2.uniservehosting.com), cPanel hosting
+; Note: lookups from outside can only find names that were queried. Records not listed here may exist; compare with the zone editor in Uniserve's cPanel.
+
+janjohnsonprints.com.                    21600  NS     ns1.uniservehosting.com.
+janjohnsonprints.com.                    21600  NS     ns2.uniservehosting.com.
+janjohnsonprints.com.                    21600  SOA    ns1.uniservehosting.com. alerts.uniserveteam.com. 2026101501 3600 1800 1209600 86400
+janjohnsonprints.com.                    14400  A      216.113.194.113
+janjohnsonprints.com.                    14400  MX     0 janjohnsonprints.com.
+janjohnsonprints.com.                    14400  TXT    "v=spf1 ip4:216.113.196.150 include:spf.uniservehosting.com ip4:216.113.196.146 ip4:216.113.194.65 ip4:172.16.155.155 +a +mx +ip4:216.113.193.54 ~all"
+www.janjohnsonprints.com.                14400  CNAME  janjohnsonprints.com.
+mail.janjohnsonprints.com.               14400  CNAME  janjohnsonprints.com.
+ftp.janjohnsonprints.com.                14400  A      216.113.194.113
+default._domainkey.janjohnsonprints.com. 14400  TXT    "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmhuFszfz3TVVulbfucN2fXZPsLrB35y8IqaQUZ9eXtgaOoWSqrYNbMZgYM1IYvmwkxQ8qTCHA4hJQMONMSTMVFx5/OZL4Q/obmaWmAHElJl3qwXbih5BEvytagAuKAY7DvPt5J6upYsITDftpyJEyHu5NBkgpGaDDQW9SO/RYaoKYpshdkdOJarDGpcP1ro02w+pufPxtwROO9oywxCEdXdflNNKlv7b/ku+qyG9arJzltMNX8F1MeolNofJma3S/5i7xDOqIcHWlFYV/XOK/64Df4HI8gGV3vIZ2TgxPIZDTRPQZzVInmrRPL1wuV4N54/hN7+4PKA7mOStDtTPoQIDAQAB;"
+_autodiscover._tcp.janjohnsonprints.com. 14400  SRV    0 0 443 cpanelemaildiscovery.cpanel.net.
+
+; Not found: AAAA, CAA, DMARC (_dmarc), Google/Microsoft DKIM selectors
