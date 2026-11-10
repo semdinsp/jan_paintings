@@ -203,6 +203,20 @@ defmodule JanPaintingsWeb.PrintControllerTest do
     assert Jason.decode!(json)["citation"] == "Hollstein 15; see Dutch Etchings"
   end
 
+  test "canadian prints label the catalogue reference as Details", %{conn: conn} do
+    print = Catalog.get_print("buller-lovers")
+    {:ok, print} = Catalog.update_print(print, %{"catalogue_references" => "Signed in pencil"})
+
+    html = conn |> get(~p"/prints/canadian/#{print.slug}") |> html_response(200)
+    assert html =~ ~r{>Details</dt>\s*<dd[^>]*>\s*Signed in pencil}
+    refute html =~ ">Catalogue reference</dt>"
+
+    other = Catalog.get_print("dusart-fiddler-in-an-inn")
+    {:ok, _} = Catalog.update_print(other, %{"catalogue_references" => "Hollstein 15"})
+    html = conn |> get(~p"/prints/old-masters/#{other.slug}") |> html_response(200)
+    assert html =~ ">Catalogue reference</dt>"
+  end
+
   test "lists the details in the gallery's order, without the state", %{conn: conn} do
     print = Catalog.get_print("dusart-fiddler-in-an-inn")
 
