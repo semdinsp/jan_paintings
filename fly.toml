@@ -12,7 +12,7 @@ kill_signal = 'SIGTERM'
   release_command = '/app/bin/migrate'
 
 [env]
-  PHX_HOST = 'jan-prints.fly.dev'
+  PHX_HOST = 'www.janjohnsonprints.com'
   PORT = '8080'
   # Images uploaded from the admin pages, kept on the volume below.
   UPLOADS_DIR = '/data/uploads'
