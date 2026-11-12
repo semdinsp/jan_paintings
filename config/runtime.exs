@@ -93,6 +93,17 @@ if config_env() == :prod do
 
   config :jan_paintings, JanPaintingsWeb.Endpoint,
     url: [host: host, port: 443, scheme: "https"],
+    # The site is reached on several hostnames (fly.dev plus the custom
+    # domain, with and without www). By default Phoenix only accepts
+    # LiveView socket connections whose Origin matches url[:host], so list
+    # every hostname here or the socket is refused.
+    check_origin:
+      Enum.uniq([
+        "//#{host}",
+        "//jan-prints.fly.dev",
+        "//janjohnsonprints.com",
+        "//www.janjohnsonprints.com"
+      ]),
     http: [
       # Enable IPv6 and bind on all interfaces.
       # Set it to  {0, 0, 0, 0, 0, 0, 0, 1} for local network only access.
