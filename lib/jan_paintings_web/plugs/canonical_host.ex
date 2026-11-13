@@ -10,6 +10,10 @@ defmodule JanPaintingsWeb.Plugs.CanonicalHost do
 
   In production this comes from the CANONICAL_HOST environment variable.
   Set PHX_HOST to the same host so canonical URLs and redirects agree.
+
+  Only GET and HEAD requests are redirected. Clients do not reliably resend a
+  POST body after a 301, so webhooks (such as the SNS endpoint at /cc/sns)
+  keep working on whichever hostname they were registered with.
   """
   @behaviour Plug
 
@@ -21,8 +25,13 @@ defmodule JanPaintingsWeb.Plugs.CanonicalHost do
   @impl true
   def call(conn, _opts) do
     case Application.get_env(:jan_paintings, :canonical_host) do
-      host when is_binary(host) and host != "" and host != conn.host -> redirect(conn, host)
-      _ -> conn
+      host
+      when is_binary(host) and host != "" and host != conn.host and
+             conn.method in ["GET", "HEAD"] ->
+        redirect(conn, host)
+
+      _ ->
+        conn
     end
   end
 

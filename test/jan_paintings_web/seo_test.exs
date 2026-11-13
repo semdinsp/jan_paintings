@@ -215,6 +215,18 @@ defmodule JanPaintingsWeb.SEOTest do
       assert get_resp_header(conn, "location") == ["https://janjohnsonprints.com/prints?q=dore"]
     end
 
+    test "does not redirect POSTs, so webhooks on other hosts still work", %{conn: conn} do
+      Application.put_env(:jan_paintings, :canonical_host, "janjohnsonprints.com")
+
+      conn =
+        conn
+        |> Map.put(:host, "jan-prints.fly.dev")
+        |> put_req_header("content-type", "application/json")
+        |> post("/cc/sns", "{}")
+
+      refute conn.status == 301
+    end
+
     test "leaves requests on the canonical host alone", %{conn: conn} do
       Application.put_env(:jan_paintings, :canonical_host, "janjohnsonprints.com")
       conn = conn |> Map.put(:host, "janjohnsonprints.com") |> get("/about")
