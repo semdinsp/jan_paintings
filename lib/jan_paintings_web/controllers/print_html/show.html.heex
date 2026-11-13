@@ -39,7 +39,7 @@
             id="print-notes"
             class={["hidden max-w-[68ch] md:block", @print.gallery != [] && "mt-3"]}
           >
-            <p :for={paragraph <- @notes} class="italic text-ink-2 [&+&]:mt-3">{paragraph}</p>
+            <p :for={paragraph <- @notes} class="italic text-ink [&+&]:mt-3">{paragraph}</p>
           </div>
         </div>
         <a
@@ -121,7 +121,7 @@
         <.detail :if={@print.dimensions != ""} label="Size">{@print.dimensions}</.detail>
         <.detail :if={@print.sheet_size != ""} label="Sheet">{@print.sheet_size}</.detail>
         <.detail :if={@notes != []} label="Additional notes" class="md:hidden">
-          <p :for={paragraph <- @notes} class="italic text-ink-2 [&+&]:mt-3">{paragraph}</p>
+          <p :for={paragraph <- @notes} class="italic text-ink [&+&]:mt-3">{paragraph}</p>
         </.detail>
         <.detail label="Price">
           <span :if={@print.status == "sold"} class="text-sold">Sold</span>
