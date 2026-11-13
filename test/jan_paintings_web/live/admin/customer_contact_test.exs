@@ -59,20 +59,14 @@ defmodule JanPaintingsWeb.Admin.CustomerContactTest do
     assert brand.primary_color == "#c2918d"
   end
 
-  test "the open pixel works without a session or the site password", %{conn: conn} do
-    Application.put_env(:jan_paintings, :basic_auth, username: "jan", password: "secret")
-    on_exit(fn -> Application.put_env(:jan_paintings, :basic_auth, []) end)
-
+  test "the open pixel works without a session", %{conn: conn} do
     conn = get(conn, "/cc/o/anything.gif")
     assert response(conn, 200)
     assert response_content_type(conn, :gif) =~ "image/gif"
   end
 
-  test "campaign images are served without a session or the site password", %{conn: conn} do
-    Application.put_env(:jan_paintings, :basic_auth, username: "jan", password: "secret")
-    on_exit(fn -> Application.put_env(:jan_paintings, :basic_auth, []) end)
-
-    # An unknown image is a 404 from the dep, not a 401 from the site password.
+  test "campaign images are served without a session", %{conn: conn} do
+    # An unknown image is a 404 from the dep.
     conn = get(conn, "/cc/i/00000000-0000-0000-0000-000000000000/missing.png")
     assert conn.status == 404
   end

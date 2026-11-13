@@ -39,7 +39,7 @@ npm-debug.log
 # gstack browse/QA reports
 /.gstack/
 
-# Environment files with local secrets (BASIC_AUTH_PASSWORD, mail API keys, etc.).
+# Environment files with local secrets (mail API keys, etc.).
 .env
 .env.*
 !.env.example
