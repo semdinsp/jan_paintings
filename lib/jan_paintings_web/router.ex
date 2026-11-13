@@ -12,13 +12,6 @@ defmodule JanPaintingsWeb.Router do
     plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug :fetch_current_scope_for_user
-    # Site-wide password while the site is private; delete this line to remove it.
-    plug JanPaintingsWeb.Plugs.BasicAuth
-  end
-
-  # Crawler files (sitemap, robots, llms.txt): no session, same optional password.
-  pipeline :crawler_files do
-    plug JanPaintingsWeb.Plugs.BasicAuth
   end
 
   pipeline :api do
@@ -26,14 +19,11 @@ defmodule JanPaintingsWeb.Router do
   end
 
   # Campaign email links (open pixel, click redirect, unsubscribe) and the
-  # Amazon SNS webhook. Outside every pipeline: no CSRF check (signed tokens
-  # and AWS signatures authorize them) and no site password, so links in
-  # emails work while the site is private.
+  # Amazon SNS webhook. Outside every pipeline: no session or CSRF check
+  # (signed tokens and AWS signatures authorize them).
   forward "/cc", CustomerContact.Web.PublicPlug
 
   scope "/", JanPaintingsWeb do
-    pipe_through :crawler_files
-
     get "/sitemap.xml", SEOController, :sitemap
     get "/robots.txt", SEOController, :robots
     get "/llms.txt", SEOController, :llms
