@@ -37,7 +37,7 @@
           <div
             :if={@notes != []}
             id="print-notes"
-            class={["hidden max-w-[68ch] pl-2 md:block", @print.gallery != [] && "mt-3"]}
+            class={["hidden max-w-[68ch] pl-3 md:block", @print.gallery != [] && "mt-3"]}
           >
             <p :for={paragraph <- @notes} class="italic text-ink [&+&]:mt-3">{paragraph}</p>
           </div>
