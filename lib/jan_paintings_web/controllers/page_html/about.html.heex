@@ -49,12 +49,12 @@
   </div>
 
   <%!-- Shown in place of the museum clients while that section is hidden. The print is
-       sold and purely decorative, so it has no caption; the mat hugs the image and sits
-       flush with the left edge of the text. --%>
+       sold and purely decorative, so it has no caption; the mat hugs the image, sits
+       flush with the left edge of the text and starts right at the rule. --%>
   <figure
     :if={!@show_museum_clients}
     id="about-feature-print"
-    class="mt-12 border-t border-rule pt-12 md:mt-16"
+    class="mt-12 border-t border-rule md:mt-16"
   >
     <div class="mat w-fit max-w-full p-4 lg:p-6">
       <img
