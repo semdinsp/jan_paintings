@@ -102,6 +102,36 @@ defmodule JanPaintingsWeb.PageControllerTest do
     assert html =~ "International Fine Print Dealers"
     assert html =~ "acting at auction for clients and performing appraisals"
 
+    # The museum clients are hidden for now; a featured print takes their place.
+    refute html =~ ~s(id="about-clients")
+    assert html =~ ~r/<figure[^>]*id="about-feature-print"/
+    assert html =~ ~s(src="/images/morin-jean-soir-dhiver-montmartre.jpg")
+
+    [feature] = Regex.run(~r{<figure[^>]*id="about-feature-print".*?</figure>}s, html)
+
+    assert feature =~
+             ~r{<figcaption.*Morin-Jean.*Soir d(&#39;|')hiver à Montmartre.*</figcaption>}s
+
+    assert html =~ ~r/<h1[^>]*>About Us<\/h1>/
+    assert html =~ ~s(src="/images/jan-johnson.jpg")
+    # Shown at every screen size, not only beside the text on wide screens.
+    [figure_class] =
+      Regex.run(~r/<figure[^>]*id="about-portrait"[^>]*class="([^"]*)"/, html,
+        capture: :all_but_first
+      )
+
+    refute figure_class =~ ~r/(^|\s)hidden(\s|$)/
+    assert html =~ ~r{property="og:image" content="[^"]*/images/jan-johnson.jpg"}
+  end
+
+  test "the About page's museum clients list renders when switched on" do
+    html =
+      %{flash: %{}, current_scope: nil, show_museum_clients: true}
+      |> JanPaintingsWeb.PageHTML.about()
+      |> Phoenix.LiveViewTest.rendered_to_string()
+
+    refute html =~ ~s(id="about-feature-print")
+
     # The museum clients: three featured, then the rest in alphabetical order.
     [clients] = Regex.run(~r{<section[^>]*id="about-clients".*?</section>}s, html)
 
@@ -131,16 +161,5 @@ defmodule JanPaintingsWeb.PageControllerTest do
 
     assert clients =~
              ~r/<button(?=[^>]*id="about-clients-toggle")(?=[^>]*aria-expanded="false")[^>]*>[\s\S]*?Show all 43 museums/
-
-    assert html =~ ~r/<h1[^>]*>About Us<\/h1>/
-    assert html =~ ~s(src="/images/jan-johnson.jpg")
-    # Shown at every screen size, not only beside the text on wide screens.
-    [figure_class] =
-      Regex.run(~r/<figure[^>]*id="about-portrait"[^>]*class="([^"]*)"/, html,
-        capture: :all_but_first
-      )
-
-    refute figure_class =~ ~r/(^|\s)hidden(\s|$)/
-    assert html =~ ~r{property="og:image" content="[^"]*/images/jan-johnson.jpg"}
   end
 end
