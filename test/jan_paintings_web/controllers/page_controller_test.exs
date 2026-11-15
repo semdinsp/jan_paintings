@@ -107,6 +107,11 @@ defmodule JanPaintingsWeb.PageControllerTest do
     assert html =~ ~r/<figure[^>]*id="about-feature-print"/
     assert html =~ ~s(src="/images/morin-jean-soir-dhiver-montmartre.jpg")
 
+    [feature] = Regex.run(~r{<figure[^>]*id="about-feature-print".*?</figure>}s, html)
+
+    assert feature =~
+             ~r{<figcaption.*Morin-Jean.*Soir d(&#39;|')hiver à Montmartre.*</figcaption>}s
+
     assert html =~ ~r/<h1[^>]*>About Us<\/h1>/
     assert html =~ ~s(src="/images/jan-johnson.jpg")
     # Shown at every screen size, not only beside the text on wide screens.
