@@ -30,6 +30,7 @@ config :jan_paintings, JanPaintingsWeb.Endpoint,
   adapter: Bandit.PhoenixAdapter,
   render_errors: [
     formats: [html: JanPaintingsWeb.ErrorHTML, json: JanPaintingsWeb.ErrorJSON],
+    root_layout: [html: {JanPaintingsWeb.Layouts, :root}],
     layout: false
   ],
   pubsub_server: JanPaintings.PubSub,
