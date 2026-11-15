@@ -48,7 +48,30 @@
     </figure>
   </div>
 
-  <section id="about-clients" class="mt-12 border-t border-rule pt-12 md:mt-16">
+  <%!-- Shown in place of the museum clients while that section is hidden. --%>
+  <figure
+    :if={!@show_museum_clients}
+    id="about-feature-print"
+    class="mt-12 border-t border-rule pt-12 md:mt-16"
+  >
+    <div class="mat flex items-center justify-center p-4 lg:p-8">
+      <img
+        src={~p"/images/morin-jean-soir-dhiver-montmartre.jpg"}
+        alt="Morin-Jean, Soir d'hiver à Montmartre: an etching of a lamplit cobbled street below a wall, with a windmill on the skyline"
+        width="995"
+        height="797"
+        loading="lazy"
+        class="max-h-[40rem] w-auto max-w-full object-contain"
+      />
+    </div>
+  </figure>
+
+  <%!-- Hidden for now; set @show_museum_clients in PageController.about/2 to show it again. --%>
+  <section
+    :if={@show_museum_clients}
+    id="about-clients"
+    class="mt-12 border-t border-rule pt-12 md:mt-16"
+  >
     <h2 class="type-h2">Museum clients</h2>
     <p class="mt-3 max-w-[68ch] text-ink-2">
       Some of the museums we have worked with:

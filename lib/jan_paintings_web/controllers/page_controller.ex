@@ -45,11 +45,16 @@ defmodule JanPaintingsWeb.PageController do
     redirect(conn, to: ~p"/contact?#{[print: slug]}")
   end
 
+  # The museum clients list on the About page is kept but not shown; set this
+  # to true to show it again (it replaces the featured print).
+  @show_museum_clients false
+
   def about(conn, _params) do
     render(conn, :about,
+      show_museum_clients: @show_museum_clients,
       page_title: "About the gallery",
       meta_description:
-        "Jan Johnson has dealt in fine prints since 1979, first in London and from 1982 in Montreal. Our museum clients and services.",
+        "Jan Johnson has dealt in fine prints since 1979, first in London and from 1982 in Montreal. Our history and services.",
       canonical_path: "/about",
       og_image: "/images/jan-johnson.jpg",
       json_ld: SEO.gallery_json_ld()
