@@ -109,8 +109,8 @@ defmodule JanPaintingsWeb.PageControllerTest do
 
     [feature] = Regex.run(~r{<figure[^>]*id="about-feature-print".*?</figure>}s, html)
 
-    assert feature =~
-             ~r{<figcaption.*Morin-Jean.*Soir d(&#39;|')hiver à Montmartre.*</figcaption>}s
+    # Sold and only decorative here, so no name/title caption.
+    refute feature =~ "<figcaption"
 
     assert html =~ ~r/<h1[^>]*>About Us<\/h1>/
     assert html =~ ~s(src="/images/jan-johnson.jpg")
