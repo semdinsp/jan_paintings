@@ -14,7 +14,7 @@ defmodule JanPaintingsWeb.UserLive.LoginTest do
       {:ok, _lv, html} = live(conn, ~p"/users/log-in")
 
       assert html =~ "Log in"
-      assert html =~ "Sign up"
+      refute html =~ "Sign up"
       assert html =~ "Log in with email"
     end
   end
@@ -96,17 +96,9 @@ defmodule JanPaintingsWeb.UserLive.LoginTest do
     end
   end
 
-  describe "login navigation" do
-    test "redirects to registration page when the Register button is clicked", %{conn: conn} do
-      {:ok, lv, _html} = live(conn, ~p"/users/log-in")
-
-      {:ok, _login_live, login_html} =
-        lv
-        |> element("main a", "Sign up")
-        |> render_click()
-        |> follow_redirect(conn, ~p"/users/register")
-
-      assert login_html =~ "Register"
+  describe "registration" do
+    test "there is no public sign-up page", %{conn: conn} do
+      assert conn |> get("/users/register") |> html_response(404)
     end
   end
 
