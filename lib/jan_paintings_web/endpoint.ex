@@ -4,11 +4,13 @@ defmodule JanPaintingsWeb.Endpoint do
   # The session will be stored in the cookie and signed,
   # this means its contents can be read but not tampered with.
   # Set :encryption_salt if you would also like to encrypt it.
+  # In production the cookie is sent only over HTTPS (see config/prod.exs).
   @session_options [
     store: :cookie,
     key: "_jan_paintings_key",
     signing_salt: "7goSyitD",
-    same_site: "Lax"
+    same_site: "Lax",
+    secure: Application.compile_env(:jan_paintings, :secure_session_cookie, false)
   ]
 
   # Send other hostnames to the canonical one, when configured.

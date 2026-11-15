@@ -21,6 +21,9 @@ config :jan_paintings, JanPaintingsWeb.Endpoint,
   ]
 
 # Configure Swoosh API Client
+# Send the session cookie only over HTTPS.
+config :jan_paintings, :secure_session_cookie, true
+
 config :swoosh, api_client: Swoosh.ApiClient.Req
 
 # Disable Swoosh Local Memory Storage
