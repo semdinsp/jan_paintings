@@ -74,6 +74,10 @@
             alt={"#{@print.artist}, #{JanPaintings.Catalog.plain_title(@print.title)}"}
             class="print-lightbox-image"
           />
+          <%!-- Shown on the image's bottom-right corner once it loads (see app.js). --%>
+          <span id="print-lightbox-watermark" class="print-lightbox-watermark" aria-hidden="true">
+            janjohnsonprints.com
+          </span>
         </div>
       </dialog>
 
