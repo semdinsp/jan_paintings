@@ -323,6 +323,7 @@ p { text-wrap: pretty; }
   padding: max(0.75rem, env(safe-area-inset-top)) 1rem 0.75rem;
 }
 .print-lightbox-stage {
+  position: relative;
   flex: 1;
   min-height: 0;
   display: flex;
@@ -336,6 +337,21 @@ p { text-wrap: pretty; }
   width: 100%;
   height: 100%;
   object-fit: contain;
+}
+/* Site address over the larger image's bottom-right corner, placed by app.js
+   because object-fit leaves the image's edges inside its box. */
+.print-lightbox-watermark {
+  position: absolute;
+  display: none;
+  font-size: clamp(0.75rem, 1.6vmin, 1.125rem);
+  letter-spacing: 0.02em;
+  color: rgb(255 255 255 / 0.8);
+  text-shadow: 0 0 3px rgb(0 0 0 / 0.6);
+  pointer-events: none;
+  user-select: none;
+}
+.print-lightbox-watermark[data-placed] {
+  display: block;
 }
 body:has(.print-lightbox[open]) {
   overflow: hidden;

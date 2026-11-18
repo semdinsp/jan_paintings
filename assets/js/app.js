@@ -68,12 +68,41 @@ document.addEventListener("click", event => {
   const opener = event.target.closest("[data-lightbox]")
   if (opener) {
     event.preventDefault()
-    document.getElementById("print-lightbox-image").src = opener.href
+    const image = document.getElementById("print-lightbox-image")
+    if (image.getAttribute("src") !== opener.href) {
+      document.getElementById("print-lightbox-watermark")?.removeAttribute("data-placed")
+      image.src = opener.href
+    }
     dialog.showModal()
+    placeLightboxWatermark()
   } else if (event.target === dialog || event.target.matches(".print-lightbox-stage, .print-lightbox-image")) {
     dialog.close()
   }
 })
+
+// Puts the watermark just inside the bottom-right corner of the larger image as
+// drawn. The image fills the stage with object-fit: contain, so its visible
+// edges are worked out from its natural size.
+function placeLightboxWatermark() {
+  const image = document.getElementById("print-lightbox-image")
+  const mark = document.getElementById("print-lightbox-watermark")
+  if (!image || !mark || !image.complete || !image.naturalWidth || !image.clientWidth) return
+
+  const scale = Math.min(image.clientWidth / image.naturalWidth, image.clientHeight / image.naturalHeight)
+  const drawnRight = image.offsetLeft + (image.clientWidth + image.naturalWidth * scale) / 2
+  const drawnBottom = image.offsetTop + (image.clientHeight + image.naturalHeight * scale) / 2
+  const inset = 12
+
+  mark.style.right = `${image.offsetParent.clientWidth - drawnRight + inset}px`
+  mark.style.bottom = `${image.offsetParent.clientHeight - drawnBottom + inset}px`
+  mark.setAttribute("data-placed", "")
+}
+
+// Image load events don't bubble, so listen in the capture phase.
+document.addEventListener("load", event => {
+  if (event.target.id === "print-lightbox-image") placeLightboxWatermark()
+}, true)
+window.addEventListener("resize", placeLightboxWatermark)
 
 // About page museum clients: the button shows the rest of the list, or only
 // the first three again.

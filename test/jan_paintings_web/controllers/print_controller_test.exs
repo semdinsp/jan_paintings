@@ -426,6 +426,11 @@ defmodule JanPaintingsWeb.PrintControllerTest do
              ~r/<form method="dialog"[^>]*>\s*<button[^>]*id="print-lightbox-close"[^>]*>[\s\S]*?Close/
 
     assert html =~ ~s(id="print-lightbox-image")
+
+    # The larger view carries the site address as a watermark.
+    assert html =~
+             ~r/<span[^>]*id="print-lightbox-watermark"[^>]*aria-hidden="true"[^>]*>\s*janjohnsonprints\.com\s*</
+
     refute html =~ ~s(id="print-gallery")
   end
 
