@@ -190,21 +190,23 @@ defmodule JanPaintingsWeb.Layouts do
             <br /> <.link href={~p"/contact"} class="link">Contact us</.link>
             · <.link href={~p"/terms-of-sale"} class="link">Terms of sale</.link>
           </p>
-          <div class="flex items-start gap-5 md:col-span-2 lg:col-span-1 lg:justify-end">
-            <.link
-              :if={!@current_scope}
-              navigate={~p"/users/log-in"}
-              class="flex size-9 items-center justify-center text-ink hover:text-rose"
-              title="Log in"
-            >
-              <.icon name="hero-arrow-right-end-on-rectangle" class="size-5" />
-              <span class="sr-only">Log in</span>
-            </.link>
-            <.theme_toggle />
+          <div class="flex flex-col gap-4 md:col-span-2 lg:col-span-1 lg:items-end lg:justify-between">
+            <div class="flex items-start gap-5">
+              <.link
+                :if={!@current_scope}
+                navigate={~p"/users/log-in"}
+                class="flex size-9 items-center justify-center text-ink hover:text-rose"
+                title="Log in"
+              >
+                <.icon name="hero-arrow-right-end-on-rectangle" class="size-5" />
+                <span class="sr-only">Log in</span>
+              </.link>
+              <.theme_toggle />
+            </div>
+            <p class="text-sm">
+              &copy; {Date.utc_today().year} Old Master &amp; Modern Prints, Inc.
+            </p>
           </div>
-          <p class="text-sm md:col-span-2 lg:col-span-3">
-            &copy; {Date.utc_today().year} Old Master &amp; Modern Prints, Inc.
-          </p>
         </div>
       </footer>
     </div>
