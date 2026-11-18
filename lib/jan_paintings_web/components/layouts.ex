@@ -202,6 +202,9 @@ defmodule JanPaintingsWeb.Layouts do
             </.link>
             <.theme_toggle />
           </div>
+          <p class="text-sm md:col-span-2 lg:col-span-3">
+            &copy; {Date.utc_today().year} Old Master &amp; Modern Prints, Inc.
+          </p>
         </div>
       </footer>
     </div>
