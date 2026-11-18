@@ -7,6 +7,13 @@ defmodule JanPaintingsWeb.PageControllerTest do
     assert html =~ "Canadian Prints"
   end
 
+  test "the footer has a copyright line with the current year", %{conn: conn} do
+    html = conn |> get(~p"/") |> html_response(200)
+    [footer] = Regex.run(~r{<footer.*?</footer>}s, html)
+    year = Date.utc_today().year
+    assert footer =~ "&copy; #{year} Old Master &amp; Modern Prints, Inc."
+  end
+
   test "the homepage has a tile for each category and none for All Prints or About", %{
     conn: conn
   } do
