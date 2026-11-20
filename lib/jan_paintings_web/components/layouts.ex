@@ -204,7 +204,7 @@ defmodule JanPaintingsWeb.Layouts do
               <.theme_toggle />
             </div>
             <p class="text-sm">
-              &copy; {Date.utc_today().year} Old Master &amp; Modern Prints, Inc.
+              &copy; {Date.utc_today().year} Jan Johnson Old Master &amp; Modern Prints, Inc.
             </p>
           </div>
         </div>
