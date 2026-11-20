@@ -11,7 +11,7 @@ defmodule JanPaintingsWeb.PageControllerTest do
     html = conn |> get(~p"/") |> html_response(200)
     [footer] = Regex.run(~r{<footer.*?</footer>}s, html)
     year = Date.utc_today().year
-    assert footer =~ "&copy; Jan Johnson, #{year} Old Master &amp; Modern Prints, Inc."
+    assert footer =~ "&copy; #{year} Jan Johnson Old Master &amp; Modern Prints, Inc."
   end
 
   test "the homepage has a tile for each category and none for All Prints or About", %{
