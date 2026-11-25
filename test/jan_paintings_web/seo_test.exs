@@ -50,10 +50,23 @@ defmodule JanPaintingsWeb.SEOTest do
     end
 
     test "mark sold prints as sold out", %{conn: conn} do
-      print = Enum.find(Catalog.list_prints(), &(&1.status == "sold"))
+      {:ok, print} =
+        Catalog.update_print(Catalog.get_print("beham-leda-and-the-swan"), %{"status" => "sold"})
+
       data = conn |> get(SEO.print_path(print)) |> html_response(200) |> json_ld()
 
       assert data["offers"]["availability"] == "https://schema.org/SoldOut"
+    end
+
+    test "describe a print without a price as an artwork only, with no offer", %{conn: conn} do
+      print = Catalog.get_print("beham-leda-and-the-swan")
+      {:ok, print} = Catalog.update_print(print, %{"price" => "On request"})
+
+      data = conn |> get(SEO.print_path(print)) |> html_response(200) |> json_ld()
+
+      assert data["@type"] == "VisualArtwork"
+      assert data["name"] == "Leda and the Swan"
+      refute Map.has_key?(data, "offers")
     end
 
     test "use an AggregateOffer when a print has several prices", %{conn: conn} do
