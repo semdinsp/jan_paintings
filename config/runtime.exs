@@ -148,6 +148,12 @@ if config_env() == :prod do
     secret: System.get_env("AWS_SECRET_ACCESS_KEY"),
     region: System.get_env("AWS_REGION", "us-east-1")
 
+  # Cloudflare Turnstile on the contact and mailing list forms. Off until both
+  # keys are set (fly secrets set TURNSTILE_SITE_KEY=... TURNSTILE_SECRET_KEY=...).
+  config :jan_paintings, JanPaintingsWeb.Turnstile,
+    site_key: System.get_env("TURNSTILE_SITE_KEY"),
+    secret_key: System.get_env("TURNSTILE_SECRET_KEY")
+
   # Campaign email delivery, bounce and complaint events: SES configuration
   # set -> SNS topic -> POST /cc/sns. Only the listed topics are accepted.
   config :customer_contact,

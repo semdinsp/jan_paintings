@@ -25,6 +25,10 @@ config :jan_paintings, JanPaintingsWeb.Endpoint,
   secret_key_base: "2nkvNTjHDbbDcd0/3rrvSyQ6EfLY+9dzskh1llrtGeY2BbCwqg7K6CxHfv3IYkB6",
   server: false
 
+# Form spam checks: no minimum fill time or IP limit unless a test sets one.
+config :jan_paintings, JanPaintingsWeb.SpamGuard, min_seconds: 0
+config :jan_paintings, JanPaintingsWeb.RateLimit, limit: 1_000_000
+
 # Jobs are only run when a test asks (Oban.Testing).
 config :jan_paintings, Oban, testing: :manual
 

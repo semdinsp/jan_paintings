@@ -5,7 +5,7 @@ defmodule JanPaintingsWeb.PageController do
 
   alias JanPaintings.{Catalog, Inquiries}
   alias JanPaintings.Inquiries.{ContactMessage, Subscriber}
-  alias JanPaintingsWeb.SEO
+  alias JanPaintingsWeb.{SEO, SpamGuard, Turnstile}
 
   def home(conn, _params) do
     render(conn, :home,
@@ -88,7 +88,13 @@ defmodule JanPaintingsWeb.PageController do
         forms
       )
 
-    render(conn, :contact, forms ++ contact_meta())
+    render(
+      conn,
+      :contact,
+      forms ++
+        contact_meta() ++
+        [form_started: SpamGuard.form_token(), turnstile_site_key: Turnstile.site_key()]
+    )
   end
 
   defp contact_meta do
@@ -110,17 +116,19 @@ defmodule JanPaintingsWeb.PageController do
     )
   end
 
-  # Bots tend to fill every field, so a filled-in hidden "website" field
-  # is treated as spam: pretend it worked and store nothing.
-  def create_message(conn, %{"contact_message" => %{"website" => trap}})
-      when trap != "" do
-    message_sent(conn)
-  end
-
+  # Spam (see SpamGuard): a bot is told it worked and nothing is stored; a
+  # person over the limit or failing Turnstile sees the form again with a note.
   def create_message(conn, %{"contact_message" => params}) do
-    case Inquiries.create_contact_message(params) do
-      {:ok, _message} ->
+    with :ok <- SpamGuard.check(conn, params),
+         {:ok, _message} <- Inquiries.create_contact_message(params) do
+      message_sent(conn)
+    else
+      {:error, :bot} ->
         message_sent(conn)
+
+      {:error, reason} when is_atom(reason) ->
+        changeset = Inquiries.change_contact_message(%ContactMessage{}, params)
+        spam_rejected(conn, reason, form: to_form(changeset))
 
       {:error, changeset} ->
         conn
@@ -129,21 +137,37 @@ defmodule JanPaintingsWeb.PageController do
     end
   end
 
-  # Same spam trap as the contact form.
-  def subscribe(conn, %{"subscriber" => %{"website" => trap}}) when trap != "" do
-    subscribed(conn)
-  end
-
   def subscribe(conn, %{"subscriber" => params}) do
-    case Inquiries.subscribe(params) do
-      {:ok, _subscriber} ->
+    with :ok <- SpamGuard.check(conn, params),
+         {:ok, _subscriber} <- Inquiries.subscribe(params) do
+      subscribed(conn)
+    else
+      {:error, :bot} ->
         subscribed(conn)
+
+      {:error, reason} when is_atom(reason) ->
+        changeset = Inquiries.change_subscriber(%Subscriber{}, params)
+        spam_rejected(conn, reason, subscriber_form: to_form(changeset))
 
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)
         |> render_contact(subscriber_form: to_form(changeset))
     end
+  end
+
+  defp spam_rejected(conn, :rate_limited, forms) do
+    conn
+    |> put_status(:too_many_requests)
+    |> put_flash(:error, "Too many messages from your connection. Please try again later.")
+    |> render_contact(forms)
+  end
+
+  defp spam_rejected(conn, :turnstile, forms) do
+    conn
+    |> put_status(:unprocessable_entity)
+    |> put_flash(:error, "Please complete the check above the button and send again.")
+    |> render_contact(forms)
   end
 
   defp subscribed(conn) do

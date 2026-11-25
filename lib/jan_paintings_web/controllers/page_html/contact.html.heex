@@ -1,5 +1,12 @@
 <Layouts.app flash={@flash} current_scope={@current_scope} active="contact">
   <h1 class="type-h1">Contact Us</h1>
+  <script
+    :if={@turnstile_site_key}
+    src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+    async
+    defer
+  >
+  </script>
   <%!--
     From lg the terms sit in the left column under the details, beside the
     forms; on phones they come last, after the forms.
@@ -54,6 +61,13 @@
               />
             </label>
           </div>
+          <input type="hidden" name="contact_message[started]" value={@form_started} />
+          <div
+            :if={@turnstile_site_key}
+            class="cf-turnstile mb-4"
+            data-sitekey={@turnstile_site_key}
+          >
+          </div>
 
           <button type="submit" class="btn btn-primary mt-2 w-full sm:w-auto">Send message</button>
         </.form>
@@ -99,6 +113,13 @@
                 autocomplete="off"
               />
             </label>
+          </div>
+          <input type="hidden" name="subscriber[started]" value={@form_started} />
+          <div
+            :if={@turnstile_site_key}
+            class="cf-turnstile mb-4"
+            data-sitekey={@turnstile_site_key}
+          >
           </div>
 
           <button type="submit" class="btn btn-primary mt-2 w-full sm:w-auto">
