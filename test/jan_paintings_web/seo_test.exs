@@ -74,6 +74,15 @@ defmodule JanPaintingsWeb.SEOTest do
       refute Map.has_key?(data, "offers")
     end
 
+    test "describe images in reading order: artist, title, medium", %{conn: conn} do
+      html = conn |> get("/prints/old-masters/beham-leda-and-the-swan") |> html_response(200)
+      assert html =~ ~s(alt="Hans Sebald Beham, Leda and the Swan, Engraving")
+      refute html =~ ~s(alt="BEHAM)
+
+      list = conn |> get("/prints/old-masters") |> html_response(200)
+      assert list =~ ~s(alt="Hans Sebald Beham, Leda and the Swan, Engraving")
+    end
+
     test "have breadcrumbs from Home through the category to the print", %{conn: conn} do
       print = Catalog.get_print("beham-leda-and-the-swan")
       html = conn |> get(SEO.print_path(print)) |> html_response(200)

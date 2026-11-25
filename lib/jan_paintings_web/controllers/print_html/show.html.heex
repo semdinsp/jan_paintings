@@ -21,7 +21,7 @@
           <img
             id="print-main-image"
             src={JanPaintings.Catalog.image_url(@print.image)}
-            alt={"#{@print.artist}, #{JanPaintings.Catalog.plain_title(@print.title)}"}
+            alt={JanPaintingsWeb.SEO.image_alt(@print)}
             class="max-h-[75vh] max-w-full object-contain"
           />
         </a>
@@ -71,7 +71,7 @@
         <div class="print-lightbox-stage">
           <img
             id="print-lightbox-image"
-            alt={"#{@print.artist}, #{JanPaintings.Catalog.plain_title(@print.title)}"}
+            alt={JanPaintingsWeb.SEO.image_alt(@print)}
             class="print-lightbox-image"
           />
           <%!-- Shown on the image's bottom-right corner once it loads (see app.js). --%>

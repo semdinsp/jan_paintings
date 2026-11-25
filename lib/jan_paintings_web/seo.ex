@@ -145,6 +145,22 @@ defmodule JanPaintingsWeb.SEO do
     }
   end
 
+  ## Images
+
+  @doc """
+  Alt text for a print's image, in reading order: "{artist}, {title},
+  {medium}", as in "Albrecht Durer, St. George slaying the Dragon, Woodcut".
+  """
+  def image_alt(print) do
+    [
+      artist_name(print.artist),
+      Catalog.plain_title(print.title),
+      medium_without_date(print.medium)
+    ]
+    |> Enum.reject(&(&1 in [nil, ""]))
+    |> Enum.join(", ")
+  end
+
   ## Breadcrumbs
 
   @doc """
