@@ -252,6 +252,16 @@ defmodule JanPaintings.CatalogTest do
       assert errors_on(changeset).slug == ["use lower-case letters, numbers and dashes"]
     end
 
+    test "a new or changed slug must have more than one word" do
+      assert {:error, changeset} = Catalog.create_print(Map.put(@valid, "slug", "hollar"))
+      assert [message] = errors_on(changeset).slug
+      assert message =~ "artist and title"
+
+      print = Catalog.get_print("neilson-dredging-the-st-charles-river")
+      assert {:error, _} = Catalog.update_print(print, %{"slug" => "b"})
+      assert {:ok, _} = Catalog.update_print(print, %{"title" => "Dredging"})
+    end
+
     test "update_print/2 and set_status/2 change a print" do
       print = Catalog.get_print("neilson-dredging-the-st-charles-river")
 

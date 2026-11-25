@@ -111,7 +111,25 @@ defmodule JanPaintings.Catalog.Print do
       message: "use lower-case letters, numbers and dashes"
     )
     |> validate_length(:slug, max: 120)
+    |> validate_slug_words()
     |> unique_constraint(:slug)
+  end
+
+  # A one-word address such as "b" or "hollar" is almost always a half-typed
+  # one. Only checked when the address changes, so existing prints still save,
+  # and skipped when the address already has an error.
+  defp validate_slug_words(%{errors: errors} = changeset) do
+    if Keyword.has_key?(errors, :slug), do: changeset, else: slug_words(changeset)
+  end
+
+  defp slug_words(changeset) do
+    validate_change(changeset, :slug, fn :slug, slug ->
+      if String.contains?(slug, "-"),
+        do: [],
+        else: [
+          slug: "use at least the artist and title, like hollar-young-woman (or leave blank)"
+        ]
+    end)
   end
 
   # Sort fields always follow the text, so they can never disagree with it.
