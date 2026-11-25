@@ -168,13 +168,19 @@ defmodule JanPaintingsWeb.SEO do
     truncate("#{artist_name(print.artist)}, #{Catalog.plain_title(print.title)}. #{body}", 155)
   end
 
-  @doc "schema.org VisualArtwork + Product node for a print's page."
+  @doc """
+  schema.org node for a print's page: VisualArtwork + Product with an offer
+  when the print has a price, otherwise just VisualArtwork. Google requires a
+  price on every Product offer, so prints "on request" or sold without a price
+  are described as artworks only.
+  """
   def print_json_ld(print) do
     {height, width} = dimensions_mm(print.dimensions)
+    offers = offers(print)
 
     %{
       "@context" => "https://schema.org",
-      "@type" => ["VisualArtwork", "Product"],
+      "@type" => if(offers, do: ["VisualArtwork", "Product"], else: "VisualArtwork"),
       "@id" => url(print_path(print)) <> "#print",
       "name" => Catalog.plain_title(print.title),
       "url" => url(print_path(print)),
@@ -187,7 +193,7 @@ defmodule JanPaintingsWeb.SEO do
       "height" => height && quantity(height),
       "width" => width && quantity(width),
       "citation" => catalogue_citation(print),
-      "offers" => offers(print)
+      "offers" => offers
     }
     |> reject_nils()
   end
@@ -205,6 +211,7 @@ defmodule JanPaintingsWeb.SEO do
 
   defp quantity(mm), do: %{"@type" => "QuantitativeValue", "value" => mm, "unitCode" => "MMT"}
 
+  # nil when the print has no price.
   defp offers(print) do
     base = %{
       "url" => url(print_path(print)),
@@ -214,7 +221,7 @@ defmodule JanPaintingsWeb.SEO do
 
     case prices(print.price) do
       [] ->
-        Map.put(base, "@type", "Offer")
+        nil
 
       [{amount, currency}] ->
         Map.merge(base, %{"@type" => "Offer", "price" => amount, "priceCurrency" => currency})
