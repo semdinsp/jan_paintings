@@ -12,7 +12,8 @@ defmodule JanPaintingsWeb.SEO do
       request path without its query string).
     * `:og_image` - site path of the image used when the page is shared.
     * `:og_type` - Open Graph type, "website" by default.
-    * `:json_ld` - a map (or list of maps) rendered as JSON-LD.
+    * `:json_ld` - a map, or a list of maps, each rendered as its own JSON-LD
+      script.
 
   Absolute URLs use the endpoint's configured URL (PHX_HOST in production),
   so they always point at the canonical host.
@@ -22,8 +23,12 @@ defmodule JanPaintingsWeb.SEO do
   alias JanPaintings.Catalog
 
   @site_name "Jan Johnson Old Master & Modern Prints"
+  # Short brand after each page title, so long print titles fit in the ~60
+  # characters a search result shows.
+  @title_brand "Jan Johnson Prints"
   @default_title "Jan Johnson · Old Master, Modern & Canadian Prints"
-  @default_description "Fine Old Master, nineteenth- and early twentieth-century European and Canadian prints, offered by Jan Johnson since 1979. Viewing by appointment in Chambly, near Montreal."
+  # Under the ~155 characters a search result shows.
+  @default_description "Old Master, 19th- and early 20th-century European and Canadian prints from Jan Johnson since 1979. Viewing by appointment in Chambly, near Montreal."
   @default_image "/images/catalogue/pether-farrier-s-shop-lg.jpg"
 
   def site_name, do: @site_name
@@ -37,7 +42,7 @@ defmodule JanPaintingsWeb.SEO do
 
   @doc "Renders description, canonical, Open Graph, Twitter and JSON-LD tags."
   def head_tags(%{assigns: page} = assigns) do
-    title = if page[:page_title], do: "#{page[:page_title]} · #{@site_name}", else: @default_title
+    title = if page[:page_title], do: page[:page_title] <> title_suffix(), else: @default_title
 
     assigns =
       assign(assigns,
@@ -46,7 +51,7 @@ defmodule JanPaintingsWeb.SEO do
         canonical: url(page[:canonical_path] || request_path(page[:conn])),
         image: url(page[:og_image] || @default_image),
         og_type: page[:og_type] || "website",
-        json_ld: page[:json_ld]
+        json_ld: List.wrap(page[:json_ld])
       )
 
     ~H"""
@@ -62,17 +67,17 @@ defmodule JanPaintingsWeb.SEO do
     <meta name="twitter:title" content={@title} />
     <meta name="twitter:description" content={@description} />
     <meta name="twitter:image" content={@image} />
-    <script :if={@json_ld} type="application/ld+json">
-      <%= json_ld(@json_ld) %>
+    <script :for={data <- @json_ld} type="application/ld+json">
+      <%= json_ld(data) %>
     </script>
     """
   end
 
-  @doc "The default title, used when a page sets no `:page_title`."
+  @doc "The default title, used as is (no suffix) when a page sets no `:page_title`."
   def default_title, do: @default_title
 
   @doc "The title suffix added after a page's `:page_title`."
-  def title_suffix, do: " · " <> @site_name
+  def title_suffix, do: " · " <> @title_brand
 
   defp request_path(%Plug.Conn{request_path: path}), do: path
   defp request_path(_), do: "/"
@@ -142,6 +147,50 @@ defmodule JanPaintingsWeb.SEO do
           end)
       }
     }
+  end
+
+  ## Images
+
+  @doc """
+  Alt text for a print's image, in reading order: "{artist}, {title},
+  {medium}", as in "Albrecht Durer, St. George slaying the Dragon, Woodcut".
+  """
+  def image_alt(print) do
+    [
+      artist_name(print.artist),
+      Catalog.plain_title(print.title),
+      medium_without_date(print.medium)
+    ]
+    |> Enum.reject(&(&1 in [nil, ""]))
+    |> Enum.join(", ")
+  end
+
+  ## Breadcrumbs
+
+  @doc """
+  schema.org BreadcrumbList from the home page down to the current page.
+  `trail` is a list of `{name, path}` pairs after Home, e.g.
+  `[{"Old Master Prints", "/prints/old-masters"}, {"St. George", "/prints/..."}]`.
+  """
+  def breadcrumb_json_ld(trail) do
+    %{
+      "@context" => "https://schema.org",
+      "@type" => "BreadcrumbList",
+      "itemListElement" =>
+        [{"Home", "/"} | trail]
+        |> Enum.with_index(1)
+        |> Enum.map(fn {{name, path}, position} ->
+          %{"@type" => "ListItem", "position" => position, "name" => name, "item" => url(path)}
+        end)
+    }
+  end
+
+  @doc "Breadcrumbs for a print page: Home › category › print."
+  def print_breadcrumbs(print, category) do
+    breadcrumb_json_ld([
+      {category.name, "/prints/#{category.slug}"},
+      {Catalog.plain_title(print.title), print_path(print)}
+    ])
   end
 
   ## Prints

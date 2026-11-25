@@ -6,7 +6,7 @@
     <meta name="csrf-token" content={get_csrf_token()} />
     <.live_title
       default={JanPaintingsWeb.SEO.default_title()}
-      suffix={JanPaintingsWeb.SEO.title_suffix()}
+      suffix={assigns[:page_title] && JanPaintingsWeb.SEO.title_suffix()}
       phx-no-format
     >{assigns[:page_title]}</.live_title>
     <JanPaintingsWeb.SEO.head_tags assigns={assigns} />

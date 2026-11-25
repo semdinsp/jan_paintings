@@ -14,7 +14,9 @@ defmodule JanPaintingsWeb.SEOController do
   Lists the home, about, terms of sale, print list and category pages, and
   every print.
   Sold prints are included: their pages stay up as a record of the stock
-  and still answer searches for the artist and title.
+  and still answer searches for the artist and title. Each print lists its
+  images (the larger version of each view) with the Google image sitemap
+  extension, so the pictures can be found in image search.
   """
   def sitemap(conn, _params) do
     prints = Catalog.list_prints()
@@ -22,17 +24,17 @@ defmodule JanPaintingsWeb.SEOController do
 
     pages =
       [
-        {"/", latest},
-        {"/about", nil},
-        {"/contact", nil},
-        {"/terms-of-sale", nil},
-        {"/prints", latest}
+        {"/", latest, []},
+        {"/about", nil, []},
+        {"/contact", nil, []},
+        {"/terms-of-sale", nil, []},
+        {"/prints", latest, []}
       ] ++
         Enum.map(Catalog.categories(), fn category ->
           {"/prints/#{category.slug}",
-           prints |> Enum.filter(&(&1.category == category.slug)) |> latest_update()}
+           prints |> Enum.filter(&(&1.category == category.slug)) |> latest_update(), []}
         end) ++
-        Enum.map(prints, &{SEO.print_path(&1), &1.updated_at})
+        Enum.map(prints, &{SEO.print_path(&1), &1.updated_at, print_images(&1)})
 
     conn
     |> put_resp_content_type("application/xml")
@@ -43,9 +45,11 @@ defmodule JanPaintingsWeb.SEOController do
     prints |> Enum.map(& &1.updated_at) |> Enum.max(DateTime, fn -> nil end)
   end
 
+  defp print_images(print), do: print |> Catalog.views() |> Enum.map(& &1.large) |> Enum.uniq()
+
   defp sitemap_xml(pages) do
     urls =
-      Enum.map(pages, fn {path, lastmod} ->
+      Enum.map(pages, fn {path, lastmod, images} ->
         [
           "  <url><loc>",
           xml_escape(SEO.url(path)),
@@ -54,13 +58,18 @@ defmodule JanPaintingsWeb.SEOController do
             do: ["<lastmod>", Date.to_iso8601(DateTime.to_date(lastmod)), "</lastmod>"],
             else: []
           ),
+          Enum.map(
+            images,
+            &["<image:image><image:loc>", xml_escape(SEO.url(&1)), "</image:loc></image:image>"]
+          ),
           "</url>\n"
         ]
       end)
 
     IO.iodata_to_binary([
       ~s(<?xml version="1.0" encoding="UTF-8"?>\n),
-      ~s(<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n),
+      ~s(<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" ),
+      ~s(xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n),
       urls,
       "</urlset>\n"
     ])

@@ -171,7 +171,10 @@ defmodule JanPaintingsWeb.PrintControllerTest do
     assert html =~ ~r{<h1[^>]*>\s*Souvenir de Bretagne, plate 4 from <em>Souvenirs</em></h1>}
     # Plain text elsewhere: the browser title and the image alt text.
     assert html =~ ~r{<title[^>]*>[^<]*plate 4 from Souvenirs}
-    assert html =~ ~s(alt="ISABEY, Eugene, Souvenir de Bretagne, plate 4 from Souvenirs")
+
+    assert html =~
+             ~s(alt="Eugene Isabey, Souvenir de Bretagne, plate 4 from Souvenirs, Lithograph")
+
     refute html =~ "*Souvenirs*"
 
     list = conn |> get(~p"/prints/#{print.category}") |> html_response(200)

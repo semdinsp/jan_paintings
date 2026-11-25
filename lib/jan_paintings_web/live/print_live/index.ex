@@ -37,13 +37,15 @@ defmodule JanPaintingsWeb.PrintLive.Index do
        meta_description: description,
        canonical_path: path,
        og_image: List.first(Enum.map(shown, & &1.image)),
-       json_ld:
+       json_ld: [
          SEO.collection_json_ld(
            (category && category.name) || "All Prints",
            description,
            path,
            shown
          ),
+         SEO.breadcrumb_json_ld(list_breadcrumbs(category))
+       ],
        category: category,
        query: query,
        nationality: nationality,
@@ -86,6 +88,10 @@ defmodule JanPaintingsWeb.PrintLive.Index do
   defp description(category, count) do
     "#{category.name} at Jan Johnson: #{count} in stock. #{category.blurb}"
   end
+
+  # Home › All Prints, or Home › the category (matching the print pages).
+  defp list_breadcrumbs(nil), do: [{"All Prints", "/prints"}]
+  defp list_breadcrumbs(category), do: [{category.name, "/prints/#{category.slug}"}]
 
   defp page_title(_category, query) when query != "", do: "Search: #{query}"
   defp page_title(nil, _query), do: "All Prints: Old Master, Modern and Canadian"

@@ -174,7 +174,7 @@ defmodule JanPaintingsWeb.PageHTML do
       <div class="mat flex aspect-[4/5] items-center justify-center p-4">
         <img
           src={Catalog.image_url(@print.image)}
-          alt={"#{@print.artist}, #{Catalog.plain_title(@print.title)}"}
+          alt={JanPaintingsWeb.SEO.image_alt(@print)}
           loading="lazy"
           class={[
             "max-h-full max-w-full object-contain",

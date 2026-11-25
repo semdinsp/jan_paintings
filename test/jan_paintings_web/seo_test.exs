@@ -9,6 +9,11 @@ defmodule JanPaintingsWeb.SEOTest do
     Jason.decode!(json)
   end
 
+  defp all_json_ld(html) do
+    Regex.scan(~r{<script[^>]*type="application/ld\+json"[^>]*>(.*?)</script>}s, html)
+    |> Enum.map(fn [_, json] -> Jason.decode!(json) end)
+  end
+
   defp base, do: JanPaintingsWeb.Endpoint.url()
 
   describe "print pages" do
@@ -69,6 +74,29 @@ defmodule JanPaintingsWeb.SEOTest do
       refute Map.has_key?(data, "offers")
     end
 
+    test "describe images in reading order: artist, title, medium", %{conn: conn} do
+      html = conn |> get("/prints/old-masters/beham-leda-and-the-swan") |> html_response(200)
+      assert html =~ ~s(alt="Hans Sebald Beham, Leda and the Swan, Engraving")
+      refute html =~ ~s(alt="BEHAM)
+
+      list = conn |> get("/prints/old-masters") |> html_response(200)
+      assert list =~ ~s(alt="Hans Sebald Beham, Leda and the Swan, Engraving")
+    end
+
+    test "have breadcrumbs from Home through the category to the print", %{conn: conn} do
+      print = Catalog.get_print("beham-leda-and-the-swan")
+      html = conn |> get(SEO.print_path(print)) |> html_response(200)
+
+      assert %{"@type" => "BreadcrumbList", "itemListElement" => items} =
+               html |> all_json_ld() |> Enum.find(&(&1["@type"] == "BreadcrumbList"))
+
+      assert Enum.map(items, &{&1["position"], &1["name"], &1["item"]}) == [
+               {1, "Home", base() <> "/"},
+               {2, "Old Master Prints", base() <> "/prints/old-masters"},
+               {3, "Leda and the Swan", base() <> SEO.print_path(print)}
+             ]
+    end
+
     test "use an AggregateOffer when a print has several prices", %{conn: conn} do
       print =
         Catalog.get_print(
@@ -90,7 +118,7 @@ defmodule JanPaintingsWeb.SEOTest do
       assert html =~ "<title"
 
       assert html =~
-               "Hans Sebald Beham, Leda and the Swan, Engraving, 1548 · Jan Johnson Old Master &amp; Modern Prints"
+               "Hans Sebald Beham, Leda and the Swan, Engraving, 1548 · Jan Johnson Prints"
 
       assert html =~ ~s(rel="canonical" href="#{canonical}")
       assert html =~ ~s(property="og:url" content="#{canonical}")
@@ -172,13 +200,56 @@ defmodule JanPaintingsWeb.SEOTest do
     assert html =~ "Canadian Prints at Jan Johnson: 37 in stock."
   end
 
+  test "the home page title names the gallery once, with no suffix", %{conn: conn} do
+    html = conn |> get("/") |> html_response(200)
+    [_, title] = Regex.run(~r{<title[^>]*>(.*?)</title>}s, html)
+    assert String.trim(title) == "Jan Johnson · Old Master, Modern &amp; Canadian Prints"
+
+    assert html =~
+             ~s(property="og:title" content="Jan Johnson · Old Master, Modern &amp; Canadian Prints")
+  end
+
+  test "page descriptions fit in a search result (155 characters)", %{conn: conn} do
+    for path <- ["/", "/about", "/contact", "/terms-of-sale", "/prints", "/prints/old-masters"] do
+      html = conn |> get(path) |> html_response(200)
+      [_, description] = Regex.run(~r/name="description" content="([^"]*)"/, html)
+
+      assert String.length(description) <= 155,
+             "#{path}: #{String.length(description)} characters"
+    end
+  end
+
+  test "other pages end their title with the short brand", %{conn: conn} do
+    html = conn |> get("/about") |> html_response(200)
+    [_, title] = Regex.run(~r{<title[^>]*>(.*?)</title>}s, html)
+    assert String.trim(title) == "About the gallery · Jan Johnson Prints"
+  end
+
+  test "category and All Prints pages have breadcrumbs", %{conn: conn} do
+    crumbs = fn path ->
+      conn
+      |> get(path)
+      |> html_response(200)
+      |> all_json_ld()
+      |> Enum.find(&(&1["@type"] == "BreadcrumbList"))
+      |> Map.fetch!("itemListElement")
+      |> Enum.map(& &1["name"])
+    end
+
+    assert crumbs.("/prints/canadian") == ["Home", "Canadian Prints"]
+    assert crumbs.("/prints") == ["Home", "All Prints"]
+  end
+
   describe "crawler files" do
     test "sitemap.xml lists the pages and every print, sold ones included", %{conn: conn} do
       conn = get(conn, "/sitemap.xml")
       xml = response(conn, 200)
 
       assert response_content_type(conn, :xml) =~ "application/xml"
-      assert xml =~ ~s(<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">)
+
+      assert xml =~
+               ~s(<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">)
+
       assert xml =~ "<loc>#{base()}/</loc>"
       assert xml =~ "<loc>#{base()}/prints/old-masters</loc>"
       assert xml =~ "<loc>#{base()}/terms-of-sale</loc>"
@@ -188,6 +259,25 @@ defmodule JanPaintingsWeb.SEOTest do
       sold = Enum.find(Catalog.list_prints(), &(&1.status == "sold"))
       assert xml =~ base() <> SEO.print_path(sold)
       assert length(Regex.scan(~r/<url>/, xml)) == 8 + length(Catalog.list_prints())
+    end
+
+    test "sitemap.xml lists each print's images, and none for the other pages", %{conn: conn} do
+      xml = conn |> get("/sitemap.xml") |> response(200)
+      print = Catalog.get_print("beham-leda-and-the-swan")
+      [%{large: large} | _] = Catalog.views(print)
+
+      [entry] =
+        Regex.run(
+          ~r{<url><loc>[^<]*/prints/old-masters/beham-leda-and-the-swan</loc>.*?</url>},
+          xml
+        )
+
+      assert entry =~ "<image:image><image:loc>#{base()}#{large}</image:loc></image:image>"
+
+      [home] = Regex.run(~r{<url><loc>#{base()}/</loc>.*?</url>}, xml)
+      refute home =~ "image:image"
+
+      assert length(Regex.scan(~r/<image:image>/, xml)) >= length(Catalog.list_prints())
     end
 
     test "robots.txt allows crawlers and points at the sitemap", %{conn: conn} do
