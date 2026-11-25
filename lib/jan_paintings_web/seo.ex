@@ -12,7 +12,8 @@ defmodule JanPaintingsWeb.SEO do
       request path without its query string).
     * `:og_image` - site path of the image used when the page is shared.
     * `:og_type` - Open Graph type, "website" by default.
-    * `:json_ld` - a map (or list of maps) rendered as JSON-LD.
+    * `:json_ld` - a map, or a list of maps, each rendered as its own JSON-LD
+      script.
 
   Absolute URLs use the endpoint's configured URL (PHX_HOST in production),
   so they always point at the canonical host.
@@ -46,7 +47,7 @@ defmodule JanPaintingsWeb.SEO do
         canonical: url(page[:canonical_path] || request_path(page[:conn])),
         image: url(page[:og_image] || @default_image),
         og_type: page[:og_type] || "website",
-        json_ld: page[:json_ld]
+        json_ld: List.wrap(page[:json_ld])
       )
 
     ~H"""
@@ -62,8 +63,8 @@ defmodule JanPaintingsWeb.SEO do
     <meta name="twitter:title" content={@title} />
     <meta name="twitter:description" content={@description} />
     <meta name="twitter:image" content={@image} />
-    <script :if={@json_ld} type="application/ld+json">
-      <%= json_ld(@json_ld) %>
+    <script :for={data <- @json_ld} type="application/ld+json">
+      <%= json_ld(data) %>
     </script>
     """
   end
@@ -142,6 +143,34 @@ defmodule JanPaintingsWeb.SEO do
           end)
       }
     }
+  end
+
+  ## Breadcrumbs
+
+  @doc """
+  schema.org BreadcrumbList from the home page down to the current page.
+  `trail` is a list of `{name, path}` pairs after Home, e.g.
+  `[{"Old Master Prints", "/prints/old-masters"}, {"St. George", "/prints/..."}]`.
+  """
+  def breadcrumb_json_ld(trail) do
+    %{
+      "@context" => "https://schema.org",
+      "@type" => "BreadcrumbList",
+      "itemListElement" =>
+        [{"Home", "/"} | trail]
+        |> Enum.with_index(1)
+        |> Enum.map(fn {{name, path}, position} ->
+          %{"@type" => "ListItem", "position" => position, "name" => name, "item" => url(path)}
+        end)
+    }
+  end
+
+  @doc "Breadcrumbs for a print page: Home › category › print."
+  def print_breadcrumbs(print, category) do
+    breadcrumb_json_ld([
+      {category.name, "/prints/#{category.slug}"},
+      {Catalog.plain_title(print.title), print_path(print)}
+    ])
   end
 
   ## Prints

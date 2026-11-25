@@ -16,7 +16,7 @@ defmodule JanPaintingsWeb.PrintController do
       canonical_path: SEO.print_path(print),
       og_image: print.image,
       og_type: "product",
-      json_ld: SEO.print_json_ld(print),
+      json_ld: [SEO.print_json_ld(print), SEO.print_breadcrumbs(print, category)],
       category: category,
       print: print,
       views: Catalog.views(print),

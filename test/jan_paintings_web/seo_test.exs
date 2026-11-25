@@ -9,6 +9,11 @@ defmodule JanPaintingsWeb.SEOTest do
     Jason.decode!(json)
   end
 
+  defp all_json_ld(html) do
+    Regex.scan(~r{<script[^>]*type="application/ld\+json"[^>]*>(.*?)</script>}s, html)
+    |> Enum.map(fn [_, json] -> Jason.decode!(json) end)
+  end
+
   defp base, do: JanPaintingsWeb.Endpoint.url()
 
   describe "print pages" do
@@ -67,6 +72,20 @@ defmodule JanPaintingsWeb.SEOTest do
       assert data["@type"] == "VisualArtwork"
       assert data["name"] == "Leda and the Swan"
       refute Map.has_key?(data, "offers")
+    end
+
+    test "have breadcrumbs from Home through the category to the print", %{conn: conn} do
+      print = Catalog.get_print("beham-leda-and-the-swan")
+      html = conn |> get(SEO.print_path(print)) |> html_response(200)
+
+      assert %{"@type" => "BreadcrumbList", "itemListElement" => items} =
+               html |> all_json_ld() |> Enum.find(&(&1["@type"] == "BreadcrumbList"))
+
+      assert Enum.map(items, &{&1["position"], &1["name"], &1["item"]}) == [
+               {1, "Home", base() <> "/"},
+               {2, "Old Master Prints", base() <> "/prints/old-masters"},
+               {3, "Leda and the Swan", base() <> SEO.print_path(print)}
+             ]
     end
 
     test "use an AggregateOffer when a print has several prices", %{conn: conn} do
@@ -170,6 +189,21 @@ defmodule JanPaintingsWeb.SEOTest do
 
     assert html =~ ~s(rel="canonical" href="#{base()}/prints/canadian")
     assert html =~ "Canadian Prints at Jan Johnson: 37 in stock."
+  end
+
+  test "category and All Prints pages have breadcrumbs", %{conn: conn} do
+    crumbs = fn path ->
+      conn
+      |> get(path)
+      |> html_response(200)
+      |> all_json_ld()
+      |> Enum.find(&(&1["@type"] == "BreadcrumbList"))
+      |> Map.fetch!("itemListElement")
+      |> Enum.map(& &1["name"])
+    end
+
+    assert crumbs.("/prints/canadian") == ["Home", "Canadian Prints"]
+    assert crumbs.("/prints") == ["Home", "All Prints"]
   end
 
   describe "crawler files" do
