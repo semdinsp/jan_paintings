@@ -14,6 +14,9 @@ defmodule JanPaintingsWeb.ContactControllerTest do
     "website" => ""
   }
 
+  # The signed "form shown at" field the real form carries (SpamGuard).
+  defp started(params), do: Map.put(params, "started", JanPaintingsWeb.SpamGuard.form_token())
+
   test "the contact page shows contact details and the form", %{conn: conn} do
     html = conn |> get(~p"/contact") |> html_response(200)
     assert html =~ ~r/<h1[^>]*>Contact Us<\/h1>/
@@ -70,13 +73,13 @@ defmodule JanPaintingsWeb.ContactControllerTest do
   end
 
   test "a form loaded before the move still posts to /about", %{conn: conn} do
-    conn = post(conn, ~p"/about", contact_message: @valid)
+    conn = post(conn, ~p"/about", contact_message: started(@valid))
     assert redirected_to(conn) == "/contact"
     assert [_] = Inquiries.list_contact_messages()
   end
 
   test "a valid message is stored and the gallery is emailed", %{conn: conn} do
-    conn = post(conn, ~p"/contact", contact_message: @valid)
+    conn = post(conn, ~p"/contact", contact_message: started(@valid))
 
     assert redirected_to(conn) == "/contact"
     assert Phoenix.Flash.get(conn.assigns.flash, :info) =~ "your message has been sent"
@@ -93,7 +96,9 @@ defmodule JanPaintingsWeb.ContactControllerTest do
 
   test "an invalid message re-renders with errors", %{conn: conn} do
     conn =
-      post(conn, ~p"/contact", contact_message: %{@valid | "email" => "nope", "message" => ""})
+      post(conn, ~p"/contact",
+        contact_message: started(%{@valid | "email" => "nope", "message" => ""})
+      )
 
     html = html_response(conn, 422)
     assert html =~ "must be a valid email"
@@ -103,7 +108,8 @@ defmodule JanPaintingsWeb.ContactControllerTest do
   end
 
   test "the spam trap silently drops the message", %{conn: conn} do
-    conn = post(conn, ~p"/contact", contact_message: %{@valid | "website" => "http://spam"})
+    conn =
+      post(conn, ~p"/contact", contact_message: started(%{@valid | "website" => "http://spam"}))
 
     assert redirected_to(conn) == "/contact"
     assert Inquiries.list_contact_messages() == []

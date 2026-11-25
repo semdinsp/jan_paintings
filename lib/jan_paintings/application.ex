@@ -13,6 +13,7 @@ defmodule JanPaintings.Application do
       {Oban, Application.fetch_env!(:jan_paintings, Oban)},
       {DNSCluster, query: Application.get_env(:jan_paintings, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: JanPaintings.PubSub},
+      JanPaintingsWeb.RateLimit,
       # Start a worker by calling: JanPaintings.Worker.start_link(arg)
       # {JanPaintings.Worker, arg},
       # Start to serve requests, typically the last entry
