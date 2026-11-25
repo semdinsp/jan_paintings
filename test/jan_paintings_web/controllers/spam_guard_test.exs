@@ -91,15 +91,23 @@ defmodule JanPaintingsWeb.SpamGuardTest do
       put_config(Turnstile,
         site_key: "site-key-123",
         secret_key: "secret",
+        hostnames: ["janjohnsonprints.com"],
         req_options: [plug: {Req.Test, Turnstile}]
       )
     end
 
-    defp cloudflare_says(success) do
+    defp cloudflare_says(success, extra \\ %{}) do
       Req.Test.stub(Turnstile, fn conn ->
         {:ok, body, conn} = Plug.Conn.read_body(conn)
         send(self(), {:verify_body, URI.decode_query(body)})
-        Req.Test.json(conn, %{"success" => success})
+
+        Req.Test.json(
+          conn,
+          Map.merge(
+            %{"success" => success, "action" => "contact", "hostname" => "janjohnsonprints.com"},
+            extra
+          )
+        )
       end)
     end
 
@@ -139,6 +147,42 @@ defmodule JanPaintingsWeb.SpamGuardTest do
       assert html =~ "Please complete the check"
       assert html =~ "Durer woodcuts"
       assert Inquiries.list_contact_messages() == []
+    end
+
+    test "a token issued for a different form or site is refused", %{conn: conn} do
+      cloudflare_says(true, %{"action" => "mailing-list"})
+      assert html_response(post_message(conn, "token"), 422) =~ "Please complete the check"
+
+      cloudflare_says(true, %{"hostname" => "evil.example"})
+
+      assert html_response(post_message(build_conn(), "token"), 422) =~
+               "Please complete the check"
+
+      assert Inquiries.list_contact_messages() == []
+    end
+
+    test "if Cloudflare can't be reached the message is refused", %{conn: conn} do
+      Req.Test.stub(Turnstile, &Req.Test.transport_error(&1, :econnrefused))
+      assert html_response(post_message(conn, "token"), 422) =~ "Please complete the check"
+      assert Inquiries.list_contact_messages() == []
+    end
+
+    test "each form's widget has its own action", %{conn: conn} do
+      html = conn |> get(~p"/contact") |> html_response(200)
+      assert html =~ ~s(data-action="contact")
+      assert html =~ ~s(data-action="mailing-list")
+    end
+
+    test "a mailing list signup is checked against its own action", %{conn: conn} do
+      cloudflare_says(true, %{"action" => "mailing-list"})
+
+      post(conn, ~p"/mailing-list",
+        subscriber: %{"email" => "a@example.com", "started" => seconds_ago(20)},
+        "cf-turnstile-response": "token"
+      )
+
+      assert [_] = Inquiries.list_subscribers()
+      assert_received {:verify_body, %{"response" => "token"}}
     end
 
     test "a message without the widget's token is refused", %{conn: conn} do

@@ -26,10 +26,11 @@ defmodule JanPaintingsWeb.SpamGuard do
     do: Phoenix.Token.sign(Endpoint, @salt, now, signed_at: now)
 
   @doc """
-  Checks a submission. `params` are the form's params (with "website",
+  Checks a submission. `action` is the form's Turnstile action ("contact" or
+  "mailing-list"). `params` are the form's params (with "website",
   "started" and Cloudflare's "cf-turnstile-response" in the top-level params).
   """
-  def check(conn, form_params) do
+  def check(conn, form_params, action) do
     cond do
       form_params["website"] not in [nil, ""] ->
         {:error, :bot}
@@ -40,7 +41,7 @@ defmodule JanPaintingsWeb.SpamGuard do
       not RateLimit.allow?(client_ip(conn)) ->
         {:error, :rate_limited}
 
-      not Turnstile.valid?(conn.params["cf-turnstile-response"], client_ip(conn)) ->
+      not Turnstile.valid?(conn.params["cf-turnstile-response"], action, client_ip(conn)) ->
         {:error, :turnstile}
 
       true ->

@@ -119,7 +119,7 @@ defmodule JanPaintingsWeb.PageController do
   # Spam (see SpamGuard): a bot is told it worked and nothing is stored; a
   # person over the limit or failing Turnstile sees the form again with a note.
   def create_message(conn, %{"contact_message" => params}) do
-    with :ok <- SpamGuard.check(conn, params),
+    with :ok <- SpamGuard.check(conn, params, "contact"),
          {:ok, _message} <- Inquiries.create_contact_message(params) do
       message_sent(conn)
     else
@@ -138,7 +138,7 @@ defmodule JanPaintingsWeb.PageController do
   end
 
   def subscribe(conn, %{"subscriber" => params}) do
-    with :ok <- SpamGuard.check(conn, params),
+    with :ok <- SpamGuard.check(conn, params, "mailing-list"),
          {:ok, _subscriber} <- Inquiries.subscribe(params) do
       subscribed(conn)
     else

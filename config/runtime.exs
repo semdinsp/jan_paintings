@@ -152,7 +152,13 @@ if config_env() == :prod do
   # keys are set (fly secrets set TURNSTILE_SITE_KEY=... TURNSTILE_SECRET_KEY=...).
   config :jan_paintings, JanPaintingsWeb.Turnstile,
     site_key: System.get_env("TURNSTILE_SITE_KEY"),
-    secret_key: System.get_env("TURNSTILE_SECRET_KEY")
+    secret_key: System.get_env("TURNSTILE_SECRET_KEY"),
+    # Hostnames a token may be issued for; defaults to the site's own host.
+    hostnames:
+      "TURNSTILE_HOSTNAMES"
+      |> System.get_env(System.get_env("PHX_HOST", ""))
+      |> String.split(",", trim: true)
+      |> Enum.map(&String.trim/1)
 
   # Campaign email delivery, bounce and complaint events: SES configuration
   # set -> SNS topic -> POST /cc/sns. Only the listed topics are accepted.
