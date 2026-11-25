@@ -27,7 +27,8 @@ defmodule JanPaintingsWeb.SEO do
   # characters a search result shows.
   @title_brand "Jan Johnson Prints"
   @default_title "Jan Johnson · Old Master, Modern & Canadian Prints"
-  @default_description "Fine Old Master, nineteenth- and early twentieth-century European and Canadian prints, offered by Jan Johnson since 1979. Viewing by appointment in Chambly, near Montreal."
+  # Under the ~155 characters a search result shows.
+  @default_description "Old Master, 19th- and early 20th-century European and Canadian prints from Jan Johnson since 1979. Viewing by appointment in Chambly, near Montreal."
   @default_image "/images/catalogue/pether-farrier-s-shop-lg.jpg"
 
   def site_name, do: @site_name

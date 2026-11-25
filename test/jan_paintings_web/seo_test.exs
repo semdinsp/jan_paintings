@@ -209,6 +209,16 @@ defmodule JanPaintingsWeb.SEOTest do
              ~s(property="og:title" content="Jan Johnson · Old Master, Modern &amp; Canadian Prints")
   end
 
+  test "page descriptions fit in a search result (155 characters)", %{conn: conn} do
+    for path <- ["/", "/about", "/contact", "/terms-of-sale", "/prints", "/prints/old-masters"] do
+      html = conn |> get(path) |> html_response(200)
+      [_, description] = Regex.run(~r/name="description" content="([^"]*)"/, html)
+
+      assert String.length(description) <= 155,
+             "#{path}: #{String.length(description)} characters"
+    end
+  end
+
   test "other pages end their title with the short brand", %{conn: conn} do
     html = conn |> get("/about") |> html_response(200)
     [_, title] = Regex.run(~r{<title[^>]*>(.*?)</title>}s, html)
