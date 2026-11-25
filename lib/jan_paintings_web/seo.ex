@@ -23,6 +23,9 @@ defmodule JanPaintingsWeb.SEO do
   alias JanPaintings.Catalog
 
   @site_name "Jan Johnson Old Master & Modern Prints"
+  # Short brand after each page title, so long print titles fit in the ~60
+  # characters a search result shows.
+  @title_brand "Jan Johnson Prints"
   @default_title "Jan Johnson · Old Master, Modern & Canadian Prints"
   @default_description "Fine Old Master, nineteenth- and early twentieth-century European and Canadian prints, offered by Jan Johnson since 1979. Viewing by appointment in Chambly, near Montreal."
   @default_image "/images/catalogue/pether-farrier-s-shop-lg.jpg"
@@ -38,7 +41,7 @@ defmodule JanPaintingsWeb.SEO do
 
   @doc "Renders description, canonical, Open Graph, Twitter and JSON-LD tags."
   def head_tags(%{assigns: page} = assigns) do
-    title = if page[:page_title], do: "#{page[:page_title]} · #{@site_name}", else: @default_title
+    title = if page[:page_title], do: page[:page_title] <> title_suffix(), else: @default_title
 
     assigns =
       assign(assigns,
@@ -69,11 +72,11 @@ defmodule JanPaintingsWeb.SEO do
     """
   end
 
-  @doc "The default title, used when a page sets no `:page_title`."
+  @doc "The default title, used as is (no suffix) when a page sets no `:page_title`."
   def default_title, do: @default_title
 
   @doc "The title suffix added after a page's `:page_title`."
-  def title_suffix, do: " · " <> @site_name
+  def title_suffix, do: " · " <> @title_brand
 
   defp request_path(%Plug.Conn{request_path: path}), do: path
   defp request_path(_), do: "/"

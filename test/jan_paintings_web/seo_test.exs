@@ -118,7 +118,7 @@ defmodule JanPaintingsWeb.SEOTest do
       assert html =~ "<title"
 
       assert html =~
-               "Hans Sebald Beham, Leda and the Swan, Engraving, 1548 · Jan Johnson Old Master &amp; Modern Prints"
+               "Hans Sebald Beham, Leda and the Swan, Engraving, 1548 · Jan Johnson Prints"
 
       assert html =~ ~s(rel="canonical" href="#{canonical}")
       assert html =~ ~s(property="og:url" content="#{canonical}")
@@ -198,6 +198,21 @@ defmodule JanPaintingsWeb.SEOTest do
 
     assert html =~ ~s(rel="canonical" href="#{base()}/prints/canadian")
     assert html =~ "Canadian Prints at Jan Johnson: 37 in stock."
+  end
+
+  test "the home page title names the gallery once, with no suffix", %{conn: conn} do
+    html = conn |> get("/") |> html_response(200)
+    [_, title] = Regex.run(~r{<title[^>]*>(.*?)</title>}s, html)
+    assert String.trim(title) == "Jan Johnson · Old Master, Modern &amp; Canadian Prints"
+
+    assert html =~
+             ~s(property="og:title" content="Jan Johnson · Old Master, Modern &amp; Canadian Prints")
+  end
+
+  test "other pages end their title with the short brand", %{conn: conn} do
+    html = conn |> get("/about") |> html_response(200)
+    [_, title] = Regex.run(~r{<title[^>]*>(.*?)</title>}s, html)
+    assert String.trim(title) == "About the gallery · Jan Johnson Prints"
   end
 
   test "category and All Prints pages have breadcrumbs", %{conn: conn} do
