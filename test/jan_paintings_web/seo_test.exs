@@ -178,7 +178,10 @@ defmodule JanPaintingsWeb.SEOTest do
       xml = response(conn, 200)
 
       assert response_content_type(conn, :xml) =~ "application/xml"
-      assert xml =~ ~s(<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">)
+
+      assert xml =~
+               ~s(<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">)
+
       assert xml =~ "<loc>#{base()}/</loc>"
       assert xml =~ "<loc>#{base()}/prints/old-masters</loc>"
       assert xml =~ "<loc>#{base()}/terms-of-sale</loc>"
@@ -188,6 +191,25 @@ defmodule JanPaintingsWeb.SEOTest do
       sold = Enum.find(Catalog.list_prints(), &(&1.status == "sold"))
       assert xml =~ base() <> SEO.print_path(sold)
       assert length(Regex.scan(~r/<url>/, xml)) == 8 + length(Catalog.list_prints())
+    end
+
+    test "sitemap.xml lists each print's images, and none for the other pages", %{conn: conn} do
+      xml = conn |> get("/sitemap.xml") |> response(200)
+      print = Catalog.get_print("beham-leda-and-the-swan")
+      [%{large: large} | _] = Catalog.views(print)
+
+      [entry] =
+        Regex.run(
+          ~r{<url><loc>[^<]*/prints/old-masters/beham-leda-and-the-swan</loc>.*?</url>},
+          xml
+        )
+
+      assert entry =~ "<image:image><image:loc>#{base()}#{large}</image:loc></image:image>"
+
+      [home] = Regex.run(~r{<url><loc>#{base()}/</loc>.*?</url>}, xml)
+      refute home =~ "image:image"
+
+      assert length(Regex.scan(~r/<image:image>/, xml)) >= length(Catalog.list_prints())
     end
 
     test "robots.txt allows crawlers and points at the sitemap", %{conn: conn} do
